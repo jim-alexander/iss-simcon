@@ -9,17 +9,20 @@ const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
 const navMenu = (user) => {
-  return(
-    <Menu theme='dark' mode="inline" defaultSelectedKeys={[window.location.pathname]} style={{borderTop: '#b3b3b333 solid 1px'}}>
-      {item.Home(user.role)}
-      {item.Outline(user.role)}
-      <SubMenu key="sub2" title={<span><Icon type="file" /><span>Documents</span></span>}>
-        {item.Profile(user.role)}
-      </SubMenu>
-      {item.Role(user.role)}
-      {item.Username(user.username)}
-      {item.Logout(user.role)}
-    </Menu>
+  return (
+    <div>
+      <div className="logo"><img src={logo} alt="My logo" style={{height: '100%', paddingLeft: '30px', marginTop: '3px'}}/></div>
+      <Menu theme='dark' mode="inline" defaultSelectedKeys={[window.location.pathname]} style={{borderTop: '#b3b3b333 solid 1px'}}>
+        {item.Home(user.role)}
+        {item.Outline(user.role)}
+        <SubMenu key="sub2" title={<span><Icon type="file" /><span>Documents</span></span>}>
+          {item.Profile(user.role)}
+        </SubMenu>
+        {item.Role(user.role)}
+        {item.Username(user.username)}
+        {item.Logout(user.role)}
+      </Menu>
+    </div>
   )
 }
 
@@ -33,7 +36,6 @@ export class Navigation extends React.Component {
         theme='dark'
         className='printHide'
       >
-        <div className="logo"><img src={logo} alt="My logo" style={{height: '100%', paddingLeft: '30px', marginTop: '3px'}}/></div>
         {navMenu(this.props.user)}
       </Sider>
     )
@@ -67,7 +69,6 @@ export class NavigationSmaller extends React.Component {
         visible={this.state.visible}
         style={{maxWidth: '200px',  animationDuration: '0s !important'}}
       >
-        <div className="logo"><img src={logo} alt="My logo" style={{height: '100%', paddingLeft: '30px', marginTop: '3px'}}/></div>
         {navMenu(this.props.user)}
       </Drawer>
       <div style={{background: '#021429',width: '36px', padding: '10px', position: 'fixed', margin: '10px 0', borderRadius: '0 5px 5px 0', left: this.state.left, top: '5px', zIndex: 1}} onClick={this.showDrawer}>
