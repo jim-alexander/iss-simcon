@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Icon, Drawer } from 'antd';
 import * as item from './MenuItems'
-import logo from './nav_logo_white.png'
+import logo from '../constants/nav_logo_white.png'
 
 import 'antd/dist/antd.css'; //This is the AntDesign css file
 

@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Layout, Input, Button, Form, Divider } from 'antd';
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import { Layout, Input, Button, Form, Divider } from 'antd'
+import logo from '../constants/nav_logo_white.png'
 
-import { PasswordForgetLink } from '../Pages/Profile/PasswordForget';
-import { auth } from '../firebase';
-import * as routes from '../constants/routes';
-import './index.css';
+import { PasswordForgetLink } from '../Pages/Profile/PasswordForget'
+import { auth } from '../firebase'
+import * as routes from '../constants/routes'
+import './index.css'
 
 const { Content, Header } = Layout;
 
@@ -13,14 +14,14 @@ const SignInPage = ({ history }) =>
   <div>
     <Header>
       <div style={{ height: '32px', right: 0, position: 'absolute', paddingRight: '30px' }}>
-        <img src={"/client-portal/nav_logo_white.png"} alt="My logo" style={{ height: '100%' }} />
+        <img src={logo} alt="My logo" style={{ height: '100%' }} />
       </div>
       <span style={{
         color: 'white',
         fontWeight: 'bold',
         fontSize: 'x-large'
       }}>
-        Drilltec Pty Ltd
+        Simpson Construction
       </span>
 
     </Header>
@@ -29,8 +30,8 @@ const SignInPage = ({ history }) =>
         <h1>Sign In</h1>
         <SignInForm history={history} />
         <Divider />
-        <h4><a style={{ color: '#4c4c4c' }} href='https://www.drilltec.com.au'>
-          Click here to return to main website. <br /> https://www.drilltec.com.au
+        <h4><a style={{ color: '#4c4c4c' }} href='https://simcon.com.au/'>
+          Click here to return to main website. <br /> https://simcon.com.au/
         </a></h4>
       </div>
       <a href="http://www.infosync.solutions">
