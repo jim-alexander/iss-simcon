@@ -1,0 +1,15 @@
+{
+  "short_name": "Client Portal",
+  "name": "Drilltec Client Portal",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#001528",
+  "background_color": "#eff2f5"
+}

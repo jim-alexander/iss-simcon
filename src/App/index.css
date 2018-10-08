@@ -1,0 +1,201 @@
+.app {
+  margin: 20px;
+}
+
+.loader {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #ddd;
+}
+.loader:before{
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: #001529;
+  -webkit-animation: loading 2s linear infinite;
+          animation: loading 2s linear infinite;
+}
+
+@-webkit-keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
+}
+
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
+}
+
+.logo {
+  height: 40px;
+  margin: 16px;
+}
+
+.layoutContent {
+  margin-left: 0;
+  min-height: 100vh;
+  background: #f3f3f3;
+}
+#sider-logout {
+  border-top: solid 1px #b3b3b333;
+}
+#sider-login {
+  border-top: solid 1px #b3b3b333;
+}
+.ant-table tr > td {
+  font-size: smaller !important;
+  padding: 5px 5px !important;
+}
+.ant-table tr > th {
+  font-size: smaller !important;
+  padding: 5px 5px !important;
+}
+.ant-tabs-nav-scroll {
+  font-size: smaller !important;
+}
+.hideThis {
+    display: none;
+}
+
+.ant-table-content {
+  color: black !important;
+}
+#menuLogout {
+  position: inherit;
+  bottom: auto;
+}
+#menuLogout:hover {
+    color: #E91E63;
+}
+#menuProfile{
+  position: inherit;
+  bottom: auto;
+}
+#menuRole{
+  position: inherit;
+  bottom: auto;
+  border-top: solid #b3b3b333 1px !important;
+}
+.ant-layout-sider-zero-width-trigger {
+  top: 74px
+}
+.ant-drawer-body{
+  padding: 0 !important;
+}
+#drawerButton {
+  position: absolute;
+  background: red;
+  padding: 10px;
+  left: 0;
+  width: 35px;
+  border-radius: 0 5px 5px 0;
+}
+.ant-drawer-content{
+  background: #001529;
+}
+.ant-drawer-content-wrapper {
+  width: 200px !important
+}
+.ant-drawer > * {
+transition-duration: 0s !important}
+
+.outlineStats{
+  padding: 0 5px;
+}
+th.outlineCompleted{ background-color: #f6ffed !important; border-bottom: solid 2px #b7eb8f !important; }
+th.outlineInProgress{ background-color: #fffbe6 !important;  border-bottom: solid 2px #ffe58f !important; }
+th.outlineUpcoming{ background-color: #e6f7ff !important;  border-bottom: solid 2px #91d5ff !important; }
+th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom: solid 2px #ffa39e !important; }
+.Maintenance td:nth-child(2) {
+  border-bottom: solid 2px #fe6385 !important;
+}
+#lastLoaded {
+  right: 0;
+  padding: 2px 20px;
+  position: absolute;
+  font-weight: 400;
+  color: #848484;
+  cursor: pointer;
+}
+#lastLoadedRefreash{
+  display: none;
+}
+#lastLoaded:hover #lastLoadedDefault{
+  display: none;
+}
+#lastLoaded:hover #lastLoadedRefreash{
+  display: block;
+}
+.DEVTESTLOCATION{
+  font-weight: 600;
+  text-align: right;
+}
+
+
+/* ---When screen width is larger than 992: make sider and content responsive */
+
+@media only screen and (min-width: 992px) {
+  .layoutContent {
+    margin-left: 200px;
+  }
+  .hideThis {
+    display: table-cell;
+  }
+  #layoutSider {
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0
+  }
+  .ant-table tr > td {
+    font-size: inherit !important;
+    padding: 10px 10px !important;
+  }
+  .ant-table tr > th {
+    font-size: inherit !important;
+    padding: 10px 10px !important;
+  }
+  .ant-tabs-nav-scroll {
+    font-size: inherit !important;
+  }
+
+}
+
+@media print {
+  .hideThis {
+      display: table-cell;
+  }
+  .printHide{
+    display:none;
+  }
+}
+
+@media only screen and (min-height: 600px) {
+  #menuLogout {
+    position: absolute;
+    bottom: 0;
+  }
+  #menuProfile{
+    position: absolute;
+    bottom: 40px;
+  }
+  #menuRole{
+    position: absolute;
+    bottom: 81px;
+    border-top: none !important;
+  }
+}
+

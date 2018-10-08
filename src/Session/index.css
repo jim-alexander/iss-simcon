@@ -1,0 +1,36 @@
+#SignInForm {
+  width: 100%;
+  max-width: 350px;
+}
+
+#SignInEmail {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+#SignInPassword {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+#SignInButton {
+  margin-bottom: 5px;
+}
+
+#SignInError {
+  color: red;
+}
+
+#builtBy {
+  margin: 12px auto;
+  max-width: 300px;
+  text-align: center;
+  padding: 10px;
+  background: white;
+}
+.somePadding {
+  margin-bottom: 10px !important;
+}
+#signupForm {
+  max-width: 300px;
+}

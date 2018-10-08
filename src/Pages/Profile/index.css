@@ -1,0 +1,16 @@
+#passwordForgetForm {
+  width: 100%;
+  max-width: 450px;
+}
+#passwordForgetEmail {
+  max-width: 200px;
+  margin: 0 15px 15px 0;
+}
+#passwordForgetButton {
+  margin-bottom:15px;
+  width: 100%;
+  max-width: 200px;
+}
+#passwordForgetError {
+  color: red;
+}
