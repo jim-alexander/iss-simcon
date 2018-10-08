@@ -119,7 +119,7 @@ class SignUpForm extends Component {
           placeholder="Confirm Password"
           className='somePadding'
         />
-      <Button disabled={isInvalid} htmlType="submit">
+      <Button disabled={isInvalid} htmlType="submit" style={{maxWidth: 150, width: '100%'}}>
           Sign Up
         </Button>
 

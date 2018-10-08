@@ -15,7 +15,5 @@ export const onceGetUsers = () =>
 export const getCurrentUsername = (id) =>
   db.ref('/users/' + id).once('value');
 
-
-
-
-// Other db APIs ...
+  export const deleteUser = (id) => 
+  db.ref('/users/' + id).remove();
