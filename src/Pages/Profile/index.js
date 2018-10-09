@@ -1,5 +1,5 @@
 import React from 'react'
-import SignUp from '../../Session/SignUp'
+import SignUp from './SignUp'
 import { Tabs, Icon, Divider } from 'antd'
 
 import DeleteAccount from './DeleteAccount'

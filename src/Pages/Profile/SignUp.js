@@ -4,8 +4,8 @@ import {
   withRouter,
 } from 'react-router-dom';
 
-import { auth, db } from '../firebase';
-import * as routes from '../constants/routes';
+import { auth, db } from '../../firebase';
+import * as routes from '../../constants/routes';
 import { Input, Button, Form, Select } from 'antd';
 import './index.css'
 

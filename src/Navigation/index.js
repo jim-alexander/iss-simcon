@@ -8,6 +8,10 @@ import 'antd/dist/antd.css'; //This is the AntDesign css file
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
+//Change navigation colors to:
+//Primary: #21383c
+//selection : #3ea08e
+
 const navMenu = (user) => {
   return (
     <div>
