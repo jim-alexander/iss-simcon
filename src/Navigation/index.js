@@ -72,7 +72,7 @@ export class NavigationSmaller extends React.Component {
       >
         {navMenu(this.props.user)}
       </Drawer>
-      <div style={{background: '#021429',width: '36px', padding: '10px', position: 'fixed', margin: '10px 0', borderRadius: '0 5px 5px 0', left: this.state.left, top: '5px', zIndex: 1}} onClick={this.showDrawer}>
+      <div style={{background: '#1d3033',width: '36px', padding: '10px', position: 'fixed', margin: '10px 0', borderRadius: '0 5px 5px 0', left: this.state.left, top: '5px', zIndex: 1}} onClick={this.showDrawer}>
         <Icon type="bars" style={{color: 'white'}} />
       </div>
       </div>
