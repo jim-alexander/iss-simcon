@@ -18,14 +18,7 @@ import 'antd/dist/antd.css' //This is the AntDesign css file
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
-  {form_id: 'e328b1d1-cd10-46d5-87d8-ace3f02a3344'},
-  {form_id: '1390d0f3-7363-470d-847f-7a4f393999d7'},
-  {form_id: '5468a3d7-47dd-46d3-bae2-0e9591b5cf26'},
-  {form_id: 'dfd98e4f-bfb0-46e9-bb82-7bd0784cbe80'},
-  {form_id: '3ebdfb67-0b99-40d2-b937-b91084a12457'},
-  {form_id: 'b600af12-d5d0-4b5e-ade0-ef4f500e4171'},
-  {form_id: '50038e62-4596-4da6-96e9-5650dc9964b7'},
-  {form_id: '3182eaff-898b-43dc-88df-d349913a2d99'}
+  {form_id: '8624ca67-d338-428c-8924-6d4e7ae6c17a'},
 ]
 
 const { Content, Footer } = Layout
@@ -39,10 +32,10 @@ class ClientPortal extends Component {
         role: '',
         email: ''
       },
-      QualityPlans:[],
+      SimpconTest:[],
       loadingScreen: false, 
       width: '',
-      lastLoaded: ''
+      lastLoaded: null
     };
   }
   componentDidMount() {
@@ -61,13 +54,13 @@ class ClientPortal extends Component {
         }
       )
     }
-    if (localStorage.getItem('QualityPlans') !== null) {
+    if (localStorage.getItem('SimpconTest') !== null) {
       this.setState({
-        QualityPlans: JSON.parse(localStorage.getItem('QualityPlans'))
+        SimpconTest: JSON.parse(localStorage.getItem('SimpconTest'))
       })
       this.loadFulcrumData();      
 
-    } else if (localStorage.getItem('QualityPlans') === null) {
+    } else if (localStorage.getItem('SimpconTest') === null) {
       this.setState({loadingScreen: true})
       this.loadFulcrumData();
     }
@@ -88,11 +81,17 @@ class ClientPortal extends Component {
   }
   componentDidUpdate(){
     var reload = moment().subtract(10, 'minutes').format("LT");
-    if (this.state.lastLoaded !== '') {
+    if (this.state.lastLoaded !== null) {
+      
+      //Compare times not strings
+
       if ( reload > this.state.lastLoaded) {
-        console.log("Attempting to reload data.");
+        
+        console.log("Attempting to reload data.", reload, this.state.lastLoaded);
         this.loadFulcrumData()
         
+      } else {
+          
       }
     }
   }
@@ -103,7 +102,7 @@ class ClientPortal extends Component {
       .then(dataReceived => {
         
         this.setState({
-          QualityPlans: dataReceived[0].objects,
+          SimpconTest: dataReceived[0].objects,
         });
 
       }).then(() => {
@@ -111,7 +110,7 @@ class ClientPortal extends Component {
         this.setState({loadingScreen: false})
         console.log("Data has been loaded successfuly.");
 
-        localStorage.setItem('QualityPlans', JSON.stringify(this.state.QualityPlans))
+        localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
          
         if (evt === 'Button Refresh') {  message.success('Data is up to date.')}
       }).catch((error) => console.log(error));
@@ -120,7 +119,7 @@ class ClientPortal extends Component {
     function navigationBased(width, user) {
       if (width >= 992) {  return <Navigation user={user}/>  }
       else if (width <= 991) {  return <NavigationSmaller user={user} />  }
-    }
+    }  
 
     if (this.state.loadingScreen === true) {
       return (
@@ -146,8 +145,8 @@ class ClientPortal extends Component {
           </div>
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
-              <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} QualityPlans={this.state.QualityPlans} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
-              <Route path={routes.OUTLINE} render={props => <Outline {...props} QualityPlans={this.state.QualityPlans} user={this.state.user} />} />
+              <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
+              <Route path={routes.OUTLINE} render={props => <Outline {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
           </Content>
