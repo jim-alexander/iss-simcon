@@ -12,6 +12,7 @@ class Outline extends React.Component {
     this.state = {
       currentRecord: null,
       loadedComments: null,
+      once:null
     };
     this.setRecord = this.setRecord.bind(this);
 
@@ -40,8 +41,8 @@ class Outline extends React.Component {
         message.loading('Updating form..', 2)
         console.log(id, obj);
         client.records.update(id, obj)
-          .then((webhook) => {
-            console.log('success', webhook);
+          .then((record) => {
+            console.log('success', record);
             message.success('Comments have been set to: ' + value, 2.5)
   
           })
@@ -52,6 +53,27 @@ class Outline extends React.Component {
       }
     }
 
+  };
+  
+  learnWebhooks() {
+    // if (this.state.once === null) {
+    //   const obj = {
+    //     name: 'My Awesome Webhook',
+    //     url: 'http://drilltec.com.au/client-portal/#/',
+    //     active: true
+    //   };
+       
+    //   client.webhooks.create(obj)
+    //     .then((webhook) => {
+    //       console.log('success', webhook);
+    //       this.setState({once: 1})
+
+    //     })
+    //     .catch((error) => {
+    //       console.log(error.message);
+    //     });
+    // }
+    
   }
 
   recordList() {
@@ -63,6 +85,7 @@ class Outline extends React.Component {
   }
 
   render() {
+    this.learnWebhooks()
     return (
       <div>
         <h1>Comments</h1>

@@ -8,9 +8,11 @@ import { auth } from '../firebase';
 export const Home = (role) => {
   if (role === 'client' || role === 'admin') {
     return (
-      <Menu.Item key="/"><Link to={routes.CLIENTPORTAL}>
-        <Icon type="pie-chart" />
-        <span className="nav-text">Home</span></Link>
+      <Menu.Item key="/">
+        <Link to={routes.CLIENTPORTAL}>
+          <Icon type="pie-chart" />
+          <span className="nav-text">Home</span>
+        </Link>
       </Menu.Item>
     )
   } else {
@@ -20,20 +22,26 @@ export const Home = (role) => {
 export const Outline = (role) => {
   if (role === 'client' || role === 'admin') {
     return (
-      <Menu.Item key="/outline/"><Link to={routes.OUTLINE}>
-        <Icon type="bars" />
-        <span className="nav-text">Outline</span></Link>
+      <Menu.Item key="/outline/">
+        <Link to={routes.OUTLINE}>
+          <Icon type="bars" />
+          <span className="nav-text">Outline</span>
+        </Link>
       </Menu.Item>
-    )    
+    )
   } else {
     return;
   }
 }
 
-export const Profile = (role) => {
-  if (role === 'client' || role === 'admin' || role === 'maintenance') {
-    return <Menu.Item key="/profile/"><Link to={routes.PROFILE}><Icon type="user" />Profile</Link></Menu.Item>
-  }
+export const Profile = () => {
+    return (
+      <Menu.Item key="/profile/">
+        <Link to={routes.PROFILE}>
+          <Icon type="user" />Profile
+        </Link>
+      </Menu.Item>
+    )
 }
 
 // These nav footer components will be shown no matter the role
@@ -42,7 +50,7 @@ export const Role = role => {
     <Menu.Item key="6" id="menuRole" disabled>
       <Icon type="safety" />
       <span className="nav-text">{role}</span>
-    </Menu.Item> 
+    </Menu.Item>
   )
 }
 export const Username = username => {

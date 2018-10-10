@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import * as routes from '../constants/routes'
-import {Client} from 'fulcrum-app'
+import { Client } from 'fulcrum-app'
 import { firebase, db } from '../firebase'
 import moment from 'moment';
 
 import withAuthorization from '../Session/withAuthorization'
-import {Navigation, NavigationSmaller} from '../Navigation'
+import { Navigation, NavigationSmaller } from '../Navigation'
 import Home from '../Pages/Home'
 import Outline from "../Pages/Outline"
 import Profile from "../Pages/Profile"
@@ -18,7 +18,7 @@ import 'antd/dist/antd.css' //This is the AntDesign css file
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
-  {form_id: '8624ca67-d338-428c-8924-6d4e7ae6c17a'},
+  { form_id: '8624ca67-d338-428c-8924-6d4e7ae6c17a' },
 ]
 
 const { Content, Footer } = Layout
@@ -32,8 +32,8 @@ class ClientPortal extends Component {
         role: '',
         email: ''
       },
-      SimpconTest:[],
-      loadingScreen: false, 
+      SimpconTest: [],
+      loadingScreen: false,
       width: '',
       lastLoaded: null
     };
@@ -41,91 +41,92 @@ class ClientPortal extends Component {
   componentDidMount() {
     if (firebase.auth.currentUser) {
       db.getCurrentUsername(firebase.auth.currentUser.uid)
-      .then( snapshot => {
-        var usernameFound = snapshot.child("username").val();
-        var roleFound = snapshot.child("role").val();
-        var emailFound = snapshot.child("email").val();
+        .then(snapshot => {
+          var usernameFound = snapshot.child("username").val();
+          var roleFound = snapshot.child("role").val();
+          var emailFound = snapshot.child("email").val();
           this.setState({
             user: {
               username: usernameFound,
               role: roleFound,
               email: emailFound
-            }})
+            }
+          })
         }
-      )
+        )
     }
     if (localStorage.getItem('SimpconTest') !== null) {
       this.setState({
         SimpconTest: JSON.parse(localStorage.getItem('SimpconTest'))
       })
-      this.loadFulcrumData();      
-
+      this.loadFulcrumData();
     } else if (localStorage.getItem('SimpconTest') === null) {
-      this.setState({loadingScreen: true})
+      this.setState({ loadingScreen: true })
       this.loadFulcrumData();
     }
-       window.addEventListener("resize", this.updateDimensions);
-      //  client.forms.all({schema: false})
-      //  .then((page) => {
-      //    console.log(page.objects);
-      //  })
-      //  .catch((error) => {
-      //    console.log('Error getting your forms.', error.message);
-      //  });
+    window.addEventListener("resize", this.updateDimensions);
   }
   updateDimensions = () => {
-    this.setState({width: window.innerWidth});
+    this.setState({ width: window.innerWidth });
   }
-  componentWillMount(){
+  componentWillMount() {
     this.updateDimensions()
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
+    this.reloadData();
+  }
+  reloadData() {
+    var autoLoad;
     var reload = moment().subtract(10, 'minutes').format("LT");
+    if (this.state.lastLoaded === null) { clearTimeout(autoLoad); autoLoad = setTimeout(this.reloadData.bind(this), 605000) }
     if (this.state.lastLoaded !== null) {
-      
       //Compare times not strings
+      if (moment(reload, 'h:mma') > moment(this.state.lastLoaded, 'h:mma')) {
+        console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
+        this.loadFulcrumData();
+        clearTimeout(autoLoad);
+        autoLoad = setTimeout(this.reloadData.bind(this), 605000);
 
-      if ( reload > this.state.lastLoaded) {
-        
-        console.log("Attempting to reload data.", reload, this.state.lastLoaded);
-        this.loadFulcrumData()
-        
-      } else {
-          
       }
+      // else if (moment(reload, 'h:mma') < moment(this.state.lastLoaded, 'h:mma')) {
+      //   console.log('%c Did not reload. 10 minutes has not passed.', 'color: red; font-size: 12px');
+      // }
     }
   }
-  loadFulcrumData(evt){
-    if (evt === 'Button Refresh') {  message.loading('Loading Fulcrum data..', 2.5)}
+  loadFulcrumData(evt) {
+    if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 2.5) }
     var promises = listFormIds.map(form_id => client.records.all(form_id));
     Promise.all(promises)
       .then(dataReceived => {
-        
+
         this.setState({
           SimpconTest: dataReceived[0].objects,
         });
 
       }).then(() => {
-        this.setState({ lastLoaded: moment().format("LT") });
-        this.setState({loadingScreen: false})
-        console.log("Data has been loaded successfuly.");
+        this.setState({
+          lastLoaded: moment().format("LT"),
+          loadingScreen: false
+        });
+
+        console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
 
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
-         
-        if (evt === 'Button Refresh') {  message.success('Data is up to date.')}
+
+        if (evt === 'Button Refresh') { message.success('Data is up to date.') }
       }).catch((error) => console.log(error));
   }
   render() {
     function navigationBased(width, user) {
-      if (width >= 992) {  return <Navigation user={user}/>  }
-      else if (width <= 991) {  return <NavigationSmaller user={user} />  }
-    }  
+      if (width >= 992) { return <Navigation user={user} /> }
+      else if (width <= 991) { return <NavigationSmaller user={user} /> }
+    }
 
     if (this.state.loadingScreen === true) {
       return (
-        <Layout style={{minHeight:'100vh'}}>
-          <Content style={{ margin: '24px 16px 0', minHeight:'89vh', background: '#f3f3f3' }}>
-            <div style={{ padding: 24, background: '#fff', height: '100%'}}>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Content style={{ margin: '24px 16px 0', minHeight: '89vh', background: '#f3f3f3' }}>
+            <div style={{ padding: 24, background: '#fff', height: '100%' }}>
               <Loader />
             </div>
           </Content>
@@ -134,9 +135,9 @@ class ClientPortal extends Component {
           </Footer>
         </Layout>
       )
-    }  
+    }
     return (
-    <Layout>
+      <Layout>
         {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
           <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
