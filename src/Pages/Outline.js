@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Select } from 'antd'
+import { Input, Select, message } from 'antd'
 import { Client } from 'fulcrum-app'
 
 const Search = Input.Search;
@@ -27,43 +27,47 @@ class Outline extends React.Component {
     }
   }
   updateRecordComments(value, original) {
-    if (value === '') {
-      console.log("there is no comments to save.");
-
+    if(!original) {
+      message.error('Please select a job.'); 
     } else {
+
       var record = original;
       record.form_values['0bd7'] = value;
-
+  
       fulcrumRecordUpdate(record.id, record);
-
+  
       function fulcrumRecordUpdate(id, obj) {
-
+        message.loading('Updating form..', 2)
         console.log(id, obj);
         client.records.update(id, obj)
           .then((webhook) => {
             console.log('success', webhook);
+            message.success('Comments have been set to: ' + value, 2.5)
+  
           })
           .catch((error) => {
             console.log(error.message);
           });
-
+  
       }
     }
+
   }
- 
+
   recordList() {
-    return  (
+    return (
       <Select showSearch placeholder="Select job title" size="large" style={{ width: '100%', paddingBottom: 10 }} onChange={this.setRecord}>
         {this.props.SimpconTest.map((x) => <Select.Option key={x.id} >{x.form_values['9cd4']}</Select.Option>)}
       </Select>
-    )    
+    )
   }
 
   render() {
     return (
       <div>
         <h1>Comments</h1>
-          {this.recordList()}
+        <h3>This can add and edit comments on the Simpson construction test app on fulcrum</h3>
+        {this.recordList()}
         <Search
           placeholder="Input Comments here."
           enterButton="Save"
