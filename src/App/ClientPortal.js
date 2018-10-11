@@ -72,6 +72,15 @@ class ClientPortal extends Component {
   componentWillMount() {
     this.updateDimensions()
   }
+  componentDidUpdate(){
+    var reload = moment().subtract(10, 'minutes').format("LTS");
+    if (this.state.lastLoaded !== null) {
+      if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
+        console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
+        this.loadFulcrumData();
+      }
+    }
+  }
 
   loadFulcrumData(evt) {
     var autoLoad;
@@ -97,7 +106,11 @@ class ClientPortal extends Component {
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
-      }).catch((error) => console.log(error));
+      }).catch((error) => {
+        console.log(error)
+        clearTimeout(autoLoad);
+        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000);
+      });
   }
   render() {
     function navigationBased(width, user) {
