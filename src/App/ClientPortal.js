@@ -13,7 +13,7 @@ import Profile from "../Pages/Profile"
 import Loader from '../Pages/Loader'
 
 import './index.css'
-import { Layout, message } from 'antd'
+import { Layout, message, Tooltip } from 'antd'
 import 'antd/dist/antd.css' //This is the AntDesign css file
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
@@ -72,28 +72,9 @@ class ClientPortal extends Component {
   componentWillMount() {
     this.updateDimensions()
   }
-  componentDidUpdate() {
-    this.reloadData();
-  }
-  reloadData() {
-    var autoLoad;
-    var reload = moment().subtract(10, 'minutes').format("LT");
-    if (this.state.lastLoaded === null) { clearTimeout(autoLoad); autoLoad = setTimeout(this.reloadData.bind(this), 605000) }
-    if (this.state.lastLoaded !== null) {
-      //Compare times not strings
-      if (moment(reload, 'h:mma') > moment(this.state.lastLoaded, 'h:mma')) {
-        console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
-        this.loadFulcrumData();
-        clearTimeout(autoLoad);
-        autoLoad = setTimeout(this.reloadData.bind(this), 605000);
 
-      }
-      // else if (moment(reload, 'h:mma') < moment(this.state.lastLoaded, 'h:mma')) {
-      //   console.log('%c Did not reload. 10 minutes has not passed.', 'color: red; font-size: 12px');
-      // }
-    }
-  }
   loadFulcrumData(evt) {
+    var autoLoad;
     if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 2.5) }
     var promises = listFormIds.map(form_id => client.records.all(form_id));
     Promise.all(promises)
@@ -110,6 +91,8 @@ class ClientPortal extends Component {
         });
 
         console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
+        clearTimeout(autoLoad);
+        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000);
 
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
@@ -140,10 +123,13 @@ class ClientPortal extends Component {
       <Layout>
         {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
-          <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
-            <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
-            <span id='lastLoadedRefreash'>Click to Refresh Data</span>
-          </div>
+          <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
+            <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
+              <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
+              <span id='lastLoadedRefreash'>Click to Refresh Data</span>
+            </div>
+          </Tooltip>
+          
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
