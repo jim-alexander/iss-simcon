@@ -14,7 +14,6 @@ import Loader from '../Pages/Loader'
 
 import './index.css'
 import { Layout, message, Tooltip } from 'antd'
-import 'antd/dist/antd.css' //This is the AntDesign css file
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
@@ -87,7 +86,6 @@ class ClientPortal extends Component {
   }
 
   loadFulcrumData(evt) {
-    var autoLoad;
     if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 2.5) }
     var promises = listFormIds.map(form_id => client.records.all(form_id));
     Promise.all(promises)
