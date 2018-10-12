@@ -53,7 +53,7 @@ class ClientPortal extends Component {
             }
           })
         }
-        )
+        ).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
     if (localStorage.getItem('SimpconTest') !== null) {
       this.setState({
@@ -92,6 +92,11 @@ class ClientPortal extends Component {
         this.setState({
           SimpconTest: dataReceived[0].objects,
         });
+        
+        while (autoLoad--) {
+          window.clearTimeout(autoLoad); // will do nothing if no timeout with id is present
+        }
+        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000); //
 
       }).then(() => {
         this.setState({
@@ -100,16 +105,12 @@ class ClientPortal extends Component {
         });
 
         console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
-        clearTimeout(autoLoad);
-        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000);
-
+        
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
       }).catch((error) => {
         console.log(error)
-        clearTimeout(autoLoad);
-        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000);
       });
   }
   render() {
