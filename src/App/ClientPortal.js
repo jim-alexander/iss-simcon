@@ -60,9 +60,11 @@ class ClientPortal extends Component {
         SimpconTest: JSON.parse(localStorage.getItem('SimpconTest'))
       })
       this.loadFulcrumData();
+      this.autoReload()
     } else if (localStorage.getItem('SimpconTest') === null) {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
+      this.autoReload()
     }
     window.addEventListener("resize", this.updateDimensions);
   }
@@ -72,7 +74,9 @@ class ClientPortal extends Component {
   componentWillMount() {
     this.updateDimensions()
   }
-  componentDidUpdate(){
+  autoReload() {
+    setTimeout(this.autoReload.bind(this), 605000);
+    
     var reload = moment().subtract(10, 'minutes').format("LTS");
     if (this.state.lastLoaded !== null) {
       if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
@@ -93,11 +97,6 @@ class ClientPortal extends Component {
           SimpconTest: dataReceived[0].objects,
         });
         
-        while (autoLoad--) {
-          window.clearTimeout(autoLoad); // will do nothing if no timeout with id is present
-        }
-        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000); //
-
       }).then(() => {
         this.setState({
           lastLoaded: moment().format("LT"),
