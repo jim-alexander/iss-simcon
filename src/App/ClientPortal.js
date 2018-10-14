@@ -14,7 +14,6 @@ import Loader from '../Pages/Loader'
 
 import './index.css'
 import { Layout, message, Tooltip } from 'antd'
-import 'antd/dist/antd.css' //This is the AntDesign css file
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
@@ -53,16 +52,18 @@ class ClientPortal extends Component {
             }
           })
         }
-        )
+        ).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
     if (localStorage.getItem('SimpconTest') !== null) {
       this.setState({
         SimpconTest: JSON.parse(localStorage.getItem('SimpconTest'))
       })
       this.loadFulcrumData();
+      this.autoReload()
     } else if (localStorage.getItem('SimpconTest') === null) {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
+      this.autoReload()
     }
     window.addEventListener("resize", this.updateDimensions);
   }
@@ -72,7 +73,9 @@ class ClientPortal extends Component {
   componentWillMount() {
     this.updateDimensions()
   }
-  componentDidUpdate(){
+  autoReload() {
+    setTimeout(this.autoReload.bind(this), 605000);
+    
     var reload = moment().subtract(10, 'minutes').format("LTS");
     if (this.state.lastLoaded !== null) {
       if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
@@ -83,7 +86,6 @@ class ClientPortal extends Component {
   }
 
   loadFulcrumData(evt) {
-    var autoLoad;
     if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 2.5) }
     var promises = listFormIds.map(form_id => client.records.all(form_id));
     Promise.all(promises)
@@ -92,7 +94,7 @@ class ClientPortal extends Component {
         this.setState({
           SimpconTest: dataReceived[0].objects,
         });
-
+        
       }).then(() => {
         this.setState({
           lastLoaded: moment().format("LT"),
@@ -100,16 +102,12 @@ class ClientPortal extends Component {
         });
 
         console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
-        clearTimeout(autoLoad);
-        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000);
-
+        
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
       }).catch((error) => {
         console.log(error)
-        clearTimeout(autoLoad);
-        autoLoad = setTimeout(this.loadFulcrumData.bind(this), 600000);
       });
   }
   render() {
