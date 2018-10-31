@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import '@firebase/messaging';
 import 'firebase/auth';
 import 'firebase/database';
 

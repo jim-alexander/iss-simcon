@@ -6,3 +6,4 @@ export const CLIENTPORTAL = '/';
 export const OUTLINE = '/outline/';
 
 export const PROFILE = '/profile/';
+export const CHAT = '/chat/';

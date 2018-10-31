@@ -34,6 +34,21 @@ export const Outline = (role) => {
   }
 }
 
+export const Chat = (role) => {
+  if (role === 'admin') {
+    return (
+      <Menu.Item key="/chat/">
+        <Link to={routes.CHAT}>
+          <Icon type="share-alt" />
+          <span className="nav-text">Chat</span>
+        </Link>
+      </Menu.Item>
+    )
+  } else {
+    return;
+  }
+}
+
 export const Profile = () => {
     return (
       <Menu.Item key="/profile/">

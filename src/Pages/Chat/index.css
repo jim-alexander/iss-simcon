@@ -1,0 +1,32 @@
+.ant-list-item-meta-description {
+  font-weight: 600;
+  color: #292929
+}
+
+#avatar {
+  background-color: white;
+  /* make a square container */
+  width: 32px;
+  height: 32px;
+
+  /* fill the container, preserving aspect ratio, and cropping to fit */
+  background-size: cover;
+
+  /* center the image vertically and horizontally */
+  background-position: top center;
+
+  /* round the edges to a circle with border radius 1/2 container size */
+  border-radius: 50%;
+}
+.roomStyle:hover {
+ background-color:#beeaff
+}
+.chatTitle {
+  padding: 5px;
+  text-align: center;
+  margin: 0px;
+  /* border-bottom: 1px solid #d9d9d9; */
+  font-size: 20px;
+  font-weight: 500;
+  color: #021429;
+}

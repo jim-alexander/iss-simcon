@@ -11,6 +11,7 @@ import Home from '../Pages/Home'
 import Outline from "../Pages/Outline"
 import Profile from "../Pages/Profile"
 import Loader from '../Pages/Loader'
+import Chat from '../Pages/Chat'
 
 import './index.css'
 import { Layout, message, Tooltip } from 'antd'
@@ -27,6 +28,7 @@ class ClientPortal extends Component {
     super();
     this.state = {
       user: {
+        id: '',
         username: '',
         role: '',
         email: ''
@@ -41,11 +43,13 @@ class ClientPortal extends Component {
     if (firebase.auth.currentUser) {
       db.getCurrentUsername(firebase.auth.currentUser.uid)
         .then(snapshot => {
+          var idFound = snapshot.key;
           var usernameFound = snapshot.child("username").val();
           var roleFound = snapshot.child("role").val();
           var emailFound = snapshot.child("email").val();
           this.setState({
             user: {
+              id: idFound,
               username: usernameFound,
               role: roleFound,
               email: emailFound
@@ -79,7 +83,7 @@ class ClientPortal extends Component {
     var reload = moment().subtract(10, 'minutes').format("LTS");
     if (this.state.lastLoaded !== null) {
       if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
-        console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
+        //console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
         this.loadFulcrumData();
       }
     }
@@ -101,7 +105,7 @@ class ClientPortal extends Component {
           loadingScreen: false
         });
 
-        console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
+        //console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
         
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
@@ -146,6 +150,7 @@ class ClientPortal extends Component {
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
               <Route path={routes.OUTLINE} render={props => <Outline {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
+              <Route path={routes.CHAT} render={props => <Chat {...props} user={this.state.user} />} />
             </div>
           </Content>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>
