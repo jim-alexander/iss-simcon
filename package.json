@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.8.4",
+    "antd": "^3.10.3",
     "chart.js": "^2.7.2",
     "dotenv": "^6.0.0",
     "firebase": "^5.4.1",

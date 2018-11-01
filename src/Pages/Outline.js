@@ -81,7 +81,6 @@ class Outline extends React.Component {
         </div>
       )
     }
-    this.learnWebhooks()
     return (
       <div />
     )

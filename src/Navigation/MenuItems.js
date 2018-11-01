@@ -34,13 +34,20 @@ export const Outline = (role) => {
   }
 }
 
-export const Chat = (role) => {
+export const Chat = (role, notification) => {
+  const Notify = () => {
+    if (notification === true) {
+      return <span id='navNotification'></span>
+    } else {
+      return null
+    }
+  }
   if (role === 'admin') {
     return (
       <Menu.Item key="/chat/">
         <Link to={routes.CHAT}>
           <Icon type="share-alt" />
-          <span className="nav-text">Chat</span>
+          <span className="nav-text">Chat<Notify /></span>
         </Link>
       </Menu.Item>
     )
@@ -50,13 +57,13 @@ export const Chat = (role) => {
 }
 
 export const Profile = () => {
-    return (
-      <Menu.Item key="/profile/">
-        <Link to={routes.PROFILE}>
-          <Icon type="user" />Profile
+  return (
+    <Menu.Item key="/profile/">
+      <Link to={routes.PROFILE}>
+        <Icon type="user" />Profile
         </Link>
-      </Menu.Item>
-    )
+    </Menu.Item>
+  )
 }
 
 // These nav footer components will be shown no matter the role

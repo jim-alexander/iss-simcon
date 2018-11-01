@@ -3,10 +3,12 @@ import { Route } from 'react-router-dom'
 import * as routes from '../constants/routes'
 import { Client } from 'fulcrum-app'
 import { firebase, db } from '../firebase'
+import {db as database} from '../firebase/firebase'
 import moment from 'moment';
 
 import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
+
 import Home from '../Pages/Home'
 import Outline from "../Pages/Outline"
 import Profile from "../Pages/Profile"
@@ -36,7 +38,11 @@ class ClientPortal extends Component {
       SimpconTest: [],
       loadingScreen: false,
       width: '',
-      lastLoaded: null
+      lastLoaded: null,
+      notify: {
+        status: false, 
+        chatId: null
+      }
     };
   }
   componentDidMount() {
@@ -47,14 +53,18 @@ class ClientPortal extends Component {
           var usernameFound = snapshot.child("username").val();
           var roleFound = snapshot.child("role").val();
           var emailFound = snapshot.child("email").val();
+          var colorFound = snapshot.child("color").val();
           this.setState({
             user: {
               id: idFound,
               username: usernameFound,
               role: roleFound,
-              email: emailFound
+              email: emailFound,
+              color: colorFound
             }
           })
+          this.loadFirebaseChatData(snapshot.key); //LOADING FIREBASE DATA HERE!
+
         }
         ).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
@@ -114,10 +124,21 @@ class ClientPortal extends Component {
         console.log(error)
       });
   }
+  loadFirebaseChatData(userId){
+    const notificationChecker = database.ref("chats").orderByChild(`members/${userId}`).equalTo(true)
+    notificationChecker.on('child_changed', snapshot => {
+      this.setState({
+        notify: {
+          status: true, 
+          chatId: snapshot.key
+        }
+      })
+    });
+  }
   render() {
-    function navigationBased(width, user) {
-      if (width >= 992) { return <Navigation user={user} /> }
-      else if (width <= 991) { return <NavigationSmaller user={user} /> }
+    function navigationBased(width, user, notify) {
+      if (width >= 992) { return <Navigation user={user} notification={notify} /> }
+      else if (width <= 991) { return <NavigationSmaller user={user} notification={notify} /> }
     }
 
     if (this.state.loadingScreen === true) {
@@ -136,7 +157,7 @@ class ClientPortal extends Component {
     }
     return (
       <Layout>
-        {navigationBased(this.state.width, this.state.user)}
+        {navigationBased(this.state.width, this.state.user, this.state.notify.status)}
         <Layout className="layoutContent">
           <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
             <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
@@ -144,13 +165,12 @@ class ClientPortal extends Component {
               <span id='lastLoadedRefreash'>Click to Refresh Data</span>
             </div>
           </Tooltip>
-          
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
               <Route path={routes.OUTLINE} render={props => <Outline {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
-              <Route path={routes.CHAT} render={props => <Chat {...props} user={this.state.user} />} />
+              <Route path={routes.CHAT} render={props => <Chat {...props} user={this.state.user} notification={this.state.notify.chatId}/>} />
             </div>
           </Content>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>

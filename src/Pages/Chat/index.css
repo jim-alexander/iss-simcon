@@ -18,9 +18,11 @@
   /* round the edges to a circle with border radius 1/2 container size */
   border-radius: 50%;
 }
+
 .roomStyle:hover {
- background-color:#beeaff
+  background-color: #e6f7ff
 }
+
 .chatTitle {
   padding: 5px;
   text-align: center;
@@ -29,4 +31,23 @@
   font-size: 20px;
   font-weight: 500;
   color: #021429;
+}
+
+#msgScroller::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+#msgScroller::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+#msgScroller::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+#msgScroller::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
