@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom'
 import * as routes from '../constants/routes'
 import { Client } from 'fulcrum-app'
 import { firebase, db } from '../firebase'
-import {db as database} from '../firebase/firebase'
+import { db as database } from '../firebase/firebase'
 import moment from 'moment';
 
 import withAuthorization from '../Session/withAuthorization'
@@ -40,9 +40,10 @@ class ClientPortal extends Component {
       width: '',
       lastLoaded: null,
       notify: {
-        status: false, 
-        chatId: null
-      }
+        status: false,
+        chatId: []
+      },
+      chats: null
     };
   }
   componentDidMount() {
@@ -63,10 +64,8 @@ class ClientPortal extends Component {
               color: colorFound
             }
           })
-          this.loadFirebaseChatData(snapshot.key); //LOADING FIREBASE DATA HERE!
-
-        }
-        ).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
+          this.loadFirebaseChatData(snapshot.key)
+        }).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
     if (localStorage.getItem('SimpconTest') !== null) {
       this.setState({
@@ -85,11 +84,11 @@ class ClientPortal extends Component {
     this.setState({ width: window.innerWidth });
   }
   componentWillMount() {
-    this.updateDimensions()
+    this.updateDimensions();    
   }
   autoReload() {
     setTimeout(this.autoReload.bind(this), 605000);
-    
+
     var reload = moment().subtract(10, 'minutes').format("LTS");
     if (this.state.lastLoaded !== null) {
       if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
@@ -108,7 +107,7 @@ class ClientPortal extends Component {
         this.setState({
           SimpconTest: dataReceived[0].objects,
         });
-        
+
       }).then(() => {
         this.setState({
           lastLoaded: moment().format("LT"),
@@ -116,7 +115,7 @@ class ClientPortal extends Component {
         });
 
         //console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
-        
+
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
@@ -124,14 +123,24 @@ class ClientPortal extends Component {
         console.log(error)
       });
   }
-  loadFirebaseChatData(userId){
+  loadFirebaseChatData(userId) {
     const notificationChecker = database.ref("chats").orderByChild(`members/${userId}`).equalTo(true)
-    notificationChecker.on('child_changed', snapshot => {
+    notificationChecker.on('value', snapshot => {
+      Object.entries(snapshot.val()).forEach(chat => {
+        Object.entries(chat[1].messages).forEach(message => {
+          if (message[1].from !== this.state.user.id) {
+            if (message[1].read === false) {
+              this.setState({
+                notify: {
+                  status: true,
+                }
+              })
+            }
+          }
+        })
+      })
       this.setState({
-        notify: {
-          status: true, 
-          chatId: snapshot.key
-        }
+        chats: snapshot.val()
       })
     });
   }
@@ -154,7 +163,7 @@ class ClientPortal extends Component {
           </Footer>
         </Layout>
       )
-    }
+    }    
     return (
       <Layout>
         {navigationBased(this.state.width, this.state.user, this.state.notify.status)}
@@ -170,7 +179,7 @@ class ClientPortal extends Component {
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
               <Route path={routes.OUTLINE} render={props => <Outline {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
-              <Route path={routes.CHAT} render={props => <Chat {...props} user={this.state.user} notification={this.state.notify.chatId}/>} />
+              <Route path={routes.CHAT} render={props => <Chat {...props} user={this.state.user} notification={this.state.notify.chatId} chats={this.state.chats} />} />
             </div>
           </Content>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>

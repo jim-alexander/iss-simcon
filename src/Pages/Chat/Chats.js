@@ -6,12 +6,13 @@ export default class Chats extends Component {
   state = {
     roomId: null,
     roomList: [],
-    users: {}
+    users: {},
+    newData: []
   }
   selected(value) {
     this.setState({
-      roomId: value.id
-    })
+      roomId: value.id,
+    })    
     this.props.changeRoom(value)
   }
   componentDidMount() {
@@ -22,15 +23,20 @@ export default class Chats extends Component {
         })
       })
   }
-  render() {
-    const { chatList, user, notification } = this.props
-    var data = [];
-
+  componentDidUpdate(prevProps){
+    if (this.props.chatList !== prevProps.chatList) {
+      this.genorateChats()
+    }
+  }
+  genorateChats(){
+    const { chatList, user } = this.props    
+    var newData = [];
     for (let i = 0; i < chatList.length; i++) {
       var memberList = [];
+      var notify;
 
-      for (let k = 0; k < Object.keys(chatList[i].members).length; k++) {
-        const member = Object.keys(chatList[i].members)[k];
+      for (let k = 0; k < Object.keys(chatList[i][1].members).length; k++) {
+        const member = Object.keys(chatList[i][1].members)[k];
         if (member !== user.id) {
           for (let m = 0; m < Object.keys(this.state.users).length; m++) {
             const userId = Object.keys(this.state.users)[m];
@@ -43,27 +49,44 @@ export default class Chats extends Component {
           }
         }
       }
-      data.push({
-        id: chatList[i].id,
-        members: memberList
+      for (let a = 0; a < Object.entries(chatList[i][1].messages).length; a++) {
+        const message = Object.entries(chatList[i][1].messages)[a];
+        if (message[1].from !== user.id) {
+          if (message[1].read === false) {
+            notify = true
+          } else {
+            notify = false
+          }
+        } else {
+          notify = false
+        }
+      }
+
+      newData.push({
+        id: chatList[i][0],
+        members: memberList,
+        notify
       })
     }
-
+    this.setState({newData})
+  }
+  render() {
     return (
       <div>
         <List
           itemLayout="horizontal"
-          dataSource={data}
+          dataSource={this.state.newData}
           renderItem={item => {
+            
             var acronym = item.members[0].username.match(/\b(\w)/g).join('')
-            if (item.id === notification) {
-              var notify = 'red'
+            if (item.notify === true) {
+              var notifyCol = 'red'
             }
             if (item.id === this.state.roomId) {
               var selected = '#beeaff'
             }
               return (
-                <List.Item className='roomStyle' style={{ backgroundColor: selected, border: `1px solid ${notify}` }} onClick={() => this.selected(item)}>
+                <List.Item className='roomStyle' style={{ backgroundColor: selected, border: `1px solid ${notifyCol}` }} onClick={() => this.selected(item)}>
                   <List.Item.Meta
                     avatar={
                       <Avatar style={{ margin: 'auto 15px', backgroundColor: item.members[0].color, verticalAlign: 'middle' }} >
