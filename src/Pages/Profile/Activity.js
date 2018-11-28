@@ -32,7 +32,8 @@ export default class Activity extends Component {
           dataSource={this.state.userData}
           pagination={false}
           size='small'
-          style={{width: '100%'}} />
+          style={{width: '100%'}}
+          rowKey='email' />
       </div>
     )
   }
