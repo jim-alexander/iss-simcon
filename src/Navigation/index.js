@@ -6,7 +6,7 @@ import logo from '../constants/nav_logo_white.png'
 import 'antd/dist/antd.css'; //This is the AntDesign css file
 import './index.css'
 
-const SubMenu = Menu.SubMenu;
+// const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
 const navMenu = (user, notify) => {
@@ -16,10 +16,9 @@ const navMenu = (user, notify) => {
       <Menu theme='dark' mode="inline" defaultSelectedKeys={[window.location.pathname]} style={{borderTop: '#b3b3b333 solid 1px'}}>
         {item.Home(user.role)}
         {item.Outline(user.role)}
-        {item.Chat(user.role, notify)}
-        <SubMenu key="sub2" title={<span><Icon type="file" /><span>Documents</span></span>}>
+        {/* <SubMenu key="sub2" title={<span><Icon type="file" /><span>Documents</span></span>}>
           {item.Profile(user.role)}
-        </SubMenu>
+        </SubMenu> */}
         {item.Role(user.role)}
         {item.Username(user.username)}
         {item.Logout(user.role)}

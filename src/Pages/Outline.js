@@ -1,6 +1,7 @@
 import React from 'react'
 import { Input, Select, message } from 'antd'
 import { Client } from 'fulcrum-app'
+import { db } from '../firebase'
 
 const Search = Input.Search;
 
@@ -16,6 +17,12 @@ class Outline extends React.Component {
     };
     this.setRecord = this.setRecord.bind(this);
 
+  }
+  componentDidMount(){
+    db.lastViewedPage(this.props.user.id, 'outline')
+  }
+  componentDidUpdate(){
+    db.lastViewedPage(this.props.user.id, 'outline')
   }
   setRecord(value) {
     for (let i = 0; i < this.props.SimpconTest.length; i++) {

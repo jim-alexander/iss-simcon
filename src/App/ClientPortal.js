@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom'
 import * as routes from '../constants/routes'
 import { Client } from 'fulcrum-app'
 import { firebase, db } from '../firebase'
-import { db as database } from '../firebase/firebase'
 import moment from 'moment';
 
 import withAuthorization from '../Session/withAuthorization'
@@ -13,7 +12,6 @@ import Home from '../Pages/Home'
 import Outline from "../Pages/Outline"
 import Profile from "../Pages/Profile"
 import Loader from '../Pages/Loader'
-import Chat from '../Pages/Chat'
 
 import './index.css'
 import { Layout, message, Tooltip } from 'antd'
@@ -64,7 +62,6 @@ class ClientPortal extends Component {
               color: colorFound
             }
           })
-          this.loadFirebaseChatData(snapshot.key)
         }).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
     if (localStorage.getItem('SimpconTest') !== null) {
@@ -118,32 +115,14 @@ class ClientPortal extends Component {
 
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
 
+        db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
+
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
       }).catch((error) => {
         console.log(error)
       });
   }
-  loadFirebaseChatData(userId) {
-    const notificationChecker = database.ref("chats").orderByChild(`members/${userId}`).equalTo(true)
-    notificationChecker.on('value', snapshot => {
-      Object.entries(snapshot.val()).forEach(chat => {
-        Object.entries(chat[1].messages).forEach(message => {
-          if (message[1].from !== this.state.user.id) {
-            if (message[1].read === false) {
-              this.setState({
-                notify: {
-                  status: true,
-                }
-              })
-            }
-          }
-        })
-      })
-      this.setState({
-        chats: snapshot.val()
-      })
-    });
-  }
+  
   render() {
     function navigationBased(width, user, notify) {
       if (width >= 992) { return <Navigation user={user} notification={notify} /> }
@@ -179,7 +158,6 @@ class ClientPortal extends Component {
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
               <Route path={routes.OUTLINE} render={props => <Outline {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
-              <Route path={routes.CHAT} render={props => <Chat {...props} user={this.state.user} notification={this.state.notify.chatId} chats={this.state.chats} />} />
             </div>
           </Content>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>

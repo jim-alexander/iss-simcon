@@ -40,3 +40,6 @@
     line-height: 25px;
     color: white;
 }
+#menuProfile a:hover {
+  color: #52c41a
+}

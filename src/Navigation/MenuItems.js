@@ -34,28 +34,6 @@ export const Outline = (role) => {
   }
 }
 
-export const Chat = (role, notification) => {
-  const Notify = () => {
-    if (notification === true) {
-      return <span id='navNotification'></span>
-    } else {
-      return null
-    }
-  }
-  if (role === 'admin') {
-    return (
-      <Menu.Item key="/chat/">
-        <Link to={routes.CHAT}>
-          <Icon type="share-alt" />
-          <span className="nav-text">Chat<Notify /></span>
-        </Link>
-      </Menu.Item>
-    )
-  } else {
-    return;
-  }
-}
-
 export const Profile = () => {
   return (
     <Menu.Item key="/profile/">
@@ -77,9 +55,11 @@ export const Role = role => {
 }
 export const Username = username => {
   return (
-    <Menu.Item key="7" id="menuProfile" disabled>
-      <Icon type="user" />
-      <span className="nav-text">{username}</span>
+    <Menu.Item key="7" id="menuProfile">
+      <Link to={routes.PROFILE}>
+        <Icon type="user" />
+        <span className="nav-text">{username}</span>
+      </Link>
     </Menu.Item>
   )
 }

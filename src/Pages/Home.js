@@ -3,6 +3,7 @@ import { Select, Table, Alert, Row, Col, DatePicker } from 'antd'
 import './index.css'
 import * as column from '../constants/columns'
 import * as data from '../constants/SimpsonData'
+import { db } from '../firebase'
 
 const Option = Select.Option;
 
@@ -18,9 +19,11 @@ class Home extends React.Component {
   handleBoreSelect (evt) {
     this.setState({ selectedBore: evt });
   }
-  async componentDidMount(){
+  componentDidMount(){
+    db.lastViewedPage(this.props.user.id, 'home')
   }
-  async componentWillMount(){
+  componentDidUpdate(){
+    db.lastViewedPage(this.props.user.id, 'home')
   }
 
   selectJob() {
