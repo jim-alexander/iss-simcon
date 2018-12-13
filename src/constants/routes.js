@@ -6,3 +6,4 @@ export const CLIENTPORTAL = '/';
 export const TIMESHEET = '/timesheet/';
 
 export const PROFILE = '/profile/';
+export const CHAT = '/chat/';

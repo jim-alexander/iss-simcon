@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
+
 import Home from '../Pages/Home'
 import Timesheet from "../Pages/Timesheet"
 import Profile from "../Pages/Profile"
@@ -27,6 +28,7 @@ class ClientPortal extends Component {
     super();
     this.state = {
       user: {
+        id: '',
         username: '',
         role: '',
         email: ''
@@ -34,25 +36,33 @@ class ClientPortal extends Component {
       SimpconTest: [],
       loadingScreen: false,
       width: '',
-      lastLoaded: null
+      lastLoaded: null,
+      notify: {
+        status: false,
+        chatId: []
+      },
+      chats: null
     };
   }
   componentDidMount() {
     if (firebase.auth.currentUser) {
       db.getCurrentUsername(firebase.auth.currentUser.uid)
         .then(snapshot => {
+          var idFound = snapshot.key;
           var usernameFound = snapshot.child("username").val();
           var roleFound = snapshot.child("role").val();
           var emailFound = snapshot.child("email").val();
+          var colorFound = snapshot.child("color").val();
           this.setState({
             user: {
+              id: idFound,
               username: usernameFound,
               role: roleFound,
-              email: emailFound
+              email: emailFound,
+              color: colorFound
             }
           })
-        }
-        ).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
+        }).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
     if (localStorage.getItem('SimpconTest') !== null) {
       this.setState({
@@ -71,15 +81,15 @@ class ClientPortal extends Component {
     this.setState({ width: window.innerWidth });
   }
   componentWillMount() {
-    this.updateDimensions()
+    this.updateDimensions();    
   }
   autoReload() {
     setTimeout(this.autoReload.bind(this), 605000);
-    
+
     var reload = moment().subtract(10, 'minutes').format("LTS");
     if (this.state.lastLoaded !== null) {
       if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
-        console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
+        //console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
         this.loadFulcrumData();
       }
     }
@@ -94,26 +104,29 @@ class ClientPortal extends Component {
         this.setState({
           SimpconTest: dataReceived[0].objects,
         });
-        
+
       }).then(() => {
         this.setState({
           lastLoaded: moment().format("LT"),
           loadingScreen: false
         });
 
-        console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
-        
+        //console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
+
         localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
+
+        db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
 
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
       }).catch((error) => {
         console.log(error)
       });
   }
+  
   render() {
-    function navigationBased(width, user) {
-      if (width >= 992) { return <Navigation user={user} /> }
-      else if (width <= 991) { return <NavigationSmaller user={user} /> }
+    function navigationBased(width, user, notify) {
+      if (width >= 992) { return <Navigation user={user} notification={notify} /> }
+      else if (width <= 991) { return <NavigationSmaller user={user} notification={notify} /> }
     }
 
     if (this.state.loadingScreen === true) {
@@ -129,10 +142,10 @@ class ClientPortal extends Component {
           </Footer>
         </Layout>
       )
-    }
+    }    
     return (
       <Layout>
-        {navigationBased(this.state.width, this.state.user)}
+        {navigationBased(this.state.width, this.state.user, this.state.notify.status)}
         <Layout className="layoutContent">
           <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
             <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
@@ -140,7 +153,6 @@ class ClientPortal extends Component {
               <span id='lastLoadedRefreash'>Click to Refresh Data</span>
             </div>
           </Tooltip>
-          
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />

@@ -92,6 +92,9 @@
 .ant-layout-sider-zero-width-trigger {
   top: 74px
 }
+.ant-layout {
+  background: rgb(243, 243, 243);
+}
 .ant-drawer-body{
   padding: 0 !important;
 }
@@ -124,7 +127,7 @@ th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom:
 }
 #lastLoaded {
   right: 0;
-  padding: 2px 20px;
+  padding: 3px 20px;
   position: absolute;
   font-weight: 400;
   color: #848484;

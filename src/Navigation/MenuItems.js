@@ -35,13 +35,13 @@ export const Timesheet = (role) => {
 }
 
 export const Profile = () => {
-    return (
-      <Menu.Item key="/profile/">
-        <Link to={routes.PROFILE}>
-          <Icon type="user" />Profile
+  return (
+    <Menu.Item key="/profile/">
+      <Link to={routes.PROFILE}>
+        <Icon type="user" />Profile
         </Link>
-      </Menu.Item>
-    )
+    </Menu.Item>
+  )
 }
 
 // These nav footer components will be shown no matter the role
@@ -55,9 +55,11 @@ export const Role = role => {
 }
 export const Username = username => {
   return (
-    <Menu.Item key="7" id="menuProfile" disabled>
-      <Icon type="user" />
-      <span className="nav-text">{username}</span>
+    <Menu.Item key="7" id="menuProfile">
+      <Link to={routes.PROFILE}>
+        <Icon type="user" />
+        <span className="nav-text">{username}</span>
+      </Link>
     </Menu.Item>
   )
 }

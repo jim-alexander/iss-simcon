@@ -12,7 +12,7 @@ const { Content, Header } = Layout;
 
 const SignInPage = ({ history }) =>
   <div>
-    <Header>
+    <Header style={{backgroundColor: '#1d3033' }}>
       <div style={{ height: '32px', right: 0, position: 'absolute', paddingRight: '30px' }}>
         <img src={logo} alt="My logo" style={{ height: '100%' }} />
       </div>

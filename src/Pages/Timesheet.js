@@ -1,6 +1,7 @@
 import React from 'react'
 import { Input, Select, message } from 'antd'
 import { Client } from 'fulcrum-app'
+import { db } from '../firebase'
 
 const Search = Input.Search;
 
@@ -16,6 +17,12 @@ class Outline extends React.Component {
     };
     this.setRecord = this.setRecord.bind(this);
 
+  }
+  componentDidMount(){
+    db.lastViewedPage(this.props.user.id, 'outline')
+  }
+  componentDidUpdate(){
+    db.lastViewedPage(this.props.user.id, 'outline')
   }
   setRecord(value) {
     for (let i = 0; i < this.props.SimpconTest.length; i++) {
@@ -55,27 +62,6 @@ class Outline extends React.Component {
 
   };
 
-  learnWebhooks() {
-    // if (this.state.once === null) {
-    //   const obj = {
-    //     name: 'My Awesome Webhook',
-    //     url: 'http://drilltec.com.au/client-portal/#/',
-    //     active: true
-    //   };
-
-    //   client.webhooks.create(obj)
-    //     .then((webhook) => {
-    //       console.log('success', webhook);
-    //       this.setState({once: 1})
-
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.message);
-    //     });
-    // }
-
-  }
-
   recordList() {
     return (
       <Select showSearch placeholder="Select job title" size="large" style={{ width: '100%', paddingBottom: 10 }} onChange={this.setRecord}>
@@ -102,7 +88,6 @@ class Outline extends React.Component {
         </div>
       )
     }
-    this.learnWebhooks()
     return (
       <div />
     )
