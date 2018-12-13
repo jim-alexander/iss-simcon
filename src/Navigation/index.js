@@ -15,7 +15,10 @@ const navMenu = (user, notify) => {
       <div className="logo"><img src={logo} alt="My logo" style={{height: '100%', paddingLeft: '30px', marginTop: '3px'}}/></div>
       <Menu theme='dark' mode="inline" defaultSelectedKeys={[window.location.pathname]} style={{borderTop: '#b3b3b333 solid 1px'}}>
         {item.DailyReport(user.role)}
-        {item.Timesheet(user.role)}
+        {item.Timesheets(user.role)}
+        {item.SitePlantRegister(user.role)}
+        {item.SQEStats(user.role)}
+        {item.HazardRegister(user.role)}
         {item.Role(user.role)}
         {item.Username(user.username)}
         {item.Logout(user.role)}

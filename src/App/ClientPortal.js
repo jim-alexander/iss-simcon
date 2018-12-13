@@ -9,7 +9,10 @@ import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
 
 import Home from '../Pages/Home'
-import Timesheet from "../Pages/Timesheet"
+import Timesheets from "../Pages/Timesheets"
+import SitePlantRegister from "../Pages/SitePlantRegister"
+import SQEStats from "../Pages/SQEStats"
+import HazardRegister from "../Pages/HazardRegister"
 import Profile from "../Pages/Profile"
 import Loader from '../Pages/Loader'
 
@@ -156,7 +159,10 @@ class ClientPortal extends Component {
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
-              <Route path={routes.TIMESHEET} render={props => <Timesheet {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
+              <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
+              <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props} user={this.state.user} />} />
+              <Route path={routes.SQESTATS} render={props => <SQEStats {...props} user={this.state.user} />} />
+              <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
           </Content>
