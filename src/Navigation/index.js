@@ -14,8 +14,8 @@ const navMenu = (user) => {
     <div>
       <div className="logo"><img src={logo} alt="My logo" style={{height: '100%', paddingLeft: '30px', marginTop: '3px'}}/></div>
       <Menu theme='dark' mode="inline" defaultSelectedKeys={[window.location.pathname]} style={{borderTop: '#b3b3b333 solid 1px'}}>
-        {item.Home(user.role)}
-        {item.Outline(user.role)}
+        {item.DailyReport(user.role)}
+        {item.Timesheet(user.role)}
         <SubMenu key="sub2" title={<span><Icon type="file" /><span>Documents</span></span>}>
           {item.Profile(user.role)}
         </SubMenu>

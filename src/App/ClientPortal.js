@@ -8,7 +8,7 @@ import moment from 'moment';
 import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
 import Home from '../Pages/Home'
-import Outline from "../Pages/Outline"
+import Timesheet from "../Pages/Timesheet"
 import Profile from "../Pages/Profile"
 import Loader from '../Pages/Loader'
 
@@ -144,7 +144,7 @@ class ClientPortal extends Component {
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
               <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
-              <Route path={routes.OUTLINE} render={props => <Outline {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
+              <Route path={routes.TIMESHEET} render={props => <Timesheet {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
           </Content>

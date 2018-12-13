@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import { auth } from '../firebase';
 
 
-export const Home = (role) => {
+export const DailyReport = (role) => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/">
         <Link to={routes.CLIENTPORTAL}>
           <Icon type="pie-chart" />
-          <span className="nav-text">Home</span>
+          <span className="nav-text">Daily Report</span>
         </Link>
       </Menu.Item>
     )
@@ -19,13 +19,13 @@ export const Home = (role) => {
     return;
   }
 }
-export const Outline = (role) => {
+export const Timesheet = (role) => {
   if (role === 'client' || role === 'admin') {
     return (
-      <Menu.Item key="/outline/">
-        <Link to={routes.OUTLINE}>
+      <Menu.Item key="/timesheet/">
+        <Link to={routes.TIMESHEET}>
           <Icon type="bars" />
-          <span className="nav-text">Outline</span>
+          <span className="nav-text">Timesheet</span>
         </Link>
       </Menu.Item>
     )
