@@ -17,8 +17,8 @@ const navMenu = (user, notify) => {
         {item.DailyReport(user.role)}
         {item.Timesheets(user.role)}
         {item.SitePlantRegister(user.role)}
-        {item.SQEStats(user.role)}
         {item.HazardRegister(user.role)}
+        {item.SQEStats(user.role)}
         {item.Role(user.role)}
         {item.Username(user.username)}
         {item.Logout(user.role)}
