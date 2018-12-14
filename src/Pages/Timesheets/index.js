@@ -21,7 +21,6 @@ export default class Timesheets extends Component {
   render() {
     return (
       <div>
-        <div style={{ paddingBottom: 10 }}>
           <Row>
             <Col span={16} style={{ paddingRight: 5 }}>
               {this.selectEmployee()}
@@ -30,7 +29,6 @@ export default class Timesheets extends Component {
               {this.selectDate()}
             </Col>
           </Row>
-        </div>
         <Table
           pagination={false}
           bordered

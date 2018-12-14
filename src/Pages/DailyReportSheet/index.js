@@ -47,7 +47,6 @@ class DailyReportSheet extends React.Component {
   render() {
     return (
       <div>
-        <div style={{ paddingBottom: 10 }}>
           <Row>
             <Col span={16} style={{ paddingRight: 5 }}>
               {this.selectJob()}
@@ -56,7 +55,6 @@ class DailyReportSheet extends React.Component {
               {this.selectDate()}
             </Col>
           </Row>
-        </div>
         <div className='boresPadding'>
           <Table
             pagination={false}
