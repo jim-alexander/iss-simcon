@@ -8,7 +8,7 @@ import moment from 'moment';
 import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
 
-import Home from '../Pages/Home'
+import DailyReportSheet from '../Pages/DailyReportSheet'
 import Timesheets from "../Pages/Timesheets"
 import SitePlantRegister from "../Pages/SitePlantRegister"
 import SQEStats from "../Pages/SQEStats"
@@ -158,7 +158,7 @@ class ClientPortal extends Component {
           </Tooltip>
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
-              <Route exact path={routes.CLIENTPORTAL} render={props => <Home {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
+              <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
               <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
               <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props} user={this.state.user} />} />
               <Route path={routes.SQESTATS} render={props => <SQEStats {...props} user={this.state.user} />} />
