@@ -7,7 +7,7 @@ import { db } from '../../firebase'
 
 const Option = Select.Option;
 
-class Home extends React.Component {
+class DailyReportSheet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,7 +79,7 @@ class Home extends React.Component {
             columns={column.timesheet}
             dataSource={data.SimpsonDataTwo}
             rowKey='id'
-            size="small" />
+            size="middle" />
         </div>
         <div className='boresPadding'>
           <Table
@@ -92,7 +92,7 @@ class Home extends React.Component {
             columns={column.timesheet}
             dataSource={data.SimpsonDataThree}
             rowKey='id'
-            size="small" />
+            size="middle" />
         </div>
         <div className='boresPadding'>
           <Row gutter={10}>
@@ -106,7 +106,7 @@ class Home extends React.Component {
                 columns={column.companyPlant}
                 dataSource={data.SimpsonDataFour}
                 rowKey='id'
-                size="small" />
+                size="middle" />
             </Col>
             <Col span={16}>
               <Table
@@ -118,7 +118,7 @@ class Home extends React.Component {
                 columns={column.hiredPlant}
                 dataSource={data.SimpsonDataFour}
                 rowKey='id'
-                size="small" />
+                size="middle" />
             </Col>
           </Row>
         </div>
@@ -134,7 +134,7 @@ class Home extends React.Component {
                 columns={column.docketsReceived}
                 dataSource={data.SimpsonDataFive}
                 rowKey='id'
-                size="small" />
+                size="middle" />
             </Col>
             <Col span={16}>
               <Table
@@ -146,7 +146,7 @@ class Home extends React.Component {
                 columns={column.materialsReceived}
                 dataSource={data.SimpsonDataFive}
                 rowKey='id'
-                size="small" />
+                size="middle" />
             </Col>
           </Row>
         </div>
@@ -160,10 +160,10 @@ class Home extends React.Component {
             columns={column.sqeStats}
             dataSource={data.SimpsonDataFive}
             rowKey='id'
-            size="small" /></div>
+            size="middle" /></div>
       </div>
     );
   }
 }
 
-export default Home;
+export default DailyReportSheet;
