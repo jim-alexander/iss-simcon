@@ -1,13 +1,13 @@
 #layoutSider {
-  background-color: #112528 !important
+  background-color: #1c3538 !important
 }
 
 .ant-menu-dark {
-  background-color: #112528 !important
+  background-color: #1c3538 !important
 }
 
 .ant-drawer-content {
-  background: #112528 !important
+  background: #1c3538 !important
 }
 
 .ant-menu-sub {
@@ -17,9 +17,11 @@
 .ant-menu-item-selected {
   background-color: #3ea08e !important
 }
-#cpHeader{
+
+#cpHeader {
   background-color: white
 }
+
 #headerAccount {
   max-width: 300px;
   width: 100%;
@@ -29,17 +31,18 @@
 
 #navNotification {
   position: absolute;
-    right: 20px;
-    top: 14px;
-    background: red;
-    border: 2px solid #fafafa;
-    width: 12px;
-    height: 12px;
-    text-align: center;
-    border-radius: 20px;
-    line-height: 25px;
-    color: white;
+  right: 20px;
+  top: 14px;
+  background: red;
+  border: 2px solid #fafafa;
+  width: 12px;
+  height: 12px;
+  text-align: center;
+  border-radius: 20px;
+  line-height: 25px;
+  color: white;
 }
+
 #menuProfile a:hover {
-  color: #52c41a
+  color: #3498db
 }

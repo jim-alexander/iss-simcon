@@ -21,7 +21,12 @@ import { Layout, message, Tooltip } from 'antd'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
-  { form_id: '8624ca67-d338-428c-8924-6d4e7ae6c17a' },
+  { form_id: '0a877c38-ecdb-434a-a0ec-0b283ee8d1b6' }, // Job file
+  { form_id: '8624ca67-d338-428c-8924-6d4e7ae6c17a' }, // Daily prestart
+  { form_id: '99a2f95d-ba0e-4cc8-8d7d-6e08c2c9ca5a' }, // Plant verification
+  { form_id: '1b0fe741-65e4-44eb-b7bb-8aeeb1b2c8d5' }, // Site inspection
+  { form_id: '1b9a6e3c-2c36-4431-8fcb-bcdb2bc3c760' }, // Toolbox minutes
+  { form_id: '08e7cbcf-4ae7-4ec1-8b84-53a3600d9014' }  // Daily Diary
 ]
 
 const { Content, Footer } = Layout
@@ -36,7 +41,12 @@ class ClientPortal extends Component {
         role: '',
         email: ''
       },
-      SimpconTest: [],
+      jobFiles: [],
+      dailyPrestarts: [],
+      plantVerifications: [],
+      siteInspections: [],
+      toolboxMinutes: [],
+      dailyDiarys: [],
       loadingScreen: false,
       width: '',
       lastLoaded: null,
@@ -67,24 +77,31 @@ class ClientPortal extends Component {
           })
         }).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
-    if (localStorage.getItem('SimpconTest') !== null) {
+    if (localStorage.getItem('jobFiles') !== null) {
       this.setState({
-        SimpconTest: JSON.parse(localStorage.getItem('SimpconTest'))
+        jobFiles: JSON.parse(localStorage.getItem('jobFiles'))
       })
       this.loadFulcrumData();
       this.autoReload()
-    } else if (localStorage.getItem('SimpconTest') === null) {
+    } else if (localStorage.getItem('jobFiles') === null) {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
       this.autoReload()
     }
     window.addEventListener("resize", this.updateDimensions);
+    // client.forms.all({ schema: false })
+    //   .then((page) => {
+    //     console.log(page.objects);
+    //   })
+    //   .catch((error) => {
+    //     console.log('Error getting your forms.', error.message);
+    //   });
   }
   updateDimensions = () => {
     this.setState({ width: window.innerWidth });
   }
   componentWillMount() {
-    this.updateDimensions();    
+    this.updateDimensions();
   }
   autoReload() {
     setTimeout(this.autoReload.bind(this), 605000);
@@ -105,7 +122,12 @@ class ClientPortal extends Component {
       .then(dataReceived => {
 
         this.setState({
-          SimpconTest: dataReceived[0].objects,
+          jobFiles: dataReceived[0].objects,
+          dailyPrestarts: dataReceived[1].objects,
+          plantVerifications: dataReceived[2].objects,
+          siteInspections: dataReceived[3].objects,
+          toolboxMinutes: dataReceived[4].objects,
+          dailyDiarys: dataReceived[5].objects
         });
 
       }).then(() => {
@@ -116,7 +138,7 @@ class ClientPortal extends Component {
 
         //console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
 
-        localStorage.setItem('SimpconTest', JSON.stringify(this.state.SimpconTest))
+        localStorage.setItem('jobFiles', JSON.stringify(this.state.jobFiles))
 
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
 
@@ -125,13 +147,12 @@ class ClientPortal extends Component {
         console.log(error)
       });
   }
-  
+
   render() {
     function navigationBased(width, user, notify) {
       if (width >= 992) { return <Navigation user={user} notification={notify} /> }
       else if (width <= 991) { return <NavigationSmaller user={user} notification={notify} /> }
     }
-
     if (this.state.loadingScreen === true) {
       return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -145,7 +166,7 @@ class ClientPortal extends Component {
           </Footer>
         </Layout>
       )
-    }    
+    }
     return (
       <Layout>
         {navigationBased(this.state.width, this.state.user, this.state.notify.status)}
@@ -158,8 +179,12 @@ class ClientPortal extends Component {
           </Tooltip>
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
-              <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props} user={this.state.user} posts={this.state.Posts} SimpconTest={this.state.SimpconTest} DailyLogs={this.state.DailyLogs} prestarts={this.state.Prestarts} />} />
-              <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props} SimpconTest={this.state.SimpconTest} user={this.state.user} />} />
+              <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props} 
+                user={this.state.user} 
+                dailyPrestarts={this.state.dailyPrestarts} 
+                jobFiles={this.state.jobFiles} 
+                dailyDiarys={this.state.dailyDiarys} />} />
+              <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props} jobFiles={this.state.jobFiles} user={this.state.user} />} />
               <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props} user={this.state.user} />} />
               <Route path={routes.SQESTATS} render={props => <SQEStats {...props} user={this.state.user} />} />
               <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props} user={this.state.user} />} />

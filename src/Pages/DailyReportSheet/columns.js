@@ -1,4 +1,4 @@
-export const jobDetails = [{
+export const jobDetails1 = [{
     title: 'Title',
     dataIndex: 'title',
     key: 'title',
@@ -8,19 +8,20 @@ export const jobDetails = [{
     dataIndex: 'projectManager',
     key: 'projectManager',
     width: 100,
-}, {
+}];
+
+export const jobDetails2 = [{
     title: 'Site Supervisor',
     dataIndex: 'siteSupervisor',
     key: 'siteSupervisor',
     width: 100,
-    className: 'hideThis'
+    // className: 'hideThis'
 }, {
     title: 'Day',
     dataIndex: 'day',
     key: 'day',
     width: 100,
-    className: 'hideThis'
-}];
+}]
 
 export const timesheet = [{
     title: 'Name',
@@ -37,59 +38,49 @@ export const timesheet = [{
     dataIndex: 'end',
     key: 'end',
     width: 100,
-    className: ''
 }, {
     title: 'Hours / Mins',
     dataIndex: 'hours',
     key: 'hours',
-    width: 100,
-    className: 'hideThis'
+    width: 100
 }];
 
 export const companyPlant = [{
     title: 'Item',
     dataIndex: 'item',
     key: 'item'
-}, {
-    title: 'Notes',
-    dataIndex: 'notes',
-    key: 'notes'
 }];
 
 export const hiredPlant = [{
     title: 'Supplier',
     dataIndex: 'supplier',
-    key: 'supplier'
+    key: 'supplier',
+    width: 100
 }, {
     title: 'Equipment',
     dataIndex: 'equipment',
-    key: 'equipment'
+    key: 'equipment',
+    width: 100
 }, {
     title: 'Start Time',
     dataIndex: 'start',
-    key: 'start'
+    key: 'start',
+    width: 40
 }, {
     title: 'End Time',
     dataIndex: 'end',
-    key: 'end'
+    key: 'end',
+    width: 40
 }, {
     title: 'Hours / Mins',
     dataIndex: 'total',
-    key: 'total'
+    key: 'total',
+    width: 40
 }, {
     title: 'Docket No',
     dataIndex: 'docket',
-    key: 'docket'
-}];
-
-export const docketsReceived = [{
-    title: 'Item',
-    dataIndex: 'item',
-    key: 'item'
-}, {
-    title: 'Photo',
-    dataIndex: 'photo',
-    key: 'photo',
+    key: 'docket',
+    width: 40
 }];
 
 export const materialsReceived = [{
@@ -108,16 +99,27 @@ export const materialsReceived = [{
     title: 'Docket No',
     dataIndex: 'docket',
     key: 'docket'
+}, {
+    title: 'Photo',
+    dataIndex: 'photo',
+    key: 'photo'
 }];
 
 export const sqeStats = [{
     title: 'Fuel Consumtion',
     dataIndex: 'fuel',
-    key: 'fuel'
+    key: 'fuel',
+    width: 50
 }, {
     title: 'Water Use',
     dataIndex: 'water',
-    key: 'water'
+    key: 'water',
+    width: 50
+}, {
+    title: 'Comments',
+    dataIndex: 'comments',
+    key: 'comments',
+    width: 150
 }];
 
 
