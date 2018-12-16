@@ -42,6 +42,7 @@ export const timesheet = [{
 }];
 
 export const data = [{
+  id: 0,
   title: 'Job',
   sun: '1234',
   mon: '1432',
@@ -51,6 +52,7 @@ export const data = [{
   fri: '1233',
   sat: '1231'
 },{
+  id: 1,
   title: 'Start',
   sun: '7:30 AM',
   mon: '7:30 AM',
@@ -60,6 +62,7 @@ export const data = [{
   fri: '7:30 AM',
   sat: '7:30 AM'
 },{
+  id: 2,
   title: 'Break',
   sun: '.5',
   mon: '.5',
@@ -69,6 +72,7 @@ export const data = [{
   fri: '.5',
   sat: '.5'
 },{
+  id: 3,
   title: 'Finish',
   sun: '3:30 PM',
   mon: '3:30 PM',

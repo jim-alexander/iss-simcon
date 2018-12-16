@@ -18,6 +18,8 @@ class DailyReportSheet extends React.Component {
       jobData1: [],
       jobData2: [],
       companyPersonnel: [],
+      compPersTotal: '00:00',
+      subContrTotal: '00:00',
       subContractors: [],
       companyPlant: [],
       hiredPlant: [],
@@ -30,10 +32,16 @@ class DailyReportSheet extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     db.lastViewedPage(this.props.user.id, 'home');
-    if (this.state.selectedDate !== prevState.selectedDate || this.state.selectedJob !== prevState.selectedJob) {
+    if (this.state.selectedDate !== prevState.selectedDate 
+      || this.state.selectedJob !== prevState.selectedJob
+      || this.props.jobFiles !== prevProps.jobFiles
+      || this.props.dailyPrestarts !== prevProps.dailyPrestarts) {
+    
       this.setState({
         hideDate: false,
         companyPersonnel: [],
+        compPersTotal: '00:00',
+        subContrTotal: '00:00',
         subContractors: [],
         companyPlant: [],
         hiredPlant: [],
@@ -50,7 +58,7 @@ class DailyReportSheet extends React.Component {
         showSearch
         placeholder="Select a job Number"
         style={{ width: '100%', paddingBottom: 10 }}
-        onChange={(job) => { this.setState({ selectedJob: job, selectedDate: ''}) }}>
+        onChange={(job) => { this.setState({ selectedJob: job, selectedDate: '' }) }}>
         {this.props.jobFiles.map(job => <Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)}
       </Select>
     )
@@ -72,7 +80,7 @@ class DailyReportSheet extends React.Component {
   updatePageData() {
     function calcTimeDiff(startTime, endTime) {
       if (!startTime || !endTime) {
-        return ''
+        return '00:00'
       }
       // parse time using 24-hour clock and use UTC to prevent DST issues
       var start = moment.utc(startTime, "HH:mm");
@@ -82,7 +90,7 @@ class DailyReportSheet extends React.Component {
       // calculate the duration
       var d = moment.duration(end.diff(start));
       // format a string result
-      return moment.utc(+d).format('H:mm');
+      return moment.utc(+d).format('HH:mm');
     }
     this.props.jobFiles.forEach(file => {
       if (file.project_id === this.state.selectedJob) {
@@ -119,25 +127,52 @@ class DailyReportSheet extends React.Component {
                 if (log.form_values[8464]) {
                   var compName = log.form_values[8464].choice_values[0]
                 }
+                let diff = calcTimeDiff(log.form_values['d294'], log.form_values['1696']);
+
+                if (moment(diff, 'HH:mm').format('m') !== 0) {
+                  var addMins = moment(diff, 'HH:mm').format('m');
+                } else {addMins = null}
+                if (moment(diff, 'HH:mm').format('h') !== 0) {
+                  var addHours = moment(diff, 'HH:mm').format('HH');
+                } else {addHours = null}
+                
                 this.setState(prevState => ({
                   companyPersonnel: [...prevState.companyPersonnel, {
                     id: log.id,
                     name: compName,
                     start: log.form_values['d294'],
                     end: log.form_values['1696'],
-                    hours: calcTimeDiff(log.form_values['d294'], log.form_values['1696'])
-                  }]
+                    hours: diff
+                  }],
+                  compPersTotal: moment(prevState.compPersTotal, 'HH:mm')
+                    .add(addMins, 'm')
+                    .add(addHours, 'h')
+                    .format('HH:mm')
                 }))
+
               }
               else if (log.form_values['cc82'] === 'sub_contractor') {
+                let diff = calcTimeDiff(log.form_values['d294'], log.form_values['1696']);
+
+                if (moment(diff, 'HH:mm').format('m') !== 0) {
+                  var addMins2 = moment(diff, 'HH:mm').format('m');
+                } else {addMins2 = 0}
+                if (moment(diff, 'HH:mm').format('h') !== 0) {
+                  var addHours2 = moment(diff, 'HH:mm').format('HH');
+                } else {addHours2 = 0}
+                
                 this.setState(prevState => ({
                   subContractors: [...prevState.subContractors, {
                     id: log.id,
                     name: log.form_values[9666],
                     start: log.form_values['d294'],
                     end: log.form_values['1696'],
-                    hours: calcTimeDiff(log.form_values['d294'], log.form_values['1696'])
-                  }]
+                    hours: diff
+                  }],
+                  subContrTotal: moment(prevState.subContrTotal, 'HH:mm')
+                  .add(addMins2, 'm')
+                  .add(addHours2, 'h')
+                  .format('HH:mm')
                 }))
               }
             })
@@ -235,7 +270,7 @@ class DailyReportSheet extends React.Component {
           <Table
             pagination={false}
             title={() => 'Company Personnel'}
-            footer={() => 'Total: 9:54'}
+            footer={() => `Total: ${this.state.compPersTotal}`}
             bordered
             id='boresTableTwo'
             className='boreTables tableResizer dailyReportTables'
@@ -248,7 +283,7 @@ class DailyReportSheet extends React.Component {
           <Table
             pagination={false}
             title={() => 'Sub Contractors'}
-            footer={() => 'Total: 2:26'}
+            footer={() => `Total: ${this.state.subContrTotal}`}
             bordered
             id='boresTableThree'
             className='boreTables tableResizer dailyReportTables'

@@ -1,9 +1,10 @@
 .boreTables {
   margin-bottom: 10px
 }
+
 .ant-table-footer {
-  padding: 6px;
-  font-weight: 500;
+  padding: 1px 15px;
+  font-weight: 400;
   text-align: right;
 }
 
@@ -11,11 +12,18 @@
   padding: 5px;
   font-weight: 600;
   text-align: center;
-  color: black
+  color: black;
+  font-size: 11px;
 }
-  
+
+@media only screen and (min-width: 992px) {
+  .dailyReportTables .ant-table-title {
+    font-size: 15px;
+  }
+}
+
 #boresTableTwo .ant-table-title {
-  background-color: #f6ffed!important;
+  background-color: #f6ffed !important;
   border-bottom: 2px solid #2ecc71 !important;
 }
 
@@ -36,7 +44,7 @@
 
 #boresTableSix .ant-table-title {
   background-color: #fffbe6 !important;
-  border-bottom: 2px solid #f1c40f!important;
+  border-bottom: 2px solid #f1c40f !important;
 }
 
 #boresTableSeven .ant-table-title {

@@ -187,6 +187,9 @@ th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom:
 }
 
 @media only screen and (min-height: 600px) {
+  .ant-menu-item > a:before {
+    position: inherit !important;
+  }
   #menuLogout {
     position: absolute;
     bottom: 0;
