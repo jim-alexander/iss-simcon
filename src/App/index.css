@@ -184,6 +184,9 @@ th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom:
   .printHide{
     display:none;
   }
+  .layoutContent{
+    background: white
+  }
 }
 
 @media only screen and (min-height: 600px) {
