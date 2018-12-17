@@ -17,12 +17,14 @@ const navMenu = (user) => {
       theme='dark' 
       mode="inline" 
       defaultSelectedKeys={[window.location.pathname]} 
+      selectedKeys={[window.location.pathname]}
       style={{borderTop: '#b3b3b333 solid 1px'}}>
         {item.DailyReport(user.role)}
         {item.Timesheets(user.role)}
         {item.SitePlantRegister(user.role)}
         {item.HazardRegister(user.role)}
         {item.SQEStats(user.role)}
+        {item.Fulcrum(user.role)}
         {item.Role(user.role)}
         {item.Username(user.username)}
         {item.Logout(user.role)}

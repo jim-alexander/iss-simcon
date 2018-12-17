@@ -179,12 +179,15 @@ class ClientPortal extends Component {
           </Tooltip>
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
-              <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props} 
-                user={this.state.user} 
-                dailyPrestarts={this.state.dailyPrestarts} 
-                jobFiles={this.state.jobFiles} 
+              <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props}
+                user={this.state.user}
+                dailyPrestarts={this.state.dailyPrestarts}
+                jobFiles={this.state.jobFiles}
                 dailyDiarys={this.state.dailyDiarys} />} />
-              <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props} jobFiles={this.state.jobFiles} user={this.state.user} />} />
+              <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props}
+                jobFiles={this.state.jobFiles}
+                dailyPrestarts={this.state.dailyPrestarts}
+                user={this.state.user} />} />
               <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props} user={this.state.user} />} />
               <Route path={routes.SQESTATS} render={props => <SQEStats {...props} user={this.state.user} />} />
               <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props} user={this.state.user} />} />

@@ -75,6 +75,20 @@ export const HazardRegister = (role) => {
     return;
   }
 }
+export const Fulcrum = (role) => {
+  if (role === 'client' || role === 'admin') {
+    return (
+      <Menu.Item key="/fulcrum/" id='fulcrum'>
+        <a href='https://web.fulcrumapp.com/dash/8624ca67-d338-428c-8924-6d4e7ae6c17a' target='_blank' rel="noopener noreferrer">
+          <Icon type="mobile" theme='outlined' />
+          <span className="nav-text">Fulcrum</span>
+        </a>
+      </Menu.Item>
+    )
+  } else {
+    return;
+  }
+}
 
 // These nav footer components will be shown no matter the role
 export const Role = role => {

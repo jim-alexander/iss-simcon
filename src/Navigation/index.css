@@ -46,3 +46,6 @@
 #menuProfile a:hover {
   color: #3498db
 }
+li#fulcrum:hover{
+  background: #c0392b;
+}
