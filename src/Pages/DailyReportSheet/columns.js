@@ -8,9 +8,7 @@ export const jobDetails1 = [{
     dataIndex: 'projectManager',
     key: 'projectManager',
     width: 100,
-}];
-
-export const jobDetails2 = [{
+}, {
     title: 'Site Supervisor',
     dataIndex: 'siteSupervisor',
     key: 'siteSupervisor',
@@ -21,7 +19,9 @@ export const jobDetails2 = [{
     dataIndex: 'day',
     key: 'day',
     width: 100,
-}]
+}];
+
+export const jobDetails2 = []
 
 export const timesheet = [{
     title: 'Name',

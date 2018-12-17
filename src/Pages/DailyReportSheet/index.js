@@ -15,8 +15,7 @@ class DailyReportSheet extends React.Component {
       selectedJob: '',
       reportList: [],
       hideDate: true,
-      jobData1: [],
-      jobData2: [],
+      jobInfo: null,
       companyPersonnel: [],
       compPersTotal: '00:00',
       subContrTotal: '00:00',
@@ -32,13 +31,14 @@ class DailyReportSheet extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     db.lastViewedPage(this.props.user.id, 'home');
-    if (this.state.selectedDate !== prevState.selectedDate 
+    if (this.state.selectedDate !== prevState.selectedDate
       || this.state.selectedJob !== prevState.selectedJob
       || this.props.jobFiles !== prevProps.jobFiles
       || this.props.dailyPrestarts !== prevProps.dailyPrestarts) {
-    
+
       this.setState({
         hideDate: false,
+        jobInfo: null,
         companyPersonnel: [],
         compPersTotal: '00:00',
         subContrTotal: '00:00',
@@ -78,6 +78,13 @@ class DailyReportSheet extends React.Component {
   }
 
   updatePageData() {
+    var jobInfo = [{
+      id: 0,
+      title: null,
+      projectManager: null,
+      siteSupervisor: null,
+      day: null,
+    }]
     function calcTimeDiff(startTime, endTime) {
       if (!startTime || !endTime) {
         return '00:00'
@@ -95,33 +102,23 @@ class DailyReportSheet extends React.Component {
     this.props.jobFiles.forEach(file => {
       if (file.project_id === this.state.selectedJob) {
         if (file.form_values['3033']) {
-          var projectManager = file.form_values['3033'].choice_values[0]
+          var proMan = file.form_values['3033'].choice_values[0]
         }
-        this.setState({
-          jobData1: [{
-            id: file.id,
-            title: file.form_values['7af6'],
-            projectManager
-          }]
-        })
-
+        jobInfo[0].id = 0
+        jobInfo[0].title = file.form_values['7af6']
+        jobInfo[0].projectManager = proMan
       }
     })
     if (this.state.selectedJob || this.state.selectedJob !== '') {
       this.props.dailyPrestarts.forEach(file => {
         if (file.form_values['80e9'] === this.state.selectedDate && file.project_id === this.state.selectedJob) {
           if (file.form_values['556f']) {
-            var siteSupervisor = file.form_values['556f'].choice_values[0]
+            var siteSuper = file.form_values['556f'].choice_values[0]
           }
-          this.setState({
-            jobData2: [{
-              id: file.id,
-              siteSupervisor,
-              day: moment(file.form_values['80e9']).format('dddd')
-            }]
-          })
-          if (file.form_values['86b7']) {
+          jobInfo[0].siteSupervisor = siteSuper
+          jobInfo[0].day = moment(file.form_values['80e9']).format('dddd')
 
+          if (file.form_values['86b7']) {
             file.form_values['86b7'].forEach(log => {
               if (log.form_values['cc82'] === 'company_personnel') {
                 if (log.form_values[8464]) {
@@ -131,11 +128,11 @@ class DailyReportSheet extends React.Component {
 
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins = moment(diff, 'HH:mm').format('m');
-                } else {addMins = null}
+                } else { addMins = null }
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours = moment(diff, 'HH:mm').format('HH');
-                } else {addHours = null}
-                
+                } else { addHours = null }
+
                 this.setState(prevState => ({
                   companyPersonnel: [...prevState.companyPersonnel, {
                     id: log.id,
@@ -156,11 +153,11 @@ class DailyReportSheet extends React.Component {
 
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins2 = moment(diff, 'HH:mm').format('m');
-                } else {addMins2 = 0}
+                } else { addMins2 = 0 }
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours2 = moment(diff, 'HH:mm').format('HH');
-                } else {addHours2 = 0}
-                
+                } else { addHours2 = 0 }
+
                 this.setState(prevState => ({
                   subContractors: [...prevState.subContractors, {
                     id: log.id,
@@ -170,9 +167,9 @@ class DailyReportSheet extends React.Component {
                     hours: diff
                   }],
                   subContrTotal: moment(prevState.subContrTotal, 'HH:mm')
-                  .add(addMins2, 'm')
-                  .add(addHours2, 'h')
-                  .format('HH:mm')
+                    .add(addMins2, 'm')
+                    .add(addHours2, 'h')
+                    .format('HH:mm')
                 }))
               }
             })
@@ -227,6 +224,11 @@ class DailyReportSheet extends React.Component {
         }
       })
     }
+    if (this.state.selectedJob) {
+      this.setState({
+        jobInfo
+      })
+    }
   }
 
   render() {
@@ -241,30 +243,15 @@ class DailyReportSheet extends React.Component {
           </Col>
         </Row>
         <div className='boresPadding'>
-          <Row gutter={10}>
-            <Col span={12}>
-              <Table
-                pagination={false}
-                bordered
-                id='boresTableOne'
-                className='boreTables tableResizer dailyReportTables'
-                columns={column.jobDetails1}
-                dataSource={this.state.jobData1}
-                rowKey='id'
-                size="middle" />
-            </Col>
-            <Col span={12}>
-              <Table
-                pagination={false}
-                bordered
-                id='boresTableOne'
-                className='boreTables tableResizer dailyReportTables'
-                columns={column.jobDetails2}
-                dataSource={this.state.jobData2}
-                rowKey='id'
-                size="middle" />
-            </Col>
-          </Row>
+          <Table
+            pagination={false}
+            bordered
+            id='boresTableOne'
+            className='boreTables tableResizer dailyReportTables'
+            columns={column.jobDetails1}
+            dataSource={this.state.jobInfo}
+            rowKey='id'
+            size="middle" />
         </div>
         <div className='boresPadding'>
           <Table

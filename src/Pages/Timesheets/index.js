@@ -11,10 +11,10 @@ export default class Timesheets extends Component {
     nameList: [],
     selectedName: null,
     selectedWeek: {
-      start: null,
-      end: null
+      start: moment().startOf('week').format('YYYY-MM-DD'),
+      end: moment().endOf('week').format('YYYY-MM-DD')
     },
-    data: null
+    data: null,
   }
   selectEmployee() {
     return (
@@ -33,15 +33,20 @@ export default class Timesheets extends Component {
     return (
       <DatePicker.WeekPicker
         style={{ width: '100%' }}
-        onChange={(date) => this.setState({
-          selectedWeek: {
-            start: date.startOf('week').format('YYYY-MM-DD'),
-            end: date.endOf('week').format('YYYY-MM-DD')
+        onChange={(date) => {
+          if (date) {
+            this.setState({
+              selectedWeek: {
+                start: date.startOf('week').format('YYYY-MM-DD'),
+                end: date.endOf('week').format('YYYY-MM-DD')
+              }
+            })}
           }
-        })} />
+        }
+        defaultValue={moment()} />
     )
   }
-  componentDidMount(){
+  componentDidMount() {
     this.loadTimesheet()
   }
   componentDidUpdate(prevProps, prevState) {
@@ -56,125 +61,99 @@ export default class Timesheets extends Component {
   //TODO: Push timesheet data to object for table
 
   loadTimesheet() {
+    var nameList = [];
+    var data = [{
+      id: 0,
+      title: 'Job',
+      sun: '',
+      mon: '',
+      tue: '',
+      wed: '',
+      thur: '',
+      fri: '',
+      sat: ''
+    }, {
+      id: 1,
+      title: 'Start',
+      sun: '',
+      mon: '',
+      tue: '',
+      wed: '',
+      thur: '',
+      fri: '',
+      sat: ''
+    }, {
+      id: 2,
+      title: 'Break',
+      sun: '',
+      mon: '',
+      tue: '',
+      wed: '',
+      thur: '',
+      fri: '',
+      sat: ''
+    }, {
+      id: 3,
+      title: 'Finish',
+      sun: '',
+      mon: '',
+      tue: '',
+      wed: '',
+      thur: '',
+      fri: '',
+      sat: '',
+    }]
     this.props.dailyPrestarts.forEach(prestart => {
       if (prestart.form_values['86b7']) {
         prestart.form_values['86b7'].forEach(entry => {
           if (entry.form_values['cc82'] === 'company_personnel') {
-            this.setState(prevState => ({
-              nameList: [...prevState.nameList, entry.form_values['8464'].choice_values[0]]
-            }))
-
+            nameList.push(entry.form_values['8464'].choice_values[0])
             if (this.state.selectedName && this.state.selectedWeek.start) {
               var prestartDate = new Date(prestart.form_values['80e9']).getTime();
               var checkStart = new Date(this.state.selectedWeek.start).getTime();
               var checkEnd = new Date(this.state.selectedWeek.end).getTime();
-              var sunday = {}, monday = {}, tuesday = {}, wednesday = {}, thursday = {}, friday = {}, saturday = {};
-
               if ((prestartDate > checkStart && prestartDate < checkEnd) || (prestartDate === checkStart || prestartDate === checkEnd)) {
                 if (entry.form_values['8464'].choice_values[0] === this.state.selectedName) {
-                  console.log(prestart, entry);
                   if (moment(prestart.form_values['80e9']).format('dddd') === 'Sunday') {
-                    sunday = {
-                      job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
+                    data[1].sun = entry.form_values['d294']; //Start
+                    data[3].sun = entry.form_values['1696'] //finish
                   } else if (moment(prestart.form_values['80e9']).format('dddd') === 'Monday') {
-                     monday = {
-                      job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
+                    data[1].mon = entry.form_values['d294']; //Start
+                    data[3].mon = entry.form_values['1696'] //finish
                   } else if (moment(prestart.form_values['80e9']).format('dddd') === 'Tuesday') {
-                     tuesday = {
-                      job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
+                    data[1].tue = entry.form_values['d294']; //Start
+                    data[3].tue = entry.form_values['1696'] //finish
                   } else if (moment(prestart.form_values['80e9']).format('dddd') === 'Wednesday') {
-                     wednesday = {
-                      job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
+                    data[1].wed = entry.form_values['d294']; //Start
+                    data[3].wed = entry.form_values['1696'] //finish
                   } else if (moment(prestart.form_values['80e9']).format('dddd') === 'Thursday') {
-                     thursday = {
-                      job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
+                    data[1].thur = entry.form_values['d294']; //Start
+                    data[3].thur = entry.form_values['1696'] //finish
                   } else if (moment(prestart.form_values['80e9']).format('dddd') === 'Friday') {
-                     friday = {
-                     job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
+                    data[1].fri = entry.form_values['d294']; //Start
+                    data[3].fri = entry.form_values['1696'] //finish
                   } else if (moment(prestart.form_values['80e9']).format('dddd') === 'Saturday') {
-                     saturday = {
-                      job: '', //prestart.project_id
-                      start: entry.form_values['d294'],
-                      break: '.5',
-                      finish: entry.form_values['1696']
-                    }
-                  } 
-                  this.setState({
-                    data: [{
-                      id: 0,
-                      title: 'Job',
-                      sun: '1234',
-                      mon: '1432',
-                      tue: '1331',
-                      wed: '1231',
-                      thur: '1231',
-                      fri: '1233',
-                      sat: '1231'
-                    },{
-                      id: 1,
-                      title: 'Start',
-                      sun: sunday.start,
-                      mon: monday.start,
-                      tue: tuesday.start,
-                      wed: wednesday.start,
-                      thur: thursday.start,
-                      fri: friday.start,
-                      sat: saturday.start
-                    },{
-                      id: 2,
-                      title: 'Break',
-                      sun: '.5',
-                      mon: '.5',
-                      tue: '.5',
-                      wed: '.5',
-                      thur: '.5',
-                      fri: '.5',
-                      sat: '.5'
-                    },{
-                      id: 3,
-                      title: 'Finish',
-                      sun: sunday.finish,
-                      mon: monday.finish,
-                      tue: tuesday.finish,
-                      wed: wednesday.finish,
-                      thur: thursday.finish,
-                      fri: friday.finish,
-                      sat: saturday.finish,
-                    }]
-                  })
+                    data[1].sat = entry.form_values['d294']; //Start
+                    data[3].sat = entry.form_values['1696'] //finish
+                  }
                 }
-              } 
+              }
             }
           }
         })
       }
     })
+    function sort_unique(arr) {
+      return arr.sort().filter(function (el, i, a) {
+        return (i === a.indexOf(el));
+      });
+    }
+    this.setState({
+      nameList: sort_unique(nameList),
+      data
+    })
   }
-  render() {    
+  render() {
     return (
       <div>
         <Row>
