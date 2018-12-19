@@ -3,7 +3,22 @@
     text-align: right;
     background: #fafafa;
 }
-.total {
+.timesheetTotals {
     background: #fafafa;
-    /* font-weight: bold; */
+}
+.date {
+    background: #fafafa;
+}
+th.dateSub span {
+    font-size: 12px;
+}
+th.timesheetDay span {
+    font-size: 12px;
+}
+td.dateSub :hover {
+    background: red
+}
+#timesheet th {
+text-align: center;
+padding: 5px !important;
 }

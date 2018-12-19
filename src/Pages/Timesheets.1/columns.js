@@ -1,0 +1,131 @@
+export const timesheet = [{
+  title: '',
+  dataIndex: 'title',
+  key: 'title',
+  width: 100,
+  className: 'timesheetTitleFeilds'
+}, {
+  title: 'Sun',
+  dataIndex: 'sun',
+  key: 'sun',
+  width: 100,
+  className: 'timesheetSunday'
+}, {
+  title: 'Mon',
+  dataIndex: 'mon',
+  key: 'mon',
+  width: 100,
+}, {
+  title: 'Tue',
+  dataIndex: 'tue',
+  key: 'tue',
+  width: 100,
+}, {
+  title: 'Wed',
+  dataIndex: 'wed',
+  key: 'wed',
+  width: 100,
+}, {
+  title: 'Thur',
+  dataIndex: 'thur',
+  key: 'thur',
+  width: 100,
+}, {
+  title: 'Fri',
+  dataIndex: 'fri',
+  key: 'fri',
+  width: 100,
+}, {
+  title: 'Sat',
+  dataIndex: 'sat',
+  key: 'sat',
+  width: 100,
+  className: 'timesheetSaturday'
+}];
+export const timesheetFortnight = [{
+  title: '',
+  dataIndex: 'title',
+  key: 'title',
+  width: 100,
+  className: 'timesheetTitleFeilds'
+}, {
+  title: 'Week one',
+  children: [{
+    title: 'Sun',
+    dataIndex: 'sun',
+    key: 'sun',
+    width: 100,
+    className: 'timesheetSunday'
+  }, {
+    title: 'Mon',
+    dataIndex: 'mon',
+    key: 'mon',
+    width: 100,
+  }, {
+    title: 'Tue',
+    dataIndex: 'tue',
+    key: 'tue',
+    width: 100,
+  }, {
+    title: 'Wed',
+    dataIndex: 'wed',
+    key: 'wed',
+    width: 100,
+  }, {
+    title: 'Thur',
+    dataIndex: 'thur',
+    key: 'thur',
+    width: 100,
+  }, {
+    title: 'Fri',
+    dataIndex: 'fri',
+    key: 'fri',
+    width: 100,
+  }, {
+    title: 'Sat',
+    dataIndex: 'sat',
+    key: 'sat',
+    width: 100,
+    className: 'timesheetSaturday'
+  }]
+}, {
+  title: 'Week Two',
+  children: [{
+    title: 'Sun',
+    dataIndex: 'sun2',
+    key: 'sun2',
+    width: 100,
+    className: 'timesheetSunday'
+  }, {
+    title: 'Mon',
+    dataIndex: 'mon2',
+    key: 'mon2',
+    width: 100,
+  }, {
+    title: 'Tue',
+    dataIndex: 'tue2',
+    key: 'tue2',
+    width: 100,
+  }, {
+    title: 'Wed',
+    dataIndex: 'wed2',
+    key: 'wed2',
+    width: 100,
+  }, {
+    title: 'Thur',
+    dataIndex: 'thur2',
+    key: 'thur2',
+    width: 100,
+  }, {
+    title: 'Fri',
+    dataIndex: 'fri2',
+    key: 'fri2',
+    width: 100,
+  }, {
+    title: 'Sat',
+    dataIndex: 'sat2',
+    key: 'sat2',
+    width: 100,
+    className: 'timesheetSaturday'
+  }]
+}];

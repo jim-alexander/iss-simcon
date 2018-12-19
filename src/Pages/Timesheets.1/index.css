@@ -1,0 +1,16 @@
+.timesheetTitleFeilds{
+    font-weight: 500;
+    text-align: right;
+    background: #fafafa;
+}
+.total {
+    background: #fafafa;
+    /* font-weight: bold; */
+}
+/* td.timesheetSaturday {
+    background: #fff1f0;
+}
+td.timesheetSunday {
+    background: #e6f7ff;
+} */
+

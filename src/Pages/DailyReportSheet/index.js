@@ -120,25 +120,28 @@ class DailyReportSheet extends React.Component {
 
           if (file.form_values['86b7']) {
             file.form_values['86b7'].forEach(log => {
+              var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1] : '';
+              var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1] : '';
+              var diff = calcTimeDiff(start, end);
+
               if (log.form_values['cc82'] === 'company_personnel') {
                 if (log.form_values[8464]) {
                   var compName = log.form_values[8464].choice_values[0]
                 }
-                let diff = calcTimeDiff(log.form_values['d294'], log.form_values['1696']);
-
+                
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins = moment(diff, 'HH:mm').format('m');
                 } else { addMins = null }
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours = moment(diff, 'HH:mm').format('HH');
                 } else { addHours = null }
-
+                
                 this.setState(prevState => ({
                   companyPersonnel: [...prevState.companyPersonnel, {
                     id: log.id,
                     name: compName,
-                    start: log.form_values['d294'],
-                    end: log.form_values['1696'],
+                    start,
+                    end,
                     hours: diff
                   }],
                   compPersTotal: moment(prevState.compPersTotal, 'HH:mm')
@@ -146,10 +149,8 @@ class DailyReportSheet extends React.Component {
                     .add(addHours, 'h')
                     .format('HH:mm')
                 }))
-
               }
               else if (log.form_values['cc82'] === 'sub_contractor') {
-                let diff = calcTimeDiff(log.form_values['d294'], log.form_values['1696']);
 
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins2 = moment(diff, 'HH:mm').format('m');
@@ -162,8 +163,8 @@ class DailyReportSheet extends React.Component {
                   subContractors: [...prevState.subContractors, {
                     id: log.id,
                     name: log.form_values[9666],
-                    start: log.form_values['d294'],
-                    end: log.form_values['1696'],
+                    start,
+                    end,
                     hours: diff
                   }],
                   subContrTotal: moment(prevState.subContrTotal, 'HH:mm')
@@ -231,7 +232,7 @@ class DailyReportSheet extends React.Component {
     }
   }
 
-  render() {
+  render() {    
     return (
       <div>
         <Row>
@@ -319,7 +320,7 @@ class DailyReportSheet extends React.Component {
             rowKey='id'
             size="middle" />
         </div>
-        <div className="boresPadding">
+        {/* <div className="boresPadding">
           <Table
             pagination={false}
             title={() => 'SQE Stats'}
@@ -329,7 +330,7 @@ class DailyReportSheet extends React.Component {
             columns={column.sqeStats}
             dataSource={this.state.SQEStats}
             rowKey='id'
-            size="middle" /></div>
+            size="middle" /></div> */}
       </div>
     );
   }
