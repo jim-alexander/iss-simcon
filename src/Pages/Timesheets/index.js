@@ -59,6 +59,7 @@ export default class Timesheets extends Component {
       }, () => this.loadTimesheet())
     }
   }
+  //TODO: Total hours fix and OT1 OT2 check
   calcTimeDiff(startTime, endTime) {
     if (!startTime || !endTime) {
       return parseFloat(0)
