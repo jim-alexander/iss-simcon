@@ -1,24 +1,38 @@
-.timesheetTitleFeilds{
+.timesheetTitleFeilds {
     font-weight: 500;
     text-align: right;
     background: #fafafa;
 }
+
 .timesheetTotals {
     background: #fafafa;
 }
+
 .date {
     background: #fafafa;
 }
+
 th.dateSub span {
     font-size: 12px;
 }
+
 th.timesheetDay span {
     font-size: 12px;
 }
+
 td.dateSub :hover {
     background: red
 }
+
 #timesheet th {
-text-align: center;
-padding: 5px !important;
+    text-align: center;
+    padding: 5px !important;
+}
+
+#dateTo {
+    font-weight: 400;
+    font-size: 16px;
+    /* border: solid 1px #d9d9d9; */
+    padding: 0 10px;
+    border-radius: 4px;
 }
