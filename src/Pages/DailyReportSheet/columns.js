@@ -29,12 +29,12 @@ export const timesheet = [{
     key: 'name',
     width: 200,
 }, {
-    title: 'start',
+    title: 'Start',
     dataIndex: 'start',
     key: 'start',
     width: 100,
 }, {
-    title: 'end',
+    title: 'End',
     dataIndex: 'end',
     key: 'end',
     width: 100,

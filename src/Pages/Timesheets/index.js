@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, DatePicker, Row, Col, Select} from 'antd'
+import { Table, DatePicker, Row, Col, Select } from 'antd'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import * as column from './columns'
@@ -23,6 +23,10 @@ export default class Timesheets extends Component {
             this.setState({
               start: date.format('YYYY-MM-DD')
             })
+          } else {
+            this.setState({
+              start: '1996-01-01'
+            })
           }
         }}
         defaultValue={moment()}
@@ -38,9 +42,9 @@ export default class Timesheets extends Component {
         format='Do MMM YYYY' />
     )
   }
-  selectDayNumber(){
-    return(
-      <Select style={{width: '100%', maxWidth: 200, paddingLeft: 20 }} defaultValue={14} onChange={(val) => this.setState({noDays: val})}>
+  selectDayNumber() {
+    return (
+      <Select style={{ width: '100%', maxWidth: 200, paddingLeft: 20 }} defaultValue={14} onChange={(val) => this.setState({ noDays: val })}>
         <Select.Option key={14}>14</Select.Option>
         <Select.Option key={7}>7</Select.Option>
       </Select>
@@ -51,18 +55,18 @@ export default class Timesheets extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.dailyPrestarts !== this.props.dailyPrestarts ||
-       prevState.start !== this.state.start ||
-        prevState.noDays !== this.state.noDays) {
+      prevState.start !== this.state.start ||
+      prevState.noDays !== this.state.noDays) {
       this.setState({
         data: null,
-        end: moment(this.state.start, 'YYYY-MM-DD').add(this.state.noDays, 'days').format('YYYY-MM-DD')
+        end: moment(this.state.start, 'YYYY-MM-DD').add((this.state.noDays - 1), 'days').format('YYYY-MM-DD')
       }, () => this.loadTimesheet())
     }
   }
-  //TODO: Total hours fix and OT1 OT2 check
+  //TODO: Total hours fix and OT1 OT2 check 
   calcTimeDiff(startTime, endTime) {
     if (!startTime || !endTime) {
-      return parseFloat(0)
+      return null
     }
     // parse time using 24-hour clock and use UTC to prevent DST issues
     var start = moment.utc(startTime, "h.mm");
@@ -71,8 +75,8 @@ export default class Timesheets extends Component {
     if (end.isBefore(start)) end.add(1, 'day');
     // calculate the duration
     var d = moment.duration(end.diff(start));
-    // format a string result
-    return parseFloat(moment.utc(+d).format('HH.mm'))
+    // format a string result    
+    return moment.utc(+d).format('HH.mm')
   }
   calcOverTimeOne(startTime, endTime, day) {
     if (startTime && endTime) {
@@ -136,34 +140,36 @@ export default class Timesheets extends Component {
             var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
             var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
 
+            var addHours = moment(hoursDiff, 'HH.mm').format('HH')
+            var addMins = moment(hoursDiff, 'HH.mm').format('m')
+
             var obj = {
               id: entry.id,
               name: entry.form_values[8464].choice_values[0],
             };
             const index = data.findIndex((e) => e.name === obj.name);
+
             if (index === -1) {
-              obj[moment(prestart.form_values['80e9']).format('D-MMM')] = hoursDiff;
-              obj.hours = hoursDiff;
-              obj.ot1 = overTimeOne
-              obj.ot2 = overTimeTwo
-              obj[moment(prestart.form_values['80e9']).format('Do-MMM') + '_start'] = start
-              obj[moment(prestart.form_values['80e9']).format('Do-MMM') + '_end'] = end
+              obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
+              obj.ot1 = overTimeOne;
+              obj.ot2 = overTimeTwo;
+              obj.hours = moment.duration({
+                hours: addHours,
+                minutes: addMins
+              })
               data.push(obj);
             } else {
+              //Called when multiple signins occure on prestart
               if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
-                data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += hoursDiff;
-                data[index].hours += hoursDiff
-                data[index].ot1 += overTimeOne
-                data[index].ot2 += overTimeTwo
-                data[index][moment(prestart.form_values['80e9']).format('Do-MMM') + '_start'] = start
-                data[index][moment(prestart.form_values['80e9']).format('Do-MMM') + '_end'] = end
+                data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += " " + moment(hoursDiff, 'HH.mm').format('HH:mm');
+                data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
+                data[index].ot1 += overTimeOne;
+                data[index].ot2 += overTimeTwo;
               } else {
-                Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: hoursDiff })
-                data[index].hours += hoursDiff
-                data[index].ot1 += overTimeOne
-                data[index].ot2 += overTimeTwo
-                data[index][moment(prestart.form_values['80e9']).format('Do-MMM') + '_start'] = start
-                data[index][moment(prestart.form_values['80e9']).format('Do-MMM') + '_end'] = end
+                Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
+                data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
+                data[index].ot1 += overTimeOne;
+                data[index].ot2 += overTimeTwo;
               }
             }
           }
@@ -198,6 +204,9 @@ export default class Timesheets extends Component {
             }
           }}
           rowKey='id'
+          onSelect={(record, selected, selectedRows) => {
+            console.log(record, selected, selectedRows)
+          }}
           size="middle" />
       </div>
     )

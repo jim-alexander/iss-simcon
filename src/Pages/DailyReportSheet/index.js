@@ -17,8 +17,14 @@ class DailyReportSheet extends React.Component {
       hideDate: true,
       jobInfo: null,
       companyPersonnel: [],
-      compPersTotal: '00:00',
-      subContrTotal: '00:00',
+      compPersTotal: moment.duration({
+        hours: 0,
+        minutes: 0
+      }),
+      subContrTotal: moment.duration({
+        hours: 0,
+        minutes: 0
+      }),
       subContractors: [],
       companyPlant: [],
       hiredPlant: [],
@@ -40,8 +46,14 @@ class DailyReportSheet extends React.Component {
         hideDate: false,
         jobInfo: null,
         companyPersonnel: [],
-        compPersTotal: '00:00',
-        subContrTotal: '00:00',
+        compPersTotal: moment.duration({
+          hours: 0,
+          minutes: 0
+        }),
+        subContrTotal: moment.duration({
+          hours: 0,
+          minutes: 0
+        }),
         subContractors: [],
         companyPlant: [],
         hiredPlant: [],
@@ -128,14 +140,14 @@ class DailyReportSheet extends React.Component {
                 if (log.form_values[8464]) {
                   var compName = log.form_values[8464].choice_values[0]
                 }
-                
+
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins = moment(diff, 'HH:mm').format('m');
-                } else { addMins = null }
-                if (moment(diff, 'HH:mm').format('h') !== 0) {
+                } else { addMins = 0 }
+                if (moment(diff, 'HH:mm').format('HH') !== 0) {
                   var addHours = moment(diff, 'HH:mm').format('HH');
-                } else { addHours = null }
-                
+                } else { addHours = 0 }
+
                 this.setState(prevState => ({
                   companyPersonnel: [...prevState.companyPersonnel, {
                     id: log.id,
@@ -144,11 +156,11 @@ class DailyReportSheet extends React.Component {
                     end,
                     hours: diff
                   }],
-                  compPersTotal: moment(prevState.compPersTotal, 'HH:mm')
-                    .add(addMins, 'm')
-                    .add(addHours, 'h')
-                    .format('HH:mm')
+                  compPersTotal: prevState.compPersTotal
+                    .add(parseInt(addHours, 0), 'hours')
+                    .add(parseInt(addMins, 0), 'minutes')
                 }))
+
               }
               else if (log.form_values['cc82'] === 'sub_contractor') {
 
@@ -167,10 +179,9 @@ class DailyReportSheet extends React.Component {
                     end,
                     hours: diff
                   }],
-                  subContrTotal: moment(prevState.subContrTotal, 'HH:mm')
-                    .add(addMins2, 'm')
-                    .add(addHours2, 'h')
-                    .format('HH:mm')
+                  subContrTotal: prevState.subContrTotal
+                    .add(parseInt(addHours2, 0), 'hours')
+                    .add(parseInt(addMins2, 0), 'minutes')
                 }))
               }
             })
@@ -258,7 +269,7 @@ class DailyReportSheet extends React.Component {
           <Table
             pagination={false}
             title={() => 'Company Personnel'}
-            footer={() => `Total: ${this.state.compPersTotal}`}
+            footer={() => `Total Hours: ${this.state.compPersTotal.asHours()}`}
             bordered
             id='boresTableTwo'
             className='boreTables tableResizer dailyReportTables'
@@ -271,7 +282,7 @@ class DailyReportSheet extends React.Component {
           <Table
             pagination={false}
             title={() => 'Sub Contractors'}
-            footer={() => `Total: ${this.state.subContrTotal}`}
+            footer={() => `Total Hours: ${this.state.subContrTotal.asHours()}`}
             bordered
             id='boresTableThree'
             className='boreTables tableResizer dailyReportTables'

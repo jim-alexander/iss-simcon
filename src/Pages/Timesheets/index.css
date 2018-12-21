@@ -20,10 +20,6 @@ th.timesheetDay span {
     font-size: 12px;
 }
 
-td.dateSub :hover {
-    background: red
-}
-
 #timesheet th {
     text-align: center;
     padding: 5px !important;

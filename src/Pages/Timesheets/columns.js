@@ -1,3 +1,4 @@
+// import React from 'react'
 import moment from 'moment'
 
 export function timesheet(today, days) {
@@ -22,7 +23,10 @@ export function timesheet(today, days) {
         dataIndex: moment(today, 'D-MMM-YYYY').add(i, 'days').format('D-MMM'),
         className: 'dateSub',
         key: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd') + i,
-        width: 100
+        width: 100,
+        // render: (time) => {
+        //   return <div contentEditable>{time}</div>
+        // }
       }],
     })
   }
@@ -31,8 +35,8 @@ export function timesheet(today, days) {
     dataIndex: 'hours',
     key: 'hours',
     width: 100,
-    render: (num) => {
-      return Math.round(num * 100) / 100
+    render: (num) => {      
+      return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
     },
     className: 'timesheetTotals'
   }, {

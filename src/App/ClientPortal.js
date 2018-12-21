@@ -189,8 +189,19 @@ class ClientPortal extends Component {
                 dailyPrestarts={this.state.dailyPrestarts}
                 user={this.state.user} />} />
               <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props} user={this.state.user} />} />
-              <Route path={routes.SQESTATS} render={props => <SQEStats {...props} user={this.state.user} />} />
-              <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props} user={this.state.user} />} />
+              <Route path={routes.SQESTATS} render={props => <SQEStats {...props}
+                user={this.state.user}
+                dailyPrestarts={this.state.dailyPrestarts}
+                jobFiles={this.state.jobFiles}
+                dailyDiarys={this.state.dailyDiarys}
+                siteInspections={this.state.siteInspections}
+                toolboxMinutes={this.state.toolboxMinutes} />} />
+              <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props}
+                user={this.state.user}
+                jobFiles={this.state.jobFiles}
+                dailyPrestarts={this.state.dailyPrestarts}
+                siteInspections={this.state.siteInspections}
+                toolboxMinutes={this.state.toolboxMinutes} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
           </Content>
