@@ -17,11 +17,11 @@ export function timesheet(today, days) {
   for (let i = 0; i < days; i++) {
     columns.push({
       title: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd'),
-      className: 'timesheetDay',
+      className: 'timesheetDay hideTheseCells',
       children: [{
         title: moment(today, 'D-MMM-YYYY').add(i, 'days').format('D-MMM'),
         dataIndex: moment(today, 'D-MMM-YYYY').add(i, 'days').format('D-MMM'),
-        className: 'dateSub',
+        className: 'dateSub hideTheseCells',
         key: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd') + i,
         width: 100,
         // render: (time) => {
@@ -31,15 +31,18 @@ export function timesheet(today, days) {
     })
   }
   columns.push({
-    title: 'Hours',
-    dataIndex: 'hours',
-    key: 'hours',
-    width: 100,
-    render: (num) => {      
-      return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
-    },
-    className: 'timesheetTotals'
-  }, {
+    title: 'Totals',
+    className: 'totals',
+    children: [{
+      title: 'Hours',
+      dataIndex: 'hours',
+      key: 'hours',
+      width: 100,
+      render: (num) => {
+        return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
+      },
+      className: 'timesheetTotals'
+    }, {
       title: 'OT1',
       dataIndex: 'ot1',
       key: 'ot1',
@@ -65,7 +68,8 @@ export function timesheet(today, days) {
         }
       },
       className: 'timesheetTotals'
-    })
+    }]
+  })
   return columns
 }
 

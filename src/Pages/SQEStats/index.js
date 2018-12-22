@@ -15,7 +15,6 @@ export default class SQEStats extends Component {
   selectJob() {
     return (
       <Select
-        showSearch
         mode="multiple"
         placeholder="Select Job Number(s)"
         style={{ width: '100%', paddingBottom: 10 }}
@@ -42,6 +41,8 @@ export default class SQEStats extends Component {
   }
   componentDidMount() {
     this.buildTable()
+    
+    
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.jobFiles !== this.props.jobFiles ||

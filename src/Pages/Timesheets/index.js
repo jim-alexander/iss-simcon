@@ -17,7 +17,7 @@ export default class Timesheets extends Component {
   selectDate() {
     return (
       <DatePicker
-        style={{ width: '100%', maxWidth: 200, paddingLeft: 20 }}
+        style={{ width: '100%' }}
         onChange={(date) => {
           if (date) {
             this.setState({
@@ -36,7 +36,7 @@ export default class Timesheets extends Component {
   dateTo() {
     return (
       <DatePicker
-        style={{ width: '100%', maxWidth: 200, paddingLeft: 20 }}
+        style={{ width: '100%' }}
         value={moment(this.state.end, 'YYYY-MM-DD')}
         disabled
         format='Do MMM YYYY' />
@@ -44,7 +44,7 @@ export default class Timesheets extends Component {
   }
   selectDayNumber() {
     return (
-      <Select style={{ width: '100%', maxWidth: 200, paddingLeft: 20 }} defaultValue={14} onChange={(val) => this.setState({ noDays: val })}>
+      <Select style={{ width: '100%' }} value={this.state.noDays} onChange={(val) => this.setState({ noDays: val })}>
         <Select.Option key={14}>14</Select.Option>
         <Select.Option key={7}>7</Select.Option>
       </Select>
@@ -52,6 +52,11 @@ export default class Timesheets extends Component {
   }
   componentDidMount() {
     this.loadTimesheet()
+    if (window.innerWidth <= 992) {
+      this.setState({
+        noDays: 7
+      })
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.dailyPrestarts !== this.props.dailyPrestarts ||
@@ -86,15 +91,15 @@ export default class Timesheets extends Component {
 
       var dayEndTime = moment(`2018-12-10 20:00`, 'YYYY-MM-DD HH:mm');
       var overtimeOne = moment.duration(0);
-
-      if (endTime.isAfter(dayEndTime)) {
+      
+      if (endTime.isAfter(dayEndTime) && moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
         var time = startTime.isAfter(dayEndTime) ? startTime : dayEndTime;
         overtimeOne = moment.duration(endTime.diff(time));
       }
       if (day === 'Saturday') {
         overtimeOne = moment.duration(endTime.diff(startTime));
       }
-      if (overtimeOne.as('hours') === 2 || overtimeOne.as('hours') > 2) {
+      if (overtimeOne.as('hours') >= 2) {
         return 2
       } else {
         return overtimeOne.as('hours')
@@ -117,8 +122,10 @@ export default class Timesheets extends Component {
         overtimeTwo = moment.duration(endTime.diff(time));
       }
       if (day === 'Saturday') {
-        overtimeTwo = moment.duration(endTime.diff(startTime));
-        overtimeTwo.subtract(2, 'hours')
+        if (overtimeTwo.as('hours') >= 2) {
+          overtimeTwo = moment.duration(endTime.diff(startTime));
+          overtimeTwo.subtract(2, 'hours')
+        } 
       }
       if (day === 'Sunday') {
         overtimeTwo = moment.duration(endTime.diff(startTime));
@@ -185,9 +192,14 @@ export default class Timesheets extends Component {
       <div>
         <div style={{ marginBottom: 10 }}>
           <Row gutter={10}>
-            <Col span={8}><h2>From: {this.selectDate()}</h2></Col>
-            <Col span={8}><h2>To: {this.dateTo()}</h2></Col>
-            <Col span={8}><h2>Days: {this.selectDayNumber()}</h2></Col>
+            <Col span={10}><h3>From</h3></Col>
+            <Col span={10}><h3>To</h3></Col>
+            <Col span={4}><h3>Days</h3></Col>
+          </Row>
+          <Row gutter={10}>
+            <Col span={10}>{this.selectDate()}</Col>
+            <Col span={10}>{this.dateTo()}</Col>
+            <Col span={4}>{this.selectDayNumber()}</Col>
           </Row>
 
         </div>

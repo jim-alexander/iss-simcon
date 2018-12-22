@@ -1,5 +1,28 @@
-.subHeader div{
+.subHeader div {
     font-size: smaller;
     text-align: center;
 
+}
+
+/* th.employees {
+    background-color: #f6ffed !important;
+    border-bottom: 2px solid #2ecc71 !important;
+}
+
+th.contractors {
+    background-color: #fff1f0 !important;
+    border-bottom: 2px solid #e74c3c !important;
+} */
+
+th.manHours {
+    background-color: #f6ffed !important;
+    border-bottom: 2px solid #2ecc71 !important;
+}
+th.documentsCompleted {
+    background-color: #e6f7ff !important;
+    border-bottom: 2px solid #3498db !important;
+}
+th.materials {
+    background-color: #fffbe6 !important;
+    border-bottom: 2px solid #f1c40f !important;
 }

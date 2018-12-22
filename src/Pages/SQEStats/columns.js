@@ -11,12 +11,13 @@ export function plantRegister(){
     width: 250
   }, {
     title: 'Man Hours',
+    className: 'manHours',
     width: 200,
     children: [{
       title: 'Employees',
       dataIndex: 'manHours',
       key: 'manHours',
-      className: 'subHeader',
+      className: 'subHeader employees',
       render: hours => {
         if (hours.asHours() > 0) {
           return hours.asHours()
@@ -29,7 +30,7 @@ export function plantRegister(){
       title: 'Contractors',
       dataIndex: 'manHoursSub',
       key: 'manHoursSub',
-      className: 'subHeader',
+      className: 'subHeader contractors',
       render: hours => {
         if (hours.asHours() > 0) {
           return hours.asHours()
@@ -41,6 +42,7 @@ export function plantRegister(){
     }]
   }, {
     title: 'Documents Completed',
+    className: 'documentsCompleted',
     children: [{
       title: 'Site Inspections',
       dataIndex: 'siteInspections',
@@ -83,6 +85,7 @@ export function plantRegister(){
     }]
   }, {
     title: 'Materials (L)',
+    className: 'materials',
     children: [{
       title: 'Diesel',
       dataIndex: 'diesel',

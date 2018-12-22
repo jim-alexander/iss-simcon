@@ -12,23 +12,35 @@
     background: #fafafa;
 }
 
-th.dateSub span {
-    font-size: 12px;
-}
-
-th.timesheetDay span {
-    font-size: 12px;
-}
-
 #timesheet th {
     text-align: center;
     padding: 5px !important;
 }
-
-#dateTo {
-    font-weight: 400;
-    font-size: 16px;
-    /* border: solid 1px #d9d9d9; */
-    padding: 0 10px;
-    border-radius: 4px;
+/* td.dateSub.hideTheseCells {
+    font-size: 12px !important;
+    padding: 2px !important;
+    text-align: center;
 }
+td.timesheetTotals{
+    font-size: 12px !important;
+    padding: 2px !important;
+    text-align: center;
+} */
+
+th.totals{
+    background-color: #f6ffed !important;
+    border-bottom: 2px solid #2ecc71 !important;
+}
+.hideTheseCells{
+    display: none;
+}
+@media only screen and (min-width: 650px) {
+    .hideTheseCells {
+      display: table-cell;
+    }
+}
+@media print {
+    .hideTheseCells {
+        display: table-cell;
+    }
+  }

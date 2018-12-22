@@ -188,7 +188,11 @@ class ClientPortal extends Component {
                 jobFiles={this.state.jobFiles}
                 dailyPrestarts={this.state.dailyPrestarts}
                 user={this.state.user} />} />
-              <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props} user={this.state.user} />} />
+              <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props}
+                user={this.state.user}
+                jobFiles={this.state.jobFiles}
+                plantVerifications={this.state.plantVerifications}
+              />} />
               <Route path={routes.SQESTATS} render={props => <SQEStats {...props}
                 user={this.state.user}
                 dailyPrestarts={this.state.dailyPrestarts}
