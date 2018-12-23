@@ -6,16 +6,16 @@ import {
 
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
-import { Input, Button, Form, Select } from 'antd';
+import { Input, Button, Form, Select, Modal, Divider, Row, Col, message } from 'antd';
 import './index.css'
 
 const Option = Select.Option;
 
-const SignUpPage = ({ history }) =>
+const SignUpPage = ({ history, title, visible, onOk, onCancel }) =>
   <div>
-    <h2>Create Account</h2>
-    <SignUpForm history={history} />
+    <SignUpForm history={history} title={title} visible={visible} onOk={onOk} onCancel={onCancel} />
   </div>
+
 
 const updateByPropertyName = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -45,10 +45,6 @@ class SignUpForm extends Component {
       passwordOne,
     } = this.state;
 
-    const {
-      history,
-    } = this.props;
-
     auth.doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
 
@@ -56,7 +52,8 @@ class SignUpForm extends Component {
         db.doCreateUser(authUser.user.uid, username, email, role)
           .then(() => {
             this.setState(() => ({ ...INITIAL_STATE }));
-            history.push(routes.CLIENTPORTAL);
+            message.info(`You have been signed in as:  ${username}`);
+            this.props.onOk()
           })
           .catch(error => {
             this.setState(updateByPropertyName('error', error));
@@ -84,47 +81,65 @@ class SignUpForm extends Component {
       passwordOne === '' ||
       username === '' ||
       email === '';
-    return (
-      <Form onSubmit={this.onSubmit} id='signupForm'>
-        <Select onChange={event => this.setState(updateByPropertyName('role', event))} className='somePadding' placeholder="Select a role">
-          <Option value="client">Client</Option>
-          <Option value="admin">Admin</Option>
-          <Option value="maintenance">Maintenance</Option>
-        </Select>
-      <Input
-          value={username}
-          onChange={event => this.setState(updateByPropertyName('username', event.target.value))}
-          type="text"
-          placeholder="Name"
-          className='somePadding'
-        />
-      <Input
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-          className='somePadding'
-        />
-      <Input
-          value={passwordOne}
-          onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
-          type="password"
-          placeholder="Password"
-          className='somePadding'
-        />
-      <Input
-          value={passwordTwo}
-          onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm Password"
-          className='somePadding'
-        />
-      <Button disabled={isInvalid} htmlType="submit" style={{maxWidth: 150, width: '100%'}}>
-          Sign Up
-        </Button>
 
-        { error && <p>{error.message}</p> }
-      </Form>
+    return (
+      <Modal
+        title={this.props.title}
+        visible={this.props.visible}
+        onOk={this.props.onOk}
+        onCancel={this.props.onCancel}
+        footer={null}
+      >
+        <Form onSubmit={this.onSubmit} id='signupForm'>
+          <Select onChange={event => this.setState(updateByPropertyName('role', event))} className='somePadding' placeholder="Select a role">
+            <Option value="client">Client</Option>
+            <Option value="admin">Admin</Option>
+            <Option value="maintenance">Maintenance</Option>
+          </Select>
+          <Input
+            value={username}
+            onChange={event => this.setState(updateByPropertyName('username', event.target.value))}
+            type="text"
+            placeholder="Name"
+            className='somePadding'
+          />
+          <Input
+            value={email}
+            onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+            type="text"
+            placeholder="Email Address"
+            className='somePadding'
+          />
+          <Input
+            value={passwordOne}
+            onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
+            type="password"
+            placeholder="Password"
+            className='somePadding'
+          />
+          <Input
+            value={passwordTwo}
+            onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
+            type="password"
+            placeholder="Confirm Password"
+            className='somePadding'
+          />
+          {error && <p>{error.message}</p>}
+          <Divider />
+          <Row gutter={10}>
+            <Col span={12}>
+            <Button key="back" onClick={this.props.onCancel}>Cancel</Button>
+            </Col>
+            <Col span={12}>
+              <Button disabled={isInvalid} htmlType="submit" type='primary' style={{ maxWidth: 150, width: '100%' }}>
+                Sign Up
+              </Button>
+            </Col>
+          </Row>
+
+        </Form>
+      </Modal>
+
     );
   }
 }
@@ -143,6 +158,3 @@ export {
   SignUpLink,
 };
 
-
-// WEBPACK FOOTER //
-// ./src/components/SignUp/index.js

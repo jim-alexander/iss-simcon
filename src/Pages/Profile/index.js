@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs, Icon, Divider, Row, Col } from 'antd'
+import { Tabs, Icon, Divider, Button, } from 'antd'
 import { db } from '../../firebase'
 
 import SignUp from './SignUp'
@@ -9,25 +9,52 @@ import PasswordChange from './PasswordChange'
 import Loader from '../Loader'
 
 class Profile extends React.Component {
+  state = {
+    createAccountVisible: false
+  }
   componentDidMount() {
     db.lastViewedPage(this.props.user.id, 'profile')
   }
   componentDidUpdate() {
     db.lastViewedPage(this.props.user.id, 'profile')
   }
+  showModal = () => {
+    this.setState({
+      createAccountVisible: true,
+    });
+  }
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      createAccountVisible: false,
+    });
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      createAccountVisible: false,
+    });
+  }
 
   signUpForm = (role) => {
     if (role === 'admin') {
       return (
         <div>
-          <Row gutter={10}>
-            <Col xs={24} sm={24} md={24} lg={5} xl={5}>
-              <SignUp />
-            </Col>
-            <Col xs={0} sm={0} md={0} lg={19} xl={19}>
-              <Activity user={this.props.user} />
-            </Col>
-          </Row>
+
+          <Activity user={this.props.user} />
+          <Button
+            type="primary"
+            ghost
+            style={{ marginTop: 15 }}
+            onClick={this.showModal}>
+            Create Account
+          </Button>
+          <SignUp title="Create Account"
+            visible={this.state.createAccountVisible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel} />
           <Divider />
         </div>
       )

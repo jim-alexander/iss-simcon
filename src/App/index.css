@@ -92,9 +92,9 @@
 .ant-layout-sider-zero-width-trigger {
   top: 74px
 }
-.ant-layout {
+/* .ant-layout {
   background: rgb(243, 243, 243);
-}
+} */
 .ant-drawer-body{
   padding: 0 !important;
 }

@@ -8,7 +8,6 @@ import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../constants/routes';
 
 import './index.css';
-import 'antd/dist/antd.css'; //This is the AntDesign css file
 
 import { Layout } from 'antd';
 
