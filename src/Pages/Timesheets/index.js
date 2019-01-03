@@ -139,48 +139,51 @@ export default class Timesheets extends Component {
     var data = [];
     this.props.dailyPrestarts.forEach(prestart => {
       if ((prestart.form_values['80e9'] > this.state.start && prestart.form_values['80e9'] < this.state.end) || (prestart.form_values['80e9'] === this.state.start || prestart.form_values['80e9'] === this.state.end)) {
-        prestart.form_values['86b7'].forEach(entry => {
-          if (entry.form_values['cc82'] === 'company_personnel') {
-            var start = (entry.form_values['33d3']) ? entry.form_values['33d3'].choice_values[1] : '';
-            var end = (entry.form_values['2748']) ? entry.form_values['2748'].choice_values[1] : '';
-            var hoursDiff = this.calcTimeDiff(start, end);
-            var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
-            var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
-
-            var addHours = moment(hoursDiff, 'HH.mm').format('HH')
-            var addMins = moment(hoursDiff, 'HH.mm').format('m')
-
-            var obj = {
-              id: entry.id,
-              name: entry.form_values[8464].choice_values[0],
-            };
-            const index = data.findIndex((e) => e.name === obj.name);
-
-            if (index === -1) {
-              obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
-              obj.ot1 = overTimeOne;
-              obj.ot2 = overTimeTwo;
-              obj.hours = moment.duration({
-                hours: addHours,
-                minutes: addMins
-              })
-              data.push(obj);
-            } else {
-              //Called when multiple signins occure on prestart
-              if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
-                data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += " " + moment(hoursDiff, 'HH.mm').format('HH:mm');
-                data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
-                data[index].ot1 += overTimeOne;
-                data[index].ot2 += overTimeTwo;
+        if (prestart.form_values['86b7']) {
+          prestart.form_values['86b7'].forEach(entry => {
+            if (entry.form_values['cc82'] === 'company_personnel') {
+              var start = (entry.form_values['33d3']) ? entry.form_values['33d3'].choice_values[1] : '';
+              var end = (entry.form_values['2748']) ? entry.form_values['2748'].choice_values[1] : '';
+              var hoursDiff = this.calcTimeDiff(start, end);
+              var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
+              var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
+  
+              var addHours = moment(hoursDiff, 'HH.mm').format('HH')
+              var addMins = moment(hoursDiff, 'HH.mm').format('m')
+  
+              var obj = {
+                id: entry.id,
+                name: entry.form_values[8464].choice_values[0],
+              };
+              const index = data.findIndex((e) => e.name === obj.name);
+  
+              if (index === -1) {
+                obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
+                obj.ot1 = overTimeOne;
+                obj.ot2 = overTimeTwo;
+                obj.hours = moment.duration({
+                  hours: addHours,
+                  minutes: addMins
+                })
+                data.push(obj);
               } else {
-                Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
-                data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
-                data[index].ot1 += overTimeOne;
-                data[index].ot2 += overTimeTwo;
+                //Called when multiple signins occure on prestart
+                if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
+                  data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += " " + moment(hoursDiff, 'HH.mm').format('HH:mm');
+                  data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
+                  data[index].ot1 += overTimeOne;
+                  data[index].ot2 += overTimeTwo;
+                } else {
+                  Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
+                  data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
+                  data[index].ot1 += overTimeOne;
+                  data[index].ot2 += overTimeTwo;
+                }
               }
             }
-          }
-        })
+          })
+        }
+        
       }
     })
     this.setState({
