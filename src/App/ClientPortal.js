@@ -77,13 +77,23 @@ class ClientPortal extends Component {
           })
         }).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
-    if (localStorage.getItem('jobFiles') !== null) {
+    if (localStorage.getItem('jobFiles') !== null &&
+      localStorage.getItem('dailyPrestarts') !== null &&
+      localStorage.getItem('plantVerifications') !== null &&
+      localStorage.getItem('siteInspections') !== null &&
+      localStorage.getItem('toolboxMinutes') !== null &&
+      localStorage.getItem('dailyDiarys') !== null) {
       this.setState({
-        jobFiles: JSON.parse(localStorage.getItem('jobFiles'))
+        jobFiles: JSON.parse(localStorage.getItem('jobFiles')),
+        dailyPrestarts: JSON.parse(localStorage.getItem('dailyPrestarts')),
+        plantVerifications: JSON.parse(localStorage.getItem('plantVerifications')),
+        siteInspections: JSON.parse(localStorage.getItem('siteInspections')),
+        toolboxMinutes: JSON.parse(localStorage.getItem('toolboxMinutes')),
+        dailyDiarys: JSON.parse(localStorage.getItem('dailyDiarys')),
       })
       this.loadFulcrumData();
       this.autoReload()
-    } else if (localStorage.getItem('jobFiles') === null) {
+    } else {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
       this.autoReload()
@@ -137,8 +147,22 @@ class ClientPortal extends Component {
         });
 
         //console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
-
-        localStorage.setItem('jobFiles', JSON.stringify(this.state.jobFiles))
+        function saveRecentData(data, num) {
+          var returned = [];
+          data = data.reverse()
+          for (let i = 0; i < num; i++) {
+            if (data[i]) {
+              returned.push(data[i])
+            }
+          }
+          return returned
+        }
+        localStorage.setItem('jobFiles', JSON.stringify(saveRecentData(this.state.jobFiles, 10)))
+        localStorage.setItem('dailyPrestarts', JSON.stringify(saveRecentData(this.state.dailyPrestarts, 200)))
+        localStorage.setItem('plantVerifications', JSON.stringify(saveRecentData(this.state.plantVerifications, 40)))
+        localStorage.setItem('siteInspections', JSON.stringify(saveRecentData(this.state.siteInspections, 20)))
+        localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
+        localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
 
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
 
