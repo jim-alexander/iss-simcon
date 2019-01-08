@@ -6,6 +6,7 @@ export function timesheet(today, days) {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
+    className: 'nameSub',
     width: 200,
     sorter: (a, b) => {
       if (a.name < b.name) { return -1; }
