@@ -25,6 +25,7 @@ class DailyReportSheet extends React.Component {
         hours: 0,
         minutes: 0
       }),
+      comments: [],
       subContractors: [],
       companyPlant: [],
       hiredPlant: [],
@@ -54,6 +55,7 @@ class DailyReportSheet extends React.Component {
           hours: 0,
           minutes: 0
         }),
+        comments: [],
         subContractors: [],
         companyPlant: [],
         hiredPlant: [],
@@ -129,7 +131,7 @@ class DailyReportSheet extends React.Component {
           }
           jobInfo[0].siteSupervisor = siteSuper
           jobInfo[0].day = moment(file.form_values['80e9']).format('dddd')
-
+          
           if (file.form_values['86b7']) {
             file.form_values['86b7'].forEach(log => {
               var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1] : '';
@@ -137,8 +139,8 @@ class DailyReportSheet extends React.Component {
               var diff = calcTimeDiff(start, end);
 
               if (log.form_values['cc82'] === 'company_personnel') {
-                if (log.form_values[8464]) {
-                  var compName = log.form_values[8464].choice_values[0]
+                if (log.form_values[8817]) {
+                  var compName = log.form_values[8817].choice_values[1]
                 }
 
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
@@ -196,6 +198,14 @@ class DailyReportSheet extends React.Component {
               }))
             })
           }
+          if (file.form_values['0bd7']) {            
+            this.setState(prevState => ({
+              comments: [...prevState.comments, {
+                id: file.id,
+                comments: file.form_values['0bd7'],
+              }]
+            }))
+          }
         }
       })
       this.props.dailyDiarys.forEach(diary => {
@@ -225,6 +235,7 @@ class DailyReportSheet extends React.Component {
               }]
             }))
           })
+
           this.setState({
             SQEStats: [{
               id: diary.id,
@@ -233,6 +244,15 @@ class DailyReportSheet extends React.Component {
               comments: diary.form_values['d5e3']
             }]
           })
+          if (diary.form_values['d5e3']) {            
+            this.setState(prevState => ({
+              comments: [...prevState.comments, {
+                id: diary.id,
+                comments: diary.form_values['d5e3'],
+              }]
+            }))
+          }
+          
         }
       })
     }
@@ -286,7 +306,7 @@ class DailyReportSheet extends React.Component {
             bordered
             id='boresTableThree'
             className='boreTables tableResizer dailyReportTables'
-            columns={column.timesheet}
+            columns={column.timesheetContractors}
             dataSource={this.state.subContractors}
             rowKey='id'
             size="middle" />
@@ -330,6 +350,15 @@ class DailyReportSheet extends React.Component {
             dataSource={this.state.materialsDelivered}
             rowKey='id'
             size="middle" />
+        </div>
+        <div className='boresPadding'>
+          <Table
+            size='small'
+            rowKey='id'
+            pagination={false}
+            dataSource={this.state.comments}
+            className='boreTables tableResizer dailyReportTables'
+            columns={[{title: 'Comments', key: 'comments', dataIndex: 'comments'}]}></Table>
         </div>
         {/* <div className="boresPadding">
           <Table

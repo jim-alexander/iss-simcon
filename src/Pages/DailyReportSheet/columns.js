@@ -44,6 +44,22 @@ export const timesheet = [{
     key: 'hours',
     width: 100
 }];
+export const timesheetContractors = [{
+    title: 'Company',
+    dataIndex: 'company',
+    key: 'company',
+    width: 200,
+}, {
+    title: 'No. of employees',
+    dataIndex: 'no_of_employees',
+    key: 'no_of_employees',
+    width: 100,
+}, {
+    title: 'Hours / Mins',
+    dataIndex: 'hours',
+    key: 'hours',
+    width: 100
+}];
 
 export const companyPlant = [{
     title: 'Item',

@@ -9,7 +9,8 @@
   overflow: hidden;
   background-color: #ddd;
 }
-.loader:before{
+
+.loader:before {
   display: block;
   position: absolute;
   content: "";
@@ -18,27 +19,62 @@
   height: 4px;
   background-color: #001529;
   -webkit-animation: loading 2s linear infinite;
-          animation: loading 2s linear infinite;
+  animation: loading 2s linear infinite;
 }
 
 @-webkit-keyframes loading {
-    from {left: -200px; width: 30%;}
-    50% {width: 30%;}
-    70% {width: 70%;}
-    80% { left: 50%;}
-    95% {left: 120%;}
-    to {left: 100%;}
+  from {
+    left: -200px;
+    width: 30%;
+  }
+
+  50% {
+    width: 30%;
+  }
+
+  70% {
+    width: 70%;
+  }
+
+  80% {
+    left: 50%;
+  }
+
+  95% {
+    left: 120%;
+  }
+
+  to {
+    left: 100%;
+  }
 }
 
 @keyframes loading {
-    from {left: -200px; width: 30%;}
-    50% {width: 30%;}
-    70% {width: 70%;}
-    80% { left: 50%;}
-    95% {left: 120%;}
-    to {left: 100%;}
-}
+  from {
+    left: -200px;
+    width: 30%;
+  }
 
+  50% {
+    width: 30%;
+  }
+
+  70% {
+    width: 70%;
+  }
+
+  80% {
+    left: 50%;
+  }
+
+  95% {
+    left: 120%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
 .logo {
   height: 40px;
   margin: 16px;
@@ -49,55 +85,68 @@
   min-height: 100vh;
   background: #f3f3f3;
 }
+
 #sider-logout {
   border-top: solid 1px #b3b3b333;
 }
+
 #sider-login {
   border-top: solid 1px #b3b3b333;
 }
-.ant-table tr > td {
+
+.ant-table tr>td {
   font-size: smaller !important;
   padding: 5px 5px !important;
 }
-.ant-table tr > th {
+
+.ant-table tr>th {
   font-size: smaller !important;
   padding: 5px 5px !important;
 }
+
 .ant-tabs-nav-scroll {
   font-size: smaller !important;
 }
+
 .hideThis {
-    display: none;
+  display: none;
 }
 
 .ant-table-content {
   color: black !important;
 }
+
 #menuLogout {
   position: inherit;
   bottom: auto;
 }
+
 #menuLogout:hover {
-    color: #E91E63;
+  color: #E91E63;
 }
-#menuProfile{
+
+#menuProfile {
   position: inherit;
   bottom: auto;
 }
-#menuRole{
+
+#menuRole {
   position: inherit;
   bottom: auto;
   border-top: solid #b3b3b333 1px !important;
 }
+
 .ant-layout-sider-zero-width-trigger {
   top: 74px
 }
+
 /* .ant-layout {
   background: rgb(243, 243, 243);
 } */
-.ant-drawer-body{
+.ant-drawer-body {
   padding: 0 !important;
 }
+
 #drawerButton {
   position: absolute;
   background: red;
@@ -106,25 +155,47 @@
   width: 35px;
   border-radius: 0 5px 5px 0;
 }
-.ant-drawer-content{
+
+.ant-drawer-content {
   background: #001529;
 }
+
 .ant-drawer-content-wrapper {
   width: 200px !important
 }
-.ant-drawer > * {
-transition-duration: 0s !important}
 
-.outlineStats{
+.ant-drawer>* {
+  transition-duration: 0s !important
+}
+
+.outlineStats {
   padding: 0 5px;
 }
-th.outlineCompleted{ background-color: #f6ffed !important; border-bottom: solid 2px #b7eb8f !important; }
-th.outlineInProgress{ background-color: #fffbe6 !important;  border-bottom: solid 2px #ffe58f !important; }
-th.outlineUpcoming{ background-color: #e6f7ff !important;  border-bottom: solid 2px #91d5ff !important; }
-th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom: solid 2px #ffa39e !important; }
+
+th.outlineCompleted {
+  background-color: #f6ffed !important;
+  border-bottom: solid 2px #b7eb8f !important;
+}
+
+th.outlineInProgress {
+  background-color: #fffbe6 !important;
+  border-bottom: solid 2px #ffe58f !important;
+}
+
+th.outlineUpcoming {
+  background-color: #e6f7ff !important;
+  border-bottom: solid 2px #91d5ff !important;
+}
+
+th.outlineAwaitingPayment {
+  background-color: #fff1f0 !important;
+  border-bottom: solid 2px #ffa39e !important;
+}
+
 .Maintenance td:nth-child(2) {
   border-bottom: solid 2px #fe6385 !important;
 }
+
 #lastLoaded {
   right: 0;
   padding: 3px 20px;
@@ -133,16 +204,20 @@ th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom:
   color: #848484;
   cursor: pointer;
 }
-#lastLoadedRefreash{
+
+#lastLoadedRefreash {
   display: none;
 }
-#lastLoaded:hover #lastLoadedDefault{
+
+#lastLoaded:hover #lastLoadedDefault {
   display: none;
 }
-#lastLoaded:hover #lastLoadedRefreash{
+
+#lastLoaded:hover #lastLoadedRefreash {
   display: block;
 }
-.DEVTESTLOCATION{
+
+.DEVTESTLOCATION {
   font-weight: 600;
   text-align: right;
 }
@@ -154,23 +229,28 @@ th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom:
   .layoutContent {
     margin-left: 200px;
   }
+
   .hideThis {
     display: table-cell;
   }
+
   #layoutSider {
     overflow: auto;
     height: 100vh;
     position: fixed;
     left: 0
   }
-  .ant-table tr > td {
+
+  .ant-table tr>td {
     font-size: inherit !important;
     padding: 10px 10px !important;
   }
-  .ant-table tr > th {
+
+  .ant-table tr>th {
     font-size: inherit !important;
     padding: 10px 10px !important;
   }
+
   .ant-tabs-nav-scroll {
     font-size: inherit !important;
   }
@@ -179,32 +259,36 @@ th.outlineAwaitingPayment{ background-color: #fff1f0 !important;  border-bottom:
 
 @media print {
   .hideThis {
-      display: table-cell;
+    display: table-cell;
   }
-  .printHide{
-    display:none;
+
+  .printHide {
+    display: none;
   }
-  .layoutContent{
+
+  .layoutContent {
     background: white
   }
 }
 
 @media only screen and (min-height: 600px) {
-  .ant-menu-item > a:before {
+  .ant-menu-item>a:before {
     position: inherit !important;
   }
+
   #menuLogout {
     position: absolute;
     bottom: 0;
   }
-  #menuProfile{
+
+  #menuProfile {
     position: absolute;
     bottom: 40px;
   }
-  #menuRole{
+
+  #menuRole {
     position: absolute;
     bottom: 81px;
     border-top: none !important;
   }
 }
-

@@ -9,7 +9,7 @@ const Option = Select.Option;
 export default class SQEStats extends Component {
   state = {
     selectedJob: [],
-    selectedDate: null,
+    selectedDate: ['1900-01-01', moment().add(2, 'years').format('YYYY-MM-DD')],
     data: [],
   }
   selectJob() {
@@ -24,25 +24,30 @@ export default class SQEStats extends Component {
     )
   }
   selectDate() {
-    return <DatePicker.MonthPicker
-      style={{ width: '100%' }} format='MM-YYYY'
-      placeholder='Select Month'
+    return <DatePicker.RangePicker
+      style={{ width: '100%' }} format='DD-MM-YYYY'
       onChange={(date) => {
-        if (date) {
+        if (date.length !== 0) {
           this.setState({
-            selectedDate: date.format('YYYY-MM-DD')
+            selectedDate: [date[0].format('YYYY-MM-DD'), date[1].format('YYYY-MM-DD')]
           })
+
         } else {
           this.setState({
-            selectedDate: null
+            selectedDate: ['1900-01-01', moment().add(2, 'years').format('YYYY-MM-DD')]
           })
         }
-      }} />
+      }}
+      ranges={{
+        'All Time': [moment('1900-01-01', 'YYYY-MM-DD'), moment().add(2, 'years')],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1 , 'months').startOf('month'), moment().subtract(1 , 'months').endOf('month')],
+        'Last Year': [moment().subtract(1 , 'years').startOf('year'), moment().subtract(1 , 'years').endOf('year')],
+      }}
+    />
   }
   componentDidMount() {
     this.buildTable()
-    
-    
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.jobFiles !== this.props.jobFiles ||
@@ -66,8 +71,8 @@ export default class SQEStats extends Component {
   buildTable() {
     var data = []
     if (this.state.selectedDate !== null) {
-      var startOf = moment(this.state.selectedDate, 'YYYY-MM-DD').startOf('month');
-      var endOf = moment(this.state.selectedDate, 'YYYY-MM-DD').endOf('month');
+      var startOf = moment(this.state.selectedDate[0], 'YYYY-MM-DD');
+      var endOf = moment(this.state.selectedDate[1], 'YYYY-MM-DD');
     } else {
       //this will work until year 2100
       startOf = moment('2000-01-01', 'YYYY-MM-DD').startOf('year');
@@ -181,10 +186,10 @@ export default class SQEStats extends Component {
     return (
       <div>
         <Row>
-          <Col span={16} style={{ paddingRight: 5 }}>
+          <Col span={12} style={{ paddingRight: 5 }}>
             {this.selectJob()}
           </Col>
-          <Col span={8} style={{ paddingLeft: 5 }}>
+          <Col span={12} style={{ paddingLeft: 5 }}>
             {this.selectDate()}
           </Col>
         </Row>

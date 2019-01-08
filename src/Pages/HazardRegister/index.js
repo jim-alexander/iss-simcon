@@ -32,8 +32,8 @@ export default class HazardRegister extends Component {
   loadHazardData() {
     var data = []
     function prestartData(prestart, hazard) {
-      let recordedBy = (hazard.form_values['e230']) ? hazard.form_values['e230'].choice_values[0] : ''
-      let assignedTo = (hazard.form_values['7ed5']) ? hazard.form_values['7ed5'].choice_values[0] : ''
+      let recordedBy = (hazard.form_values['5de8']) ? hazard.form_values['5de8'].choice_values[1] : ''
+      let assignedTo = (hazard.form_values['72a3']) ? hazard.form_values['72a3'].choice_values[1] : ''
       let obj = {
         id: hazard.id,
         dateIdentified: prestart.form_values['80e9'],
@@ -45,8 +45,8 @@ export default class HazardRegister extends Component {
       return obj
     }
     function siteInspectionData(inspection, hazard) {
-      let recordedBy = (hazard.form_values['5699']) ? hazard.form_values['5699'].choice_values[0] : ''
-      let assignedTo = (hazard.form_values['fe64']) ? hazard.form_values['fe64'].choice_values[0] : ''
+      let recordedBy = (hazard.form_values['2bdc']) ? hazard.form_values['2bdc'].choice_values[1] : ''
+      let assignedTo = (hazard.form_values['dd25']) ? hazard.form_values['dd25'].choice_values[1] : ''
       let obj = {
         id: hazard.id,
         dateIdentified: inspection.form_values['91dd'],
@@ -57,9 +57,9 @@ export default class HazardRegister extends Component {
       }
       return obj
     }
-    function toolboxData(toolbox, hazard) {
-      let recordedBy = (hazard.form_values['9272']) ? hazard.form_values['9272'].choice_values[0] : ''
-      let assignedTo = (hazard.form_values['3fe6']) ? hazard.form_values['3fe6'].choice_values[0] : ''
+    function toolboxData(toolbox, hazard) {      
+      let recordedBy = (hazard.form_values['81dd']) ? hazard.form_values['81dd'].choice_values[1] : ''
+      let assignedTo = (hazard.form_values['7ac8']) ? hazard.form_values['7ac8'].choice_values[1] : ''
       let obj = {
         id: hazard.id,
         dateIdentified: toolbox.form_values['2318'],

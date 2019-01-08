@@ -15,9 +15,10 @@ import SQEStats from "../Pages/SQEStats"
 import HazardRegister from "../Pages/HazardRegister"
 import Profile from "../Pages/Profile"
 import Loader from '../Pages/Loader'
+import PageNotes from './PageNotes'
 
 import './index.css'
-import { Layout, message, Tooltip } from 'antd'
+import { Layout, message, Tooltip, Modal, Button} from 'antd'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
@@ -50,11 +51,6 @@ class ClientPortal extends Component {
       loadingScreen: false,
       width: '',
       lastLoaded: null,
-      notify: {
-        status: false,
-        chatId: []
-      },
-      chats: null
     };
   }
   componentDidMount() {
@@ -171,11 +167,22 @@ class ClientPortal extends Component {
         console.log(error)
       });
   }
-
+  
+  PageNotes() {
+    Modal.info({
+      title: 'Page Notes',
+      content: (
+        <PageNotes currentPage={window.location.pathname} />
+      ),
+      onOk() {},
+    });
+  }
+  
+  
   render() {
-    function navigationBased(width, user, notify) {
-      if (width >= 992) { return <Navigation user={user} notification={notify} /> }
-      else if (width <= 991) { return <NavigationSmaller user={user} notification={notify} /> }
+    function navigationBased(width, user) {
+      if (width >= 992) { return <Navigation user={user} /> }
+      else if (width <= 991) { return <NavigationSmaller user={user} /> }
     }
     if (this.state.loadingScreen === true) {
       return (
@@ -193,7 +200,7 @@ class ClientPortal extends Component {
     }
     return (
       <Layout>
-        {navigationBased(this.state.width, this.state.user, this.state.notify.status)}
+        {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
           <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
             <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
@@ -233,6 +240,7 @@ class ClientPortal extends Component {
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
           </Content>
+          <Button block onClick={this.PageNotes} style={{maxWidth: 200, margin: 'auto', marginTop: 15}} className='printHide'>Page Notes</Button>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>
             Info Sync Solutions ©2018 Created by Jim Alexander
           </Footer>

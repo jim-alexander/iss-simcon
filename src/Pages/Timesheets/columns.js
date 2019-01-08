@@ -39,7 +39,9 @@ export function timesheet(today, days) {
       key: 'hours',
       width: 100,
       render: (num) => {
-        return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
+        // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
+        return moment.duration(num).asHours()
+        
       },
       className: 'timesheetTotals'
     }, {
@@ -59,6 +61,19 @@ export function timesheet(today, days) {
       title: 'OT2',
       dataIndex: 'ot2',
       key: 'ot2',
+      width: 100,
+      render: (num) => {
+        if (num === 0) {
+          return null
+        } else {
+          return num
+        }
+      },
+      className: 'timesheetTotals'
+    }, {
+      title: 'Travel',
+      dataIndex: 'travel',
+      key: 'travel',
       width: 100,
       render: (num) => {
         if (num === 0) {

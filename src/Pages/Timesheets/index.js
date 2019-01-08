@@ -9,7 +9,7 @@ const moment = extendMoment(Moment)
 
 export default class Timesheets extends Component {
   state = {
-    start: moment().format('YYYY-MM-DD'),
+    start: moment().subtract(14, 'days').format('YYYY-MM-DD'),
     end: null,
     data: null,
     noDays: 14
@@ -29,7 +29,7 @@ export default class Timesheets extends Component {
             })
           }
         }}
-        defaultValue={moment()}
+        defaultValue={moment().subtract(14, 'days')}
         format='Do MMM YYYY' />
     )
   }
@@ -150,17 +150,20 @@ export default class Timesheets extends Component {
   
               var addHours = moment(hoursDiff, 'HH.mm').format('HH')
               var addMins = moment(hoursDiff, 'HH.mm').format('m')
-  
+              var name = (entry.form_values[8817]) ? entry.form_values[8817].choice_values[1] : null
               var obj = {
                 id: entry.id,
-                name: entry.form_values[8464].choice_values[0],
+                name,
               };
+              var travel = (entry.form_values['935b']) ? parseFloat(entry.form_values['935b']) : 0
+              
               const index = data.findIndex((e) => e.name === obj.name);
   
               if (index === -1) {
                 obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
                 obj.ot1 = overTimeOne;
                 obj.ot2 = overTimeTwo;
+                obj.travel = travel;
                 obj.hours = moment.duration({
                   hours: addHours,
                   minutes: addMins
@@ -173,12 +176,14 @@ export default class Timesheets extends Component {
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
                   data[index].ot1 += overTimeOne;
                   data[index].ot2 += overTimeTwo;
+                  data[index].travel += travel;
                 } else {
                   Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
                   data[index].ot1 += overTimeOne;
                   data[index].ot2 += overTimeTwo;
-                }
+                  data[index].travel += travel;
+                }                
               }
             }
           })
