@@ -135,7 +135,7 @@ export default class HazardRegister extends Component {
           pagination={false}
           bordered
           id='boresTableOne'
-          className='boreTables tableResizer dailyReportTables'
+          className='boreTables tableResizer'
           columns={column.hazardRegister}
           dataSource={this.state.data}
           rowKey='id'
