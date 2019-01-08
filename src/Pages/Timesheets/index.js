@@ -10,7 +10,7 @@ const moment = extendMoment(Moment)
 export default class Timesheets extends Component {
   state = {
     start: moment().subtract(14, 'days').format('YYYY-MM-DD'),
-    end: null,
+    end: moment().subtract(1, 'days').format('YYYY-MM-DD'),
     data: null,
     noDays: 14
   }
@@ -196,6 +196,8 @@ export default class Timesheets extends Component {
     })
   }
   render() {
+    console.log(this.state.start);
+    
     return (
       <div>
         <div style={{ marginBottom: 10 }}>

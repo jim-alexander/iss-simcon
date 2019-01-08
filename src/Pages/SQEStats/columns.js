@@ -3,6 +3,12 @@ export function plantRegister(){
     title: 'Job No',
     dataIndex: 'job',
     key: 'job',
+    sorter: (a, b) => {  
+      if (a.job > b.job) { return -1; }
+      if (a.job < b.job) { return 1; }    
+      return 0;
+    },
+    defaultSortOrder: 'descending',
     width: 100
   }, {
     title: 'Title',

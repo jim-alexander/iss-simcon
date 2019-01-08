@@ -9,6 +9,14 @@ export const hazardRegister = [{
       return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY')
     }
   },
+  sorter: (a, b) => {  
+    var aDate = moment(a.dateIdentified, 'YYYY-MM-DD').toDate()  
+    var bDate = moment(b.dateIdentified, 'YYYY-MM-DD').toDate()  
+    if (aDate > bDate) { return -1; }
+    if (aDate < bDate) { return 1; }    
+    return 0;
+  },
+  defaultSortOrder: 'descending',
   width: 100
 }, {
   title: 'Recorded By',

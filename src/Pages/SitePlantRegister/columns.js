@@ -10,6 +10,14 @@ export const plantRegister = [{
       return null
     }
   },
+  sorter: (a, b) => {  
+    let aDate = moment(a.date, 'YYYY-MM-DD').toDate()  
+    let bDate = moment(b.date, 'YYYY-MM-DD').toDate()  
+    if (aDate > bDate) { return -1; }
+    if (aDate < bDate) { return 1; }    
+    return 0;
+  },
+  defaultSortOrder: 'descending',
   width: 100
 }, {
   title: 'Type of plant',

@@ -44,6 +44,7 @@ export default class SitePlantRegister extends Component {
       }
       return obj
     }
+    
     if (this.state.selectedJob.length !== 0) {
       this.state.selectedJob.forEach(selection => {
         this.props.plantVerifications.forEach(verification => {
