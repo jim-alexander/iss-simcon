@@ -245,8 +245,8 @@ class ClientPortal extends Component {
                 hazards={this.state.hazards} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
+            <Button block onClick={this.PageNotes} style={{maxWidth: 200, margin: '15px auto'}} className='printHide'>Page Notes</Button>
           </Content>
-          <Button block onClick={this.PageNotes} style={{maxWidth: 200, margin: 'auto', marginTop: 15}} className='printHide'>Page Notes</Button>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>
             Info Sync Solutions ©2018 Created by Jim Alexander
           </Footer>

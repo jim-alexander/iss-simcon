@@ -73,8 +73,12 @@ class DailyReportSheet extends React.Component {
         placeholder="Select a job Number"
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job, selectedDate: '' }) }}>
-        {this.props.jobFiles.map(job => <Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)}
+        {this.props.jobFiles.map(job => {
+          let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"]}` : '';
+          return (<Option key={job.project_id}>{job.form_values["5b1c"] + title}</Option>)
+        })}
       </Select>
+
     )
   }
   selectDate() {
@@ -131,11 +135,11 @@ class DailyReportSheet extends React.Component {
           }
           jobInfo[0].siteSupervisor = siteSuper
           jobInfo[0].day = moment(file.form_values['80e9']).format('dddd')
-          
+
           if (file.form_values['86b7']) {
             file.form_values['86b7'].forEach(log => {
-              var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1].replace('.',':') : '';
-              var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1].replace('.',':') : '';
+              var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1].replace('.', ':') : '';
+              var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1].replace('.', ':') : '';
               var diff = calcTimeDiff(start, end);
 
               if (log.form_values['cc82'] === 'company_personnel') {
@@ -197,7 +201,7 @@ class DailyReportSheet extends React.Component {
               }))
             })
           }
-          if (file.form_values['0bd7']) {            
+          if (file.form_values['0bd7']) {
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: file.id,
@@ -246,7 +250,7 @@ class DailyReportSheet extends React.Component {
               comments: diary.form_values['d5e3']
             }]
           })
-          if (diary.form_values['d5e3']) {            
+          if (diary.form_values['d5e3']) {
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: diary.id,
@@ -254,7 +258,7 @@ class DailyReportSheet extends React.Component {
               }]
             }))
           }
-          
+
         }
       })
     }
@@ -265,7 +269,7 @@ class DailyReportSheet extends React.Component {
     }
   }
 
-  render() {    
+  render() {
     return (
       <div>
         <Row>
@@ -315,7 +319,7 @@ class DailyReportSheet extends React.Component {
         </div>
         <div className='boresPadding'>
           <Row gutter={10}>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Table
                 pagination={false}
                 title={() => 'Company Plant'}
@@ -327,7 +331,7 @@ class DailyReportSheet extends React.Component {
                 rowKey='id'
                 size="middle" />
             </Col>
-            <Col span={16}>
+            <Col xs={24} sm={24} md={24} lg={16} xl={16}>
               <Table
                 pagination={false}
                 title={() => 'Hired Plant'}
@@ -360,7 +364,7 @@ class DailyReportSheet extends React.Component {
             pagination={false}
             dataSource={this.state.comments}
             className='boreTables tableResizer dailyReportTables'
-            columns={[{title: 'Comments', key: 'comments', dataIndex: 'comments'}]}></Table>
+            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
         </div>
         {/* <div className="boresPadding">
           <Table

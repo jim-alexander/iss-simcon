@@ -52,11 +52,6 @@ export default class Timesheets extends Component {
   }
   componentDidMount() {
     this.loadTimesheet()
-    if (window.innerWidth <= 992) {
-      this.setState({
-        noDays: 7
-      })
-    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.dailyPrestarts !== this.props.dailyPrestarts ||
@@ -156,14 +151,16 @@ export default class Timesheets extends Component {
                 name,
               };
               var travel = (entry.form_values['935b']) ? parseFloat(entry.form_values['935b']) : 0
+              var lafha = (entry.form_values['b574'] === 'yes') ? 1 : 0
               
               const index = data.findIndex((e) => e.name === obj.name);
-  
+             
               if (index === -1) {
                 obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
                 obj.ot1 = overTimeOne;
                 obj.ot2 = overTimeTwo;
                 obj.travel = travel;
+                obj.lafha = lafha;
                 obj.hours = moment.duration({
                   hours: addHours,
                   minutes: addMins
@@ -177,12 +174,14 @@ export default class Timesheets extends Component {
                   data[index].ot1 += overTimeOne;
                   data[index].ot2 += overTimeTwo;
                   data[index].travel += travel;
+                  data[index].lafha += lafha;
                 } else {
                   Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
                   data[index].ot1 += overTimeOne;
                   data[index].ot2 += overTimeTwo;
                   data[index].travel += travel;
+                  data[index].lafha += lafha;
                 }                
               }
             }
@@ -198,18 +197,17 @@ export default class Timesheets extends Component {
   render() {    
     return (
       <div>
-        <div style={{ marginBottom: 10 }}>
+        <div>
           <Row gutter={10}>
-            <Col span={10}><h3>From</h3></Col>
-            <Col span={10}><h3>To</h3></Col>
-            <Col span={4}><h3>Days</h3></Col>
+            <Col xs={0} sm={0} md={10} lg={10} xl={10}><h3>From</h3></Col>
+            <Col xs={0} sm={0} md={10} lg={10} xl={10}><h3>To</h3></Col>
+            <Col xs={0} sm={0} md={4} lg={4} xl={4}><h3>Days</h3></Col>
           </Row>
           <Row gutter={10}>
-            <Col span={10}>{this.selectDate()}</Col>
-            <Col span={10}>{this.dateTo()}</Col>
-            <Col span={4}>{this.selectDayNumber()}</Col>
+            <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{marginBottom: '10px'}}>{this.selectDate()}</Col>
+            <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{marginBottom: '10px'}}>{this.dateTo()}</Col>
+            <Col xs={24} sm={24} md={4} lg={4} xl={4} style={{marginBottom: '10px'}}>{this.selectDayNumber()}</Col>
           </Row>
-
         </div>
         <Table
           pagination={false}

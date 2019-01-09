@@ -14,21 +14,23 @@ export function plantRegister(){
     title: 'Title',
     dataIndex: 'title',
     key: 'title',
+    className: 'hideThis',
     width: 250
   }, {
     title: 'Man Hours',
-    className: 'manHours',
-    width: 200,
+    className: 'manHours titleHeader',
     children: [{
       title: 'Employees',
       dataIndex: 'manHours',
       key: 'manHours',
       className: 'subHeader employees',
       render: hours => {
-        if (hours.asHours() > 0) {
-          return hours.asHours()
-        } else {
-          return null
+        if (hours) {
+          if (hours.asHours() > 0) {
+            return hours.asHours()
+          } else {
+            return null
+          }
         }
       },
       width: 100
@@ -38,17 +40,19 @@ export function plantRegister(){
       key: 'manHoursSub',
       className: 'subHeader contractors',
       render: hours => {
-        if (hours.asHours() > 0) {
-          return hours.asHours()
-        } else {
-          return null
+        if (hours) {
+          if (hours.asHours() > 0) {
+            return hours.asHours()
+          } else {
+            return null
+          }
         }
       },
       width: 100
     }]
   }, {
     title: 'Documents Completed',
-    className: 'documentsCompleted',
+    className: 'documentsCompleted titleHeader',
     children: [{
       title: 'Site Inspections',
       dataIndex: 'siteInspections',
@@ -63,7 +67,7 @@ export function plantRegister(){
       },
       width: 100
     }, {
-      title: 'Hazards Reported & Closed',
+      title: 'Hazards Closed',
       dataIndex: 'hazardsClosed',
       className: 'subHeader',
       key: 'hazards',
@@ -91,7 +95,7 @@ export function plantRegister(){
     }]
   }, {
     title: 'Materials (L)',
-    className: 'materials',
+    className: 'materials titleHeader',
     children: [{
       title: 'Diesel',
       dataIndex: 'diesel',
@@ -133,4 +137,109 @@ export function plantRegister(){
       width: 80
     }]
   }]
+}
+
+export function sqeTotals(){
+  return [{
+    title: 'job',
+    dataIndex: 'job',
+    width: 100
+  },{
+    title: 'title',
+    dataIndex: 'title',
+    width: 250,
+    className: 'hideThis',
+  },{
+    title: 'employees',
+    dataIndex: 'employees',
+    render: hours => {
+        if (hours) {
+          if (hours.asHours() > 0) {
+            return hours.asHours()
+          } else {
+            return null
+          }
+        }
+      },
+    width: 100
+  },{
+    title: 'contractors',
+    dataIndex: 'contractors',
+    render: hours => {
+        if (hours) {
+          if (hours.asHours() > 0) {
+            return hours.asHours()
+          } else {
+            return null
+          }
+        }
+      },
+    width: 100
+  },{
+    title: 'siteInspections',
+    dataIndex: 'siteInspections',
+    width: 100,
+    render: val => {
+      if (val > 0) {
+        return val
+      } else {
+        return null
+      }
+    }
+  },{
+    title: 'hazards',
+    dataIndex: 'hazards',
+    width: 100,
+    render: val => {
+      if (val > 0) {
+        return val
+      } else {
+        return null
+      }
+    }
+  },{
+    title: 'toolboxs',
+    dataIndex: 'toolboxs',
+    width: 100,
+    render: val => {
+      if (val > 0) {
+        return val
+      } else {
+        return null
+      }
+    }
+  },{
+    title: 'diesel',
+    dataIndex: 'diesel',
+    width: 80,
+    render: val => {
+      if (val > 0) {
+        return val
+      } else {
+        return null
+      }
+    }
+  },{
+    title: 'unleaded',
+    dataIndex: 'unleaded',
+    width: 80,
+    render: val => {
+      if (val > 0) {
+        return val
+      } else {
+        return null
+      }
+    }
+  },{
+    title: 'water',
+    dataIndex: 'water',
+    width: 80,
+    render: val => {
+      if (val > 0) {
+        return val
+      } else {
+        return null
+      }
+    }
+  },]
 }

@@ -3,6 +3,14 @@
     text-align: center;
 }
 
+th.subHeader {
+    padding: 5px !important;
+}
+
+th.titleHeader {
+    padding: 5px !important;
+}
+
 /* th.employees {
     background-color: #f6ffed !important;
     border-bottom: 2px solid #2ecc71 !important;
@@ -12,19 +20,28 @@ th.contractors {
     background-color: #fff1f0 !important;
     border-bottom: 2px solid #e74c3c !important;
 } */
-
-th.subsubHeading div{
-    font-size: 10px !important;
+#sqeStatsTotal th {
+    display: none
 }
+#sqeStatsTotal tbody {
+    /* border-top: 1px solid #e0e0e0 */
+    border-top: 2px solid darkgrey;
+}
+.sqeTotal{
+    background-color: #fcfcfc;
+    font-weight: 500
+}   
 
 th.manHours {
     background-color: #f6ffed !important;
     border-bottom: 2px solid #2ecc71 !important;
 }
+
 th.documentsCompleted {
     background-color: #e6f7ff !important;
     border-bottom: 2px solid #3498db !important;
 }
+
 th.materials {
     background-color: #fffbe6 !important;
     border-bottom: 2px solid #f1c40f !important;

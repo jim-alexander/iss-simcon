@@ -11,6 +11,7 @@ export default class SQEStats extends Component {
     selectedJob: [],
     selectedDate: ['1900-01-01', moment().add(2, 'years').format('YYYY-MM-DD')],
     data: [],
+    total: []
   }
   selectJob() {
     return (
@@ -19,7 +20,10 @@ export default class SQEStats extends Component {
         placeholder="Select Job Number(s)"
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
-        {this.props.jobFiles.map(job => <Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)}
+        {this.props.jobFiles.map(job => {
+          let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"] }`: '';
+          return (<Option key={job.project_id}>{job.form_values["5b1c"] + title}</Option>)
+        })}
       </Select>
     )
   }
@@ -41,8 +45,8 @@ export default class SQEStats extends Component {
       ranges={{
         'All Time': [moment('1900-01-01', 'YYYY-MM-DD'), moment().add(2, 'years')],
         'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1 , 'months').startOf('month'), moment().subtract(1 , 'months').endOf('month')],
-        'Last Year': [moment().subtract(1 , 'years').startOf('year'), moment().subtract(1 , 'years').endOf('year')],
+        'Last Month': [moment().subtract(1, 'months').startOf('month'), moment().subtract(1, 'months').endOf('month')],
+        'Last Year': [moment().subtract(1, 'years').startOf('year'), moment().subtract(1, 'years').endOf('year')],
       }}
     />
   }
@@ -138,15 +142,18 @@ export default class SQEStats extends Component {
       //Hazards
       hazards.forEach(hazard => {
         if (hazard.project_id === job.project_id) {
-          if (hazard.status === 'Closed Out') {
-            obj.hazardsClosed++
-          } else if (hazard.status === 'Action Required'){
-            obj.hazardsReported++
+          var hazardDate = moment(hazard.form_values['9ab6'], 'YYYY-MM-DD')
+          if ((hazardDate > startOf && hazardDate < endOf) || (hazardDate === startOf && hazardDate === endOf)) {
+            if (hazard.status === 'Closed Out') {
+              obj.hazardsClosed++
+            } else if (hazard.status === 'Action Required') {
+              obj.hazardsReported++
+            }
           }
         }
- 
+
       })
-      
+
       //Materials
       dailyDiarys.forEach(diary => {
         if (diary.project_id === job.project_id) {
@@ -178,16 +185,46 @@ export default class SQEStats extends Component {
     }
     this.setState({
       data
+    }, () => this.calcTotal())
+  }
+  calcTotal() {
+    var total = [{
+      id: 1,
+      job: 'Total',
+      title: '',
+      employees: moment.duration(0),
+      contractors: moment.duration(0),
+      siteInspections: 0,
+      hazards: 0,
+      toolboxs: 0,
+      diesel: 0,
+      unleaded: 0,
+      water: 0,
+    }]
+
+    this.state.data.forEach(job => {
+      total[0].employees.add(job.manHours)
+      total[0].contractors.add(job.manHoursSub)
+      total[0].siteInspections += job.siteInspections
+      total[0].hazards += job.hazardsClosed
+      total[0].toolboxs += job.toolbox
+      total[0].diesel += job.diesel
+      total[0].unleaded += job.unleaded
+      total[0].water += job.water
     })
+    this.setState({
+      total
+    })
+
   }
   render() {
     return (
       <div>
-        <Row>
-          <Col span={12} style={{ paddingRight: 5 }}>
+        <Row gutter={10}>
+          <Col xs={24} sm={24} md={12} lg={16} xl={16}>
             {this.selectJob()}
           </Col>
-          <Col span={12} style={{ paddingLeft: 5 }}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} style={{marginBottom: '10px'}}>
             {this.selectDate()}
           </Col>
         </Row>
@@ -199,6 +236,16 @@ export default class SQEStats extends Component {
           columns={column.plantRegister()}
           dataSource={this.state.data}
           rowKey='id'
+          size="middle" />
+        <Table
+          pagination={false}
+          bordered
+          id='sqeStatsTotal'
+          className='boreTables tableResizer'
+          columns={column.sqeTotals()}
+          dataSource={this.state.total}
+          rowKey='id'
+          rowClassName='sqeTotal'
           size="middle" />
       </div>
     )

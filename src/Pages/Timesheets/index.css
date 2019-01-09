@@ -16,14 +16,19 @@
     text-align: center;
     padding: 2px !important;
 }
+#timesheet td {
+    padding: 5px!important;
+}
 
 td.dateSub.hideTheseCells {
     padding: 2px !important;
     text-align: center;
 }
+
 td.nameSub.ant-table-column-has-actions.ant-table-column-has-sorters.ant-table-column-sort {
     padding: 7px !important;
 }
+
 /* td.dateSub.hideTheseCells {
     font-size: 12px !important;
     padding: 2px !important;
@@ -51,9 +56,13 @@ th.totals {
     .hideTheseCells {
         display: table-cell;
     }
+
     th.dateSub.hideTheseCells {
-    font-size: 12px !important
-}
+        font-size: 12px !important
+    }
+    th.timesheetTotals div {
+        font-size: 12px !important
+    }
 }
 
 @media print {

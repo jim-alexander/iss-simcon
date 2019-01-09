@@ -38,7 +38,7 @@ export function timesheet(today, days) {
       title: 'Hours',
       dataIndex: 'hours',
       key: 'hours',
-      width: 100,
+      width: 90,
       render: (num) => {
         // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
         return moment.duration(num).asHours()
@@ -49,7 +49,7 @@ export function timesheet(today, days) {
       title: 'OT1',
       dataIndex: 'ot1',
       key: 'ot1',
-      width: 100,
+      width: 90,
       render: (num) => {
         if (num === 0) {
           return null
@@ -62,7 +62,7 @@ export function timesheet(today, days) {
       title: 'OT2',
       dataIndex: 'ot2',
       key: 'ot2',
-      width: 100,
+      width: 90,
       render: (num) => {
         if (num === 0) {
           return null
@@ -75,7 +75,20 @@ export function timesheet(today, days) {
       title: 'Travel',
       dataIndex: 'travel',
       key: 'travel',
-      width: 100,
+      width: 90,
+      render: (num) => {
+        if (num === 0) {
+          return null
+        } else {
+          return num
+        }
+      },
+      className: 'timesheetTotals'
+    }, {
+      title: 'LAFHA',
+      dataIndex: 'lafha',
+      key: 'lafha',
+      width: 90,
       render: (num) => {
         if (num === 0) {
           return null

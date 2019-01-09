@@ -96,12 +96,12 @@
 
 .ant-table tr>td {
   font-size: smaller !important;
-  padding: 5px 5px !important;
+  /* padding: 5px 5px !important; */
 }
 
 .ant-table tr>th {
   font-size: smaller !important;
-  padding: 5px 5px !important;
+  /* padding: 5px 5px !important; */
 }
 
 .ant-tabs-nav-scroll {
@@ -247,12 +247,12 @@ th.outlineAwaitingPayment {
 
   .ant-table tr>td {
     font-size: inherit !important;
-    padding: 5px 5px !important;
+    /* padding: 10px 10px !important; */
   }
 
   .ant-table tr>th {
     font-size: inherit !important;
-    padding: 5px 5px !important;
+    /* padding: 10px 10px !important; */
   }
 
   .ant-tabs-nav-scroll {

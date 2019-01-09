@@ -76,22 +76,22 @@ export const hiredPlant = [{
     key: 'equipment',
     width: 100
 }, {
-    title: 'Start Time',
+    title: 'Start',
     dataIndex: 'start',
     key: 'start',
     width: 40
 }, {
-    title: 'End Time',
+    title: 'End',
     dataIndex: 'end',
     key: 'end',
     width: 40
 }, {
-    title: 'Hours / Mins',
+    title: 'Total',
     dataIndex: 'total',
     key: 'total',
     width: 40
 }, {
-    title: 'Docket No',
+    title: 'Docket',
     dataIndex: 'docket',
     key: 'docket',
     width: 40

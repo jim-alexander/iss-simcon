@@ -13,12 +13,14 @@ export default class HazardRegister extends Component {
   selectJob() {
     return (
       <Select
-        showSearch
         mode="multiple"
         placeholder="Select Job Number(s)"
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
-        {this.props.jobFiles.map(job => <Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)}
+        {this.props.jobFiles.map(job => {
+          let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"] }`: '';
+          return (<Option key={job.project_id}>{job.form_values["5b1c"] + title}</Option>)
+        })}
       </Select>
     )
   }
