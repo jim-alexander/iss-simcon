@@ -70,7 +70,7 @@ export default class SitePlantRegister extends Component {
           pagination={false}
           bordered
           id='boresTableOne'
-          className='boreTables tableResizer dailyReportTables'
+          className='boreTables tableResizer'
           columns={column.plantRegister}
           dataSource={this.state.data}
           rowKey='id'
