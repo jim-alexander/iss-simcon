@@ -116,24 +116,28 @@
   color: black !important;
 }
 
-#menuLogout {
-  position: inherit;
-  bottom: auto;
-}
-
 #menuLogout:hover {
   color: #E91E63;
 }
 
+.ant-menu-item>a:before {
+  position: inherit !important;
+}
+
+#menuLogout {
+  position: absolute;
+  bottom: 0;
+}
+
 #menuProfile {
-  position: inherit;
-  bottom: auto;
+  position: absolute;
+  bottom: 40px;
 }
 
 #menuRole {
-  position: inherit;
-  bottom: auto;
-  border-top: solid #b3b3b333 1px !important;
+  position: absolute;
+  bottom: 81px;
+  border-top: none !important;
 }
 
 .ant-layout-sider-zero-width-trigger {
@@ -243,12 +247,12 @@ th.outlineAwaitingPayment {
 
   .ant-table tr>td {
     font-size: inherit !important;
-    padding: 10px 10px !important;
+    padding: 5px 5px !important;
   }
 
   .ant-table tr>th {
     font-size: inherit !important;
-    padding: 10px 10px !important;
+    padding: 5px 5px !important;
   }
 
   .ant-tabs-nav-scroll {
@@ -271,24 +275,12 @@ th.outlineAwaitingPayment {
   }
 }
 
-@media only screen and (min-height: 600px) {
-  .ant-menu-item>a:before {
-    position: inherit !important;
-  }
-
-  #menuLogout {
-    position: absolute;
-    bottom: 0;
-  }
-
+@media only screen and (max-height: 600px) {
   #menuProfile {
-    position: absolute;
-    bottom: 40px;
+    display: none
   }
-
+  
   #menuRole {
-    position: absolute;
-    bottom: 81px;
-    border-top: none !important;
+    display: none
   }
 }

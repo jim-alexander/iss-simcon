@@ -78,7 +78,7 @@ export default class SQEStats extends Component {
       startOf = moment('2000-01-01', 'YYYY-MM-DD').startOf('year');
       endOf = moment('2100-01-01', 'YYYY-MM-DD').endOf('year');
     }
-    function dataCalc(job, dailyPrestarts, siteInspections, toolboxMinutes, dailyDiarys, calcTimeDiff) {
+    function dataCalc(job, dailyPrestarts, siteInspections, toolboxMinutes, dailyDiarys, calcTimeDiff, hazards) {
       var obj = {
         id: job.id,
         job: job.form_values['5b1c'],
@@ -87,7 +87,8 @@ export default class SQEStats extends Component {
         manHoursSub: moment.duration(0),
         siteInspections: 0,
         toolbox: 0,
-        hazards: 0,
+        hazardsReported: 0,
+        hazardsClosed: 0,
         diesel: 0,
         unleaded: 0,
         water: 0
@@ -113,11 +114,6 @@ export default class SQEStats extends Component {
                 }
               })
             }
-            if (prestart.form_values['27d8']) {
-              prestart.form_values['27d8'].forEach(() => {
-                obj.hazards++
-              })
-            }
           }
         }
       })
@@ -126,11 +122,6 @@ export default class SQEStats extends Component {
         if (inspection.project_id === job.project_id) {
           var inspectionDate = moment(inspection.form_values['91dd'], 'YYYY-MM-DD')
           if ((inspectionDate > startOf && inspectionDate < endOf) || (inspectionDate === startOf && inspectionDate === endOf)) {
-            if (inspection.form_values['d187']) {
-              inspection.form_values['d187'].forEach(() => {
-                obj.hazards++
-              })
-            }
             obj.siteInspections++
           }
         }
@@ -140,15 +131,22 @@ export default class SQEStats extends Component {
         if (toolbox.project_id === job.project_id) {
           var toolBoxDate = moment(toolbox.form_values['2318'], 'YYYY-MM-DD')
           if ((toolBoxDate > startOf && toolBoxDate < endOf) || (toolBoxDate === startOf && toolBoxDate === endOf)) {
-            if (toolbox.form_values['59aa']) {
-              toolbox.form_values['59aa'].forEach(() => {
-                obj.hazards++
-              })
-            }
             obj.toolbox++
           }
         }
       })
+      //Hazards
+      hazards.forEach(hazard => {
+        if (hazard.project_id === job.project_id) {
+          if (hazard.status === 'Closed Out') {
+            obj.hazardsClosed++
+          } else if (hazard.status === 'Action Required'){
+            obj.hazardsReported++
+          }
+        }
+ 
+      })
+      
       //Materials
       dailyDiarys.forEach(diary => {
         if (diary.project_id === job.project_id) {
@@ -169,13 +167,13 @@ export default class SQEStats extends Component {
       this.state.selectedJob.forEach(selection => {
         this.props.jobFiles.forEach(job => {
           if (job.project_id === selection) {
-            data.push(dataCalc(job, this.props.dailyPrestarts, this.props.siteInspections, this.props.toolboxMinutes, this.props.dailyDiarys, this.calcTimeDiff))
+            data.push(dataCalc(job, this.props.dailyPrestarts, this.props.siteInspections, this.props.toolboxMinutes, this.props.dailyDiarys, this.calcTimeDiff, this.props.hazards))
           }
         })
       })
     } else {
       this.props.jobFiles.forEach(job => {
-        data.push(dataCalc(job, this.props.dailyPrestarts, this.props.siteInspections, this.props.toolboxMinutes, this.props.dailyDiarys, this.calcTimeDiff))
+        data.push(dataCalc(job, this.props.dailyPrestarts, this.props.siteInspections, this.props.toolboxMinutes, this.props.dailyDiarys, this.calcTimeDiff, this.props.hazards))
       })
     }
     this.setState({
@@ -197,7 +195,7 @@ export default class SQEStats extends Component {
           pagination={false}
           bordered
           id='boresTableOne'
-          className='boreTables tableResizer dailyReportTables'
+          className='boreTables tableResizer'
           columns={column.plantRegister()}
           dataSource={this.state.data}
           rowKey='id'

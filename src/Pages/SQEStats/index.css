@@ -1,7 +1,6 @@
 .subHeader div {
     font-size: smaller;
     text-align: center;
-
 }
 
 /* th.employees {
@@ -13,6 +12,10 @@ th.contractors {
     background-color: #fff1f0 !important;
     border-bottom: 2px solid #e74c3c !important;
 } */
+
+th.subsubHeading div{
+    font-size: 10px !important;
+}
 
 th.manHours {
     background-color: #f6ffed !important;

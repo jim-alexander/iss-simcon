@@ -134,15 +134,14 @@ class DailyReportSheet extends React.Component {
           
           if (file.form_values['86b7']) {
             file.form_values['86b7'].forEach(log => {
-              var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1] : '';
-              var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1] : '';
+              var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1].replace('.',':') : '';
+              var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1].replace('.',':') : '';
               var diff = calcTimeDiff(start, end);
 
               if (log.form_values['cc82'] === 'company_personnel') {
-                if (log.form_values[8817]) {
-                  var compName = log.form_values[8817].choice_values[1]
+                if (log.form_values['57fb']) {
+                  var compName = log.form_values['57fb'].choice_values[0]
                 }
-
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins = moment(diff, 'HH:mm').format('m');
                 } else { addMins = 0 }
@@ -210,32 +209,35 @@ class DailyReportSheet extends React.Component {
       })
       this.props.dailyDiarys.forEach(diary => {
         if (diary.form_values['bea6'] === this.state.selectedDate && diary.project_id === this.state.selectedJob) {
-          diary.form_values['7d44'].forEach(material => {
-            this.setState(prevState => ({
-              materialsDelivered: [...prevState.materialsDelivered, {
-                id: material.id,
-                supplier: material.form_values['0e3e'],
-                item: material.form_values['2672'],
-                quantity: material.form_values['b178'],
-                docket: 'todo',
-                photo: 'todo'
-              }]
-            }))
-          })
-          diary.form_values['f491'].forEach(plant => {
-            this.setState(prevState => ({
-              hiredPlant: [...prevState.hiredPlant, {
-                id: plant.id,
-                supplier: plant.form_values['b889'],
-                equipment: plant.form_values['8c5c'],
-                start: plant.form_values['2851'],
-                end: plant.form_values['acac'],
-                total: calcTimeDiff(plant.form_values['2851'], plant.form_values['acac']),
-                docket: 'todo',
-              }]
-            }))
-          })
-
+          if (diary.form_values['7d44']) {
+            diary.form_values['7d44'].forEach(material => {
+              this.setState(prevState => ({
+                materialsDelivered: [...prevState.materialsDelivered, {
+                  id: material.id,
+                  supplier: material.form_values['0e3e'],
+                  item: material.form_values['2672'],
+                  quantity: material.form_values['b178'],
+                  docket: 'todo',
+                  photo: 'todo'
+                }]
+              }))
+            })
+          }
+          if (diary.form_values['f491']) {
+            diary.form_values['f491'].forEach(plant => {
+              this.setState(prevState => ({
+                hiredPlant: [...prevState.hiredPlant, {
+                  id: plant.id,
+                  supplier: plant.form_values['b889'],
+                  equipment: plant.form_values['8c5c'],
+                  start: plant.form_values['2851'],
+                  end: plant.form_values['acac'],
+                  total: calcTimeDiff(plant.form_values['2851'], plant.form_values['acac']),
+                  docket: 'todo',
+                }]
+              }))
+            })
+          }
           this.setState({
             SQEStats: [{
               id: diary.id,

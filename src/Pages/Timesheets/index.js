@@ -150,7 +150,7 @@ export default class Timesheets extends Component {
   
               var addHours = moment(hoursDiff, 'HH.mm').format('HH')
               var addMins = moment(hoursDiff, 'HH.mm').format('m')
-              var name = (entry.form_values[8817]) ? entry.form_values[8817].choice_values[1] : null
+              var name = (entry.form_values['57fb']) ? entry.form_values['57fb'].choice_values[0] : null
               var obj = {
                 id: entry.id,
                 name,
@@ -195,9 +195,7 @@ export default class Timesheets extends Component {
       data
     })
   }
-  render() {
-    console.log(this.state.start);
-    
+  render() {    
     return (
       <div>
         <div style={{ marginBottom: 10 }}>

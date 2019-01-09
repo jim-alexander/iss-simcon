@@ -27,7 +27,8 @@ const listFormIds = [
   { form_id: '99a2f95d-ba0e-4cc8-8d7d-6e08c2c9ca5a' }, // Plant verification
   { form_id: '1b0fe741-65e4-44eb-b7bb-8aeeb1b2c8d5' }, // Site inspection
   { form_id: '1b9a6e3c-2c36-4431-8fcb-bcdb2bc3c760' }, // Toolbox minutes
-  { form_id: '08e7cbcf-4ae7-4ec1-8b84-53a3600d9014' }  // Daily Diary
+  { form_id: '08e7cbcf-4ae7-4ec1-8b84-53a3600d9014' },  // Daily Diary
+  { form_id: '24b9e89a-4efd-463f-a200-fa1c33b59c13' }  // Hazard Register
 ]
 
 const { Content, Footer } = Layout
@@ -48,6 +49,7 @@ class ClientPortal extends Component {
       siteInspections: [],
       toolboxMinutes: [],
       dailyDiarys: [],
+      hazards: [],
       loadingScreen: false,
       width: '',
       lastLoaded: null,
@@ -78,7 +80,8 @@ class ClientPortal extends Component {
       localStorage.getItem('plantVerifications') !== null &&
       localStorage.getItem('siteInspections') !== null &&
       localStorage.getItem('toolboxMinutes') !== null &&
-      localStorage.getItem('dailyDiarys') !== null) {
+      localStorage.getItem('dailyDiarys') !== null && 
+      localStorage.getItem('hazards') !== null) {
       this.setState({
         jobFiles: JSON.parse(localStorage.getItem('jobFiles')),
         dailyPrestarts: JSON.parse(localStorage.getItem('dailyPrestarts')),
@@ -86,6 +89,8 @@ class ClientPortal extends Component {
         siteInspections: JSON.parse(localStorage.getItem('siteInspections')),
         toolboxMinutes: JSON.parse(localStorage.getItem('toolboxMinutes')),
         dailyDiarys: JSON.parse(localStorage.getItem('dailyDiarys')),
+        hazards: JSON.parse(localStorage.getItem('hazards')),
+
       })
       this.loadFulcrumData();
       this.autoReload()
@@ -133,7 +138,8 @@ class ClientPortal extends Component {
           plantVerifications: dataReceived[2].objects,
           siteInspections: dataReceived[3].objects,
           toolboxMinutes: dataReceived[4].objects,
-          dailyDiarys: dataReceived[5].objects
+          dailyDiarys: dataReceived[5].objects,
+          hazards: dataReceived[6].objects
         });
 
       }).then(() => {
@@ -159,6 +165,7 @@ class ClientPortal extends Component {
         localStorage.setItem('siteInspections', JSON.stringify(saveRecentData(this.state.siteInspections, 20)))
         localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
         localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
+        localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
 
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
 
@@ -230,13 +237,12 @@ class ClientPortal extends Component {
                 jobFiles={this.state.jobFiles}
                 dailyDiarys={this.state.dailyDiarys}
                 siteInspections={this.state.siteInspections}
-                toolboxMinutes={this.state.toolboxMinutes} />} />
+                toolboxMinutes={this.state.toolboxMinutes}
+                hazards={this.state.hazards} />} />
               <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props}
                 user={this.state.user}
                 jobFiles={this.state.jobFiles}
-                dailyPrestarts={this.state.dailyPrestarts}
-                siteInspections={this.state.siteInspections}
-                toolboxMinutes={this.state.toolboxMinutes} />} />
+                hazards={this.state.hazards} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
             </div>
           </Content>

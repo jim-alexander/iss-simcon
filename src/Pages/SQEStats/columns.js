@@ -64,7 +64,7 @@ export function plantRegister(){
       width: 100
     }, {
       title: 'Hazards Reported & Closed',
-      dataIndex: 'hazards',
+      dataIndex: 'hazardsClosed',
       className: 'subHeader',
       key: 'hazards',
       render: (val) => {

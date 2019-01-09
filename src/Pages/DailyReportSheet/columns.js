@@ -21,8 +21,6 @@ export const jobDetails1 = [{
     width: 100,
 }];
 
-export const jobDetails2 = []
-
 export const timesheet = [{
     title: 'Name',
     dataIndex: 'name',
