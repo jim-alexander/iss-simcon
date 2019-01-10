@@ -12,7 +12,7 @@ const { Content, Header } = Layout;
 
 const SignInPage = ({ history }) =>
   <div>
-    <Header style={{backgroundColor: '#1c3538' }}>
+    <Header style={{ backgroundColor: '#1c3538' }}>
       <div style={{ height: '32px', right: 0, position: 'absolute', paddingRight: '30px' }}>
         <img src={logo} alt="My logo" style={{ height: '100%' }} />
       </div>
@@ -34,11 +34,13 @@ const SignInPage = ({ history }) =>
           Click here to return to main website. <br /> https://simcon.com.au/
         </a></h4>
       </div>
-      <a href="http://www.infosync.solutions">
-        <div id="builtBy">
-          Built by Info Sync Solutions
-        </div>
-      </a>
+      <div id="builtByContainer">
+        <a href="http://www.infosync.solutions" target='_blank' rel="noopener noreferrer">
+          <div id="builtBy">
+            Built by Info Sync Solutions
+            </div>
+        </a>
+      </div>
     </Content>
   </div>
 

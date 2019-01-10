@@ -185,7 +185,6 @@ class ClientPortal extends Component {
     });
   }
   
-  
   render() {
     function navigationBased(width, user) {
       if (width >= 992) { return <Navigation user={user} /> }

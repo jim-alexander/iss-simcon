@@ -21,9 +21,11 @@
   color: red;
 }
 
-#builtBy {
+#builtByContainer {
   margin: 12px auto;
-  max-width: 300px;
+  max-width: 300px
+}
+#builtBy {
   text-align: center;
   padding: 10px;
   background: white;

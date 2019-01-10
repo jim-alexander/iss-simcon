@@ -272,19 +272,17 @@ class DailyReportSheet extends React.Component {
       this.setState({
         jobInfo
       })
-    }
-    console.log(contractors);
-    
+    }    
   }
 
   render() {
     return (
       <div>
-        <Row>
-          <Col span={16} style={{ paddingRight: 5 }}>
+        <Row gutter={10}>
+          <Col xs={24} sm={24} md={24} lg={16} xl={16} style={{marginBottom: 10}}>
             {this.selectJob()}
           </Col>
-          <Col span={8} style={{ paddingLeft: 5 }}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             {this.selectDate()}
           </Col>
         </Row>
