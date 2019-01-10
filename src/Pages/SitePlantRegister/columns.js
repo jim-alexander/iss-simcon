@@ -23,6 +23,7 @@ export const plantRegister = [{
   title: 'Type of plant',
   dataIndex: 'type',
   key: 'plantType',
+  className: 'hideThis',
   width: 100
 }, {
   title: 'Make / Model',
@@ -38,10 +39,12 @@ export const plantRegister = [{
   title: 'Serial / ID number',
   dataIndex: 'serial',
   key: 'serialNumber',
+  className: 'hideThis',
   width: 100
 }, {
   title: 'Verification Records',
   dataIndex: 'records',
   key: 'records',
+  className: 'hideThis',
   width: 100
 }];

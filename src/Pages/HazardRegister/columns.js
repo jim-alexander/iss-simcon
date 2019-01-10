@@ -17,11 +17,13 @@ export const hazardRegister = [{
     return 0;
   },
   defaultSortOrder: 'descending',
+  className: 'hideThis',
   width: 100
 }, {
   title: 'Recorded By',
   dataIndex: 'recordedBy',
   key: 'recordedBy',
+  className: 'hideThis',
   width: 100
 }, {
   title: 'Description',

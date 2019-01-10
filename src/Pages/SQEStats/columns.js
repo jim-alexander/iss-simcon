@@ -15,7 +15,7 @@ export function plantRegister(){
     dataIndex: 'title',
     key: 'title',
     className: 'hideThis',
-    width: 250
+    width: 200
   }, {
     title: 'Man Hours',
     className: 'manHours titleHeader',
@@ -52,7 +52,7 @@ export function plantRegister(){
     }]
   }, {
     title: 'Documents Completed',
-    className: 'documentsCompleted titleHeader',
+    className: 'documentsCompleted titleHeader hideThis',
     children: [{
       title: 'Site Inspections',
       dataIndex: 'siteInspections',
@@ -69,7 +69,7 @@ export function plantRegister(){
     }, {
       title: 'Hazards Closed',
       dataIndex: 'hazardsClosed',
-      className: 'subHeader',
+      className: 'subHeader hideThis',
       key: 'hazards',
       render: (val) => {
         if (val > 0) {
@@ -82,7 +82,7 @@ export function plantRegister(){
     }, {
       title: 'Toolbox Meetings',
       dataIndex: 'toolbox',
-      className: 'subHeader',
+      className: 'subHeader hideThis',
       key: 'toolbox',
       render: (val) => {
         if (val > 0) {
@@ -99,7 +99,7 @@ export function plantRegister(){
     children: [{
       title: 'Diesel',
       dataIndex: 'diesel',
-      className: 'subHeader',
+      className: 'subHeader hideThis',
       key: 'diesel',
       render: (val) => {
         if (val > 0) {
@@ -147,7 +147,7 @@ export function sqeTotals(){
   },{
     title: 'title',
     dataIndex: 'title',
-    width: 250,
+    width: 200,
     className: 'hideThis',
   },{
     title: 'employees',
@@ -178,6 +178,7 @@ export function sqeTotals(){
   },{
     title: 'siteInspections',
     dataIndex: 'siteInspections',
+    className: 'hideThis',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -189,6 +190,7 @@ export function sqeTotals(){
   },{
     title: 'hazards',
     dataIndex: 'hazards',
+    className: 'hideThis',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -200,6 +202,7 @@ export function sqeTotals(){
   },{
     title: 'toolboxs',
     dataIndex: 'toolboxs',
+    className: 'hideThis',
     width: 100,
     render: val => {
       if (val > 0) {

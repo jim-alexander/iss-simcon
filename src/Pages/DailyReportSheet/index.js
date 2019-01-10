@@ -103,6 +103,7 @@ class DailyReportSheet extends React.Component {
       siteSupervisor: null,
       day: null,
     }]
+    var contractors = [];
     function calcTimeDiff(startTime, endTime) {
       if (!startTime || !endTime) {
         return '00:00'
@@ -168,27 +169,32 @@ class DailyReportSheet extends React.Component {
 
               }
               else if (log.form_values['cc82'] === 'sub_contractor') {
-
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins2 = moment(diff, 'HH:mm').format('m');
                 } else { addMins2 = 0 }
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours2 = moment(diff, 'HH:mm').format('HH');
                 } else { addHours2 = 0 }
-
-                this.setState(prevState => ({
-                  subContractors: [...prevState.subContractors, {
+                const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);
+                console.log(addHours2, addMins2);
+                
+                if (index === -1) {
+                  contractors.push({
                     id: log.id,
-                    name: log.form_values[9666],
-                    start,
-                    end,
-                    hours: diff
-                  }],
-                  subContrTotal: prevState.subContrTotal
-                    .add(parseInt(addHours2, 0), 'hours')
-                    .add(parseInt(addMins2, 0), 'minutes')
-                }))
+                    company: log.form_values['c1e2'],
+                    noOfEmployees: 1,
+                    hours: moment.duration({
+                      hours: parseFloat(addHours2),
+                      minutes: parseFloat(addMins2)
+                    })
+                  })
+                } else {
+                  contractors[index].noOfEmployees++
+                  contractors[index].hours.add(parseFloat(addMins2), 'minutes').add(parseFloat(addHours2), 'hours')
+                }
+
               }
+              this.setState({subContractors: contractors})
             })
           }
           if (file.form_values['2cf0']) {
@@ -267,6 +273,8 @@ class DailyReportSheet extends React.Component {
         jobInfo
       })
     }
+    console.log(contractors);
+    
   }
 
   render() {

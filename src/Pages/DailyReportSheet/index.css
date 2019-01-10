@@ -17,13 +17,23 @@
 }
 
 .dailyReportTables .ant-table tr>th {
-  padding: 5px 10px !important;
+  padding: 5px 5px !important;
+}
+.dailyReportTables th div{
+  font-size: 10px !important
 }
 
 @media only screen and (min-width: 992px) {
   .dailyReportTables .ant-table-title {
-    font-size: 15px;
+    font-size: 13px;
   }
+  .dailyReportTables th div{
+    font-size: 13px !important
+  }
+  .dailyReportTables .ant-table tr>th {
+    padding: 5px 10px !important;
+  }
+  
 }
 
 #boresTableTwo .ant-table-title {

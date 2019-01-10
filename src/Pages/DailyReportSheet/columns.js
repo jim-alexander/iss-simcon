@@ -18,6 +18,7 @@ export const jobDetails1 = [{
     title: 'Day',
     dataIndex: 'day',
     key: 'day',
+    className: 'hideThis',
     width: 100,
 }];
 
@@ -49,13 +50,16 @@ export const timesheetContractors = [{
     width: 200,
 }, {
     title: 'No. of employees',
-    dataIndex: 'no_of_employees',
-    key: 'no_of_employees',
+    dataIndex: 'noOfEmployees',
+    key: 'noOfEmployees',
     width: 100,
 }, {
     title: 'Hours / Mins',
     dataIndex: 'hours',
     key: 'hours',
+    render: hours => {
+       return hours ? hours.asHours(): 0
+    },
     width: 100
 }];
 
@@ -79,11 +83,13 @@ export const hiredPlant = [{
     title: 'Start',
     dataIndex: 'start',
     key: 'start',
+    className: 'hideThis',
     width: 40
 }, {
     title: 'End',
     dataIndex: 'end',
     key: 'end',
+    className: 'hideThis',
     width: 40
 }, {
     title: 'Total',
@@ -94,6 +100,7 @@ export const hiredPlant = [{
     title: 'Docket',
     dataIndex: 'docket',
     key: 'docket',
+    className: 'hideThis',
     width: 40
 }];
 
@@ -112,11 +119,13 @@ export const materialsReceived = [{
 }, {
     title: 'Docket No',
     dataIndex: 'docket',
-    key: 'docket'
+    key: 'docket',
+    className: 'hideThis',
 }, {
     title: 'Photo',
     dataIndex: 'photo',
-    key: 'photo'
+    key: 'photo',
+    className: 'hideThis',
 }];
 
 export const sqeStats = [{
