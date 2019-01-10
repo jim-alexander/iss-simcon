@@ -14,6 +14,37 @@ export default class PlantVerificationPage extends Component {
       verificationNumber: window.location.pathname.replace('/plant-verification', '').replace('/', '')
     })
   }
+  questions() {
+    let questions = []
+    let que = [
+      'Is the risk assessment current and all actions arising from assessment been closed out?',
+      'Have modifications have been made to the item of plant since the last hazard risk assessment?',
+      'Is maintenance and servicing up to date?',
+      'Is manual in cabin of the machine?',
+      'Log book / plant pre-start records are with the machine?',
+    ]
+    for (let i = 0; i < 4; i++) {
+      questions.push(
+        <div>
+          <h3>{que[i]}</h3>
+          <Row gutter={10}>
+            <Col span={8}>
+              <Button className='pvButtons' type='primary' ghost={true}>Yes</Button>
+            </Col>
+            <Col span={8}>
+              <Button className='pvButtons' type='danger' ghost={true}>No</Button>
+            </Col>
+            <Col span={8}>
+              <Button className='pvButtons'>N/A</Button>
+            </Col>
+          </Row>
+          <Divider />
+        </div>
+      )
+    }
+    return questions
+
+  }
 
   render() {
     console.log(this.state.verificationNumber);
@@ -64,18 +95,7 @@ export default class PlantVerificationPage extends Component {
             padding: '24px',
             marginTop: '12px'
           }}>
-            <h3>Is the risk assessment current and all actions arising from assessment been closed out?</h3>
-            <Row gutter={10}>
-              <Col span={8}>
-                <Button className='pvButtons' type='primary' ghost={true}>Yes</Button>
-              </Col>
-              <Col span={8}>
-                <Button className='pvButtons' type='danger' ghost={true}>No</Button>
-              </Col>
-              <Col span={8}>
-                <Button className='pvButtons'>N/A</Button>
-              </Col>
-            </Row>
+            {this.questions()}
           </div>
           <div id="builtByContainer">
             <a href="http://www.infosync.solutions" target='_blank' rel="noopener noreferrer">
