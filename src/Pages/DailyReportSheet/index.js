@@ -71,7 +71,7 @@ class DailyReportSheet extends React.Component {
       <Select
         showSearch
         placeholder="Select a job Number"
-        style={{ width: '100%', paddingBottom: 10 }}
+        style={{ width: '100%'}}
         onChange={(job) => { this.setState({ selectedJob: job, selectedDate: '' }) }}>
         {this.props.jobFiles.map(job => {
           let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"]}` : '';
