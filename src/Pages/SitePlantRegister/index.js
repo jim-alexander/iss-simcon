@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Select, Table, Button, Row, Col, message } from 'antd'
 import * as column from './columns'
 import PlantVerification from './PlantVerification'
+import moment from 'moment'
 import { Client } from 'fulcrum-app'
+import './index.css'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const Option = Select.Option;
@@ -46,9 +48,12 @@ export default class SitePlantRegister extends Component {
     var data = []
     function verifications(verification) {
       let type = (verification.form_values['d8a2']) ? verification.form_values['d8a2'].choice_values[0] : ''
+      let date = (verification.form_values['c553']) ? verification.form_values['c553'] : moment(verification.created_at).format('YYYY-MM-DD')
       let obj = {
         id: verification.id,
-        date: verification.form_values['c553'],
+        status: verification.status,
+        date,
+        email: verification.form_values['90f8'],
         type,
         make: verification.form_values['7c25'],
         owner: verification.form_values['926d'],
@@ -89,7 +94,7 @@ export default class SitePlantRegister extends Component {
         form_id: '99a2f95d-ba0e-4cc8-8d7d-6e08c2c9ca5a',
         status: 'Emailed',
         form_values: {
-          // 'ce91': moment(values.date).format('YYYY-MM-DD'),
+          'c553': moment().format('YYYY-MM-DD'),
           '6a97': values.message,
           '90f8': values.email,
         }
@@ -100,7 +105,20 @@ export default class SitePlantRegister extends Component {
       console.log('Received values of form: ', values);
       form.resetFields();
       message.success(`Email sent to: ${values.email}`);
-      this.setState({ visible: false });
+      this.setState({
+        visible: false,
+        data: [...this.state.data, {
+          id: Math.random(),
+          status: 'Emailed',
+          date: moment().format('YYYY-MM-DD'),
+          email: values.email,
+          type: '',
+          make: '',
+          owner: '',
+          serial: '',
+          records: 'todo',
+        }]
+      });
     });
   }
   saveFormRef = (formRef) => {
@@ -129,6 +147,7 @@ export default class SitePlantRegister extends Component {
           className='boreTables tableResizer'
           columns={column.plantRegister}
           dataSource={this.state.data}
+          rowClassName={record => record.status}
           rowKey='id'
           size="middle" />
       </div>

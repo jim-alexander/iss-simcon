@@ -1,0 +1,12 @@
+.Emailed td:nth-child(1) {
+  /* background-color: #fff1f0 !important; */
+  border-right: 2px solid #3498db !important;
+}
+.Complete td:nth-child(1) {
+  /* background-color: #f6ffed !important; */
+  border-right: 2px solid #2ecc71 !important;
+}
+.Awaiting.Confirmation td:nth-child(1) {
+  /* background-color: #f6ffed !important; */
+  border-right: 2px solid #f1c40f !important;
+}

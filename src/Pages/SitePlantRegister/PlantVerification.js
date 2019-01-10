@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Modal, Form, Button, Input} from 'antd'
+import {Modal, Form, Input} from 'antd'
 
 const PlantVerification = Form.create({name: 'Plant Verification'})(
   class extends Component {

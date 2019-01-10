@@ -127,7 +127,7 @@ class ClientPortal extends Component {
   }
 
   loadFulcrumData(evt) {
-    if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 2.5) }
+    if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 0) }
     var promises = listFormIds.map(form_id => client.records.all(form_id));
     Promise.all(promises)
       .then(dataReceived => {
@@ -168,7 +168,7 @@ class ClientPortal extends Component {
         localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
 
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
-
+        message.destroy()
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
       }).catch((error) => {
         console.log(error)
