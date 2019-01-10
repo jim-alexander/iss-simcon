@@ -24,6 +24,7 @@ export default class PlantVerificationPage extends Component {
       'Log book / plant pre-start records are with the machine?',
     ]
     for (let i = 0; i < 4; i++) {
+      let divider = (i !== 3) ? <Divider /> : null
       questions.push(
         <div>
           <h3>{que[i]}</h3>
@@ -38,7 +39,7 @@ export default class PlantVerificationPage extends Component {
               <Button className='pvButtons'>N/A</Button>
             </Col>
           </Row>
-          <Divider />
+          {divider}
         </div>
       )
     }
@@ -68,21 +69,19 @@ export default class PlantVerificationPage extends Component {
             <h1 style={{ textAlign: 'center' }}>Plant Verification Form</h1>
             <Divider />
             <Row gutter={10}>
-              <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                <h3>Verification Number</h3>
+              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                <h3 style={{textAlign: 'right'}}>Verification Number</h3>
               </Col>
               <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                 <Input
                   style={{ width: '100%', marginBottom: '10px' }}
                   value={this.state.verificationNumber}
+                  disabled
                   onChange={e => {
                     this.setState({
                       verificationNumber: e.target.value
                     })
                   }} />
-              </Col>
-              <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                <Button style={{ width: '100%' }} type='primary'>Search</Button>
               </Col>
             </Row>
           </div>

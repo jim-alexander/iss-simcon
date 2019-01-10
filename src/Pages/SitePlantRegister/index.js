@@ -132,7 +132,7 @@ export default class SitePlantRegister extends Component {
             {this.selectJob()}
           </Col>
           <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ marginBottom: 10 }}>
-            <Button style={{ width: '100%' }} onClick={() => this.setState({ visible: true })}>Send Plant Verification</Button>
+            <Button style={{ width: '100%' }} onClick={() => this.setState({ visible: true })} ghost type='primary'>Send Plant Verification</Button>
             <PlantVerification
               visible={this.state.visible}
               onClose={this.onClose}

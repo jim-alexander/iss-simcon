@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { Badge } from 'antd'
 
 export default class PageNotes extends Component {
   render() {
 
-    const {currentPage} = this.props;    
+    const { currentPage } = this.props;
 
     if (currentPage === '/') {
       return (
@@ -30,6 +31,10 @@ export default class PageNotes extends Component {
           <h1>Site Plant Register</h1>
           <p>By default, the information from every job will be listed. </p>
           <p>To filter the data per job number, simply select the job(s) desired from the search bar at the top of the page.</p>
+          <h3>Status</h3>
+          <Badge status="success" text="Complete" /><br/>
+          <Badge status="error" text="Awaiting Confirmation" /><br/>
+          <Badge status="processing" text="Emailed" /><br/>
         </div>
       )
     }
@@ -39,6 +44,9 @@ export default class PageNotes extends Component {
           <h1>Hazard Register</h1>
           <p>By default, the information from every job will be listed. </p>
           <p>To filter the data per job number, simply select the job(s) desired from the search bar at the top of the page.</p>
+          <h3>Status</h3>
+          <Badge status="success" text="Closed Out" /><br/>
+          <Badge status="error" text="Action Required" /><br/>
         </div>
       )
     }

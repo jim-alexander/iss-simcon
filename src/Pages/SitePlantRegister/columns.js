@@ -29,8 +29,8 @@ export const plantRegister = [{
   title: 'Email',
   dataIndex: 'email',
   key: 'email',
-  className: 'hideThis',
-  width: 100
+  className: 'hideThis email',
+  width: 150
 }, {
   title: 'Type of plant',
   dataIndex: 'type',
@@ -41,18 +41,18 @@ export const plantRegister = [{
   title: 'Make / Model',
   dataIndex: 'make',
   key: 'makeModel',
-  width: 200
+  width: 100
 }, {
   title: 'Owner / Company',
   dataIndex: 'owner',
   key: 'ownerCompany',
-  width: 200
+  width: 130
 }, {
   title: 'Serial / ID number',
   dataIndex: 'serial',
   key: 'serialNumber',
   className: 'hideThis',
-  width: 100
+  width: 80
 }, {
   title: 'Verification Records',
   dataIndex: 'records',
