@@ -33,7 +33,7 @@ export default class PageNotes extends Component {
           <p>To filter the data per job number, simply select the job(s) desired from the search bar at the top of the page.</p>
           <h3>Status</h3>
           <Badge status="success" text="Complete" /><br/>
-          <Badge status="error" text="Awaiting Confirmation" /><br/>
+          <Badge status="warning" text="Awaiting Confirmation" /><br/>
           <Badge status="processing" text="Emailed" /><br/>
         </div>
       )
