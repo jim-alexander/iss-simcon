@@ -175,9 +175,7 @@ class DailyReportSheet extends React.Component {
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours2 = moment(diff, 'HH:mm').format('HH');
                 } else { addHours2 = 0 }
-                const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);
-                console.log(addHours2, addMins2);
-                
+                const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);               
                 if (index === -1) {
                   contractors.push({
                     id: log.id,

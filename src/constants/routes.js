@@ -8,5 +8,6 @@ export const SITEPLANTREGISTER = '/site-plant-register/';
 export const SQESTATS = '/sqe-stats/';
 export const HAZARDREGISTER = '/hazard-register/';
 export const PLANTVERIFICATION = '/plant-verification/';
+export const JOB = '/job/';
 
 export const PROFILE = '/profile/';

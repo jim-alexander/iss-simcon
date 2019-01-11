@@ -10,16 +10,6 @@ th.subHeader {
 th.titleHeader {
     padding: 5px !important;
 }
-
-/* th.employees {
-    background-color: #f6ffed !important;
-    border-bottom: 2px solid #2ecc71 !important;
-}
-
-th.contractors {
-    background-color: #fff1f0 !important;
-    border-bottom: 2px solid #e74c3c !important;
-} */
 #sqeStatsTotal th {
     display: none
 }
@@ -46,3 +36,13 @@ th.materials {
     background-color: #fffbe6 !important;
     border-bottom: 2px solid #f1c40f !important;
 }
+
+/* TOTALS */
+td.employeesTotal{border-top: 2px solid #2ecc71 !important;}
+td.contractorsTotal{border-top: 2px solid #2ecc71 !important;}
+td.siteInspectionsTotal{border-top: 2px solid #3498db !important;}
+td.hazardsTotal{border-top: 2px solid #3498db !important;}
+td.toolboxsTotal{border-top: 2px solid #3498db !important;}
+td.dieselTotal{border-top: 2px solid #f1c40f !important;}
+td.unleadedTotal{border-top: 2px solid #f1c40f !important;}
+td.waterTotal{border-top: 2px solid #f1c40f !important;}

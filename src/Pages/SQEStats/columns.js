@@ -152,6 +152,7 @@ export function sqeTotals(){
   },{
     title: 'employees',
     dataIndex: 'employees',
+    className:'employeesTotal',
     render: hours => {
         if (hours) {
           if (hours.asHours() > 0) {
@@ -165,6 +166,7 @@ export function sqeTotals(){
   },{
     title: 'contractors',
     dataIndex: 'contractors',
+    className:'contractorsTotal',
     render: hours => {
         if (hours) {
           if (hours.asHours() > 0) {
@@ -178,7 +180,7 @@ export function sqeTotals(){
   },{
     title: 'siteInspections',
     dataIndex: 'siteInspections',
-    className: 'hideThis',
+    className: 'hideThis siteInspectionsTotal',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -190,7 +192,7 @@ export function sqeTotals(){
   },{
     title: 'hazards',
     dataIndex: 'hazards',
-    className: 'hideThis',
+    className: 'hideThis hazardsTotal',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -202,7 +204,7 @@ export function sqeTotals(){
   },{
     title: 'toolboxs',
     dataIndex: 'toolboxs',
-    className: 'hideThis',
+    className: 'hideThis toolboxsTotal',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -214,6 +216,7 @@ export function sqeTotals(){
   },{
     title: 'diesel',
     dataIndex: 'diesel',
+    className:'dieselTotal',
     width: 80,
     render: val => {
       if (val > 0) {
@@ -225,6 +228,7 @@ export function sqeTotals(){
   },{
     title: 'unleaded',
     dataIndex: 'unleaded',
+    className:'unleadedTotal',
     width: 80,
     render: val => {
       if (val > 0) {
@@ -236,6 +240,7 @@ export function sqeTotals(){
   },{
     title: 'water',
     dataIndex: 'water',
+    className:'waterTotal',
     width: 80,
     render: val => {
       if (val > 0) {

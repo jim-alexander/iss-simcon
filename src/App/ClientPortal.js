@@ -14,6 +14,7 @@ import SitePlantRegister from "../Pages/SitePlantRegister"
 import SQEStats from "../Pages/SQEStats"
 import HazardRegister from "../Pages/HazardRegister"
 import Profile from "../Pages/Profile"
+import Job from "../Pages/Job"
 import Loader from '../Pages/Loader'
 import PageNotes from './PageNotes'
 
@@ -146,7 +147,7 @@ class ClientPortal extends Component {
           dailyDiarys: dataReceived[5].objects,
           hazards: dataReceived[6].objects
         });
-        console.log("Data loaded");
+        // console.log("Data loaded");
         
 
       }).then(() => {
@@ -173,7 +174,7 @@ class ClientPortal extends Component {
         localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
         localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
         localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
-        console.log("Recent Data Saved Locally");
+        // console.log("Recent Data Saved Locally");
         
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
         message.destroy()
@@ -251,6 +252,7 @@ class ClientPortal extends Component {
                 jobFiles={this.state.jobFiles}
                 hazards={this.state.hazards} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
+              <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} />} />
             </div>
             <Button block onClick={this.PageNotes} style={{maxWidth: 200, margin: '15px auto'}} className='printHide'>Page Notes</Button>
           </Content>
