@@ -93,10 +93,12 @@ class ClientPortal extends Component {
 
       })
       this.loadFulcrumData();
+      this.interval = setInterval(() => this.loadFulcrumData(), 300000);
       this.autoReload()
     } else {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
+      this.interval = setInterval(() => this.loadFulcrumData(), 300000);
       this.autoReload()
     }
     window.addEventListener("resize", this.updateDimensions);
@@ -108,6 +110,9 @@ class ClientPortal extends Component {
     //     console.log('Error getting your forms.', error.message);
     //   });
   }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
   updateDimensions = () => {
     this.setState({ width: window.innerWidth });
   }
@@ -115,15 +120,15 @@ class ClientPortal extends Component {
     this.updateDimensions();
   }
   autoReload() {
-    setTimeout(this.autoReload.bind(this), 605000);
-
-    var reload = moment().subtract(10, 'minutes').format("LTS");
-    if (this.state.lastLoaded !== null) {
-      if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
-        //console.log('%c 10 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
-        this.loadFulcrumData();
-      }
-    }
+    // // setTimeout(this.autoReload.bind(this), 605000);
+    // setTimeout(this.autoReload.bind(this), 60000);
+    // var reload = moment().subtract(1, 'minutes').format("LTS");
+    // if (this.state.lastLoaded !== null) {
+    //   if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
+    //     console.log('%c 1 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
+    //     this.loadFulcrumData();
+    //   }
+    // }
   }
 
   loadFulcrumData(evt) {
@@ -141,6 +146,8 @@ class ClientPortal extends Component {
           dailyDiarys: dataReceived[5].objects,
           hazards: dataReceived[6].objects
         });
+        console.log("Data loaded");
+        
 
       }).then(() => {
         this.setState({
@@ -166,7 +173,8 @@ class ClientPortal extends Component {
         localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
         localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
         localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
-
+        console.log("Recent Data Saved Locally");
+        
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
         message.destroy()
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
@@ -185,7 +193,7 @@ class ClientPortal extends Component {
     });
   }
   
-  render() {
+  render() {    
     function navigationBased(width, user) {
       if (width >= 992) { return <Navigation user={user} /> }
       else if (width <= 991) { return <NavigationSmaller user={user} /> }
@@ -208,7 +216,7 @@ class ClientPortal extends Component {
       <Layout>
         {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
-          <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
+          <Tooltip title="Data loads automatically after 5 minutes." mouseEnterDelay={2} placement='bottom'>
             <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
               <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
               <span id='lastLoadedRefreash'>Click to Refresh Data</span>
