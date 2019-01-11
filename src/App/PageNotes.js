@@ -61,6 +61,14 @@ export default class PageNotes extends Component {
         </div>
       )
     }
+    if (currentPage === '/profile/') {
+      return (
+        <div>
+          <h1>Profile</h1>
+          <p>This page is where accounts for the portal are managed. (Not Fulcrum)</p>
+          </div>
+      )
+    } else {return null}
 
   }
 }
