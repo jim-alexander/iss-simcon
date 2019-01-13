@@ -123,9 +123,15 @@ export default class PlantVerificationPage extends Component {
     if (this.state.verificationNumber !== null || this.state.verificationNumber !== '') {
       let importedForm = this.state.rawForm
       importedForm.status = 'Awaiting Confirmation'
+console.log(importedForm);
 
       importedForm.form_values['926d'] = this.state.company //company
-      importedForm.form_values['d8a2'].choice_values[0] = this.state.type //plant type
+      if (this.state.type !== null && this.state.type !== '') {
+        importedForm.form_values['d8a2'] = {
+          choice_values: [this.state.type]
+        }
+      }
+       //plant type
       importedForm.form_values['7c25'] = this.state.make //make
       importedForm.form_values['f868'] = this.state.name //name
 
@@ -134,10 +140,16 @@ export default class PlantVerificationPage extends Component {
       importedForm.form_values['86f5'] = this.state.questions[2].selection //q3
       importedForm.form_values['0aed'] = this.state.questions[3].selection //q4
       importedForm.form_values['a713'] = this.state.questions[4].selection //q5
-            
+      
+      console.log(importedForm);
+      
+      
       client.records.update(importedForm.id, importedForm)
         .then(form => {
           message.success(`Form saved and submitted.`)
+          setTimeout(() => {
+            window.close()
+          }, 3000);
         })
         .catch(err => message.error(`Could not find record. Error: ${err}`))
     }
