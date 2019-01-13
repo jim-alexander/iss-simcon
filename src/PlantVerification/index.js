@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Input, Row, Col, Button, Divider, Upload, Icon, message } from 'antd'
+import { Layout, Input, Row, Col, Button, Divider, Upload, Icon, message, Select } from 'antd'
 import logo from '../constants/nav_logo_white.png'
 import { Client } from 'fulcrum-app'
 import './index.css'
@@ -30,24 +30,28 @@ export default class PlantVerificationPage extends Component {
       id: 4,
       text: 'Log book / plant pre-start records are with the machine?',
       selection: null
-    }]
+    }],
+    name: null,
+    company: null,
+    type: null,
+    make: null,
+    rawForm: null
   }
   componentDidMount = () => {
-    let verificationNumber = window.location.pathname.replace('/plant-verification', '').replace('/', '')     
+    let verificationNumber = window.location.pathname.replace('/plant-verification', '').replace('/', '')
     if (this.state.verificationNumber === null) {
       if (verificationNumber.length > 2) {
         this.setState({
           verificationNumber
         })
       }
-    }   
-  }
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.verificationNumber !== this.state.verificationNumber ) {
-      this.loadForm()      
     }
   }
-
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.verificationNumber !== this.state.verificationNumber) {
+      this.loadForm()
+    }
+  }
   selection(id, option) {
     let before = this.state.questions
     before[id].selection = option
@@ -97,6 +101,13 @@ export default class PlantVerificationPage extends Component {
     if (this.state.verificationNumber !== null) {
       client.records.find(this.state.verificationNumber)
         .then(form => {
+          this.setState({
+            rawForm: form,
+            name: form.form_values['f868'],
+            company: form.form_values['926d'],
+            type: form.form_values['d8a2'] ? form.form_values['d8a2'].choice_values[0] : null,
+            make: form.form_values['7c25']
+          })
           this.selection(0, form.form_values['ac34'])
           this.selection(1, form.form_values['ae64'])
           this.selection(2, form.form_values['86f5'])
@@ -110,27 +121,28 @@ export default class PlantVerificationPage extends Component {
   }
   saveForm() {
     if (this.state.verificationNumber !== null || this.state.verificationNumber !== '') {
-      let obj = {
-        id: this.state.verificationNumber,
-        status: 'Awaiting Confirmation',
-        form_values: {
-          'ac34': this.state.questions[0].selection,
-          'ae64': this.state.questions[1].selection,
-          '86f5': this.state.questions[2].selection,
-          '0aed': this.state.questions[3].selection,
-          'a713': this.state.questions[4].selection,
-        }
-      }
-      console.log(obj);
+      let importedForm = this.state.rawForm
+      importedForm.status = 'Awaiting Confirmation'
 
-      client.records.update(obj.id, obj)
+      importedForm.form_values['926d'] = this.state.company //company
+      importedForm.form_values['d8a2'].choice_values[0] = this.state.type //plant type
+      importedForm.form_values['7c25'] = this.state.make //make
+      importedForm.form_values['f868'] = this.state.name //name
+
+      importedForm.form_values['ac34'] = this.state.questions[0].selection //q1
+      importedForm.form_values['ae64'] = this.state.questions[1].selection //q2
+      importedForm.form_values['86f5'] = this.state.questions[2].selection //q3
+      importedForm.form_values['0aed'] = this.state.questions[3].selection //q4
+      importedForm.form_values['a713'] = this.state.questions[4].selection //q5
+            
+      client.records.update(importedForm.id, importedForm)
         .then(form => {
           message.success(`Form saved and submitted.`)
         })
         .catch(err => message.error(`Could not find record. Error: ${err}`))
     }
   }
-  render() {    
+  render() {
     return (
       <div>
         <Header style={{ backgroundColor: '#1c3538', lineHeight: '58px' }}>
@@ -149,15 +161,48 @@ export default class PlantVerificationPage extends Component {
           }}>
             <h1 style={{ textAlign: 'center' }}>Plant Verification Form</h1>
             <Divider />
-            <Row gutter={10}>
+            <Row gutter={10} style={{ marginBottom: 20 }}>
               <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                <h3 style={{ textAlign: 'right', paddingTop: 4 }}>Verification Number</h3>
+                <h3 style={{ textAlign: 'center', paddingTop: 4 }}>Verification Number</h3>
               </Col>
               <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                 <Input
                   style={{ width: '100%', marginBottom: '10px', background: '#fafafa' }}
                   value={this.state.verificationNumber}
                   disabled />
+              </Col>
+            </Row>
+            <Row gutter={10}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} style={{ marginBottom: 20 }}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{textAlign: 'center'}}>Name</h3></Col>
+                <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                  <Input style={{ width: '100%' }} placeholder='John Smith' value={this.state.name} onChange={e => this.setState({name: e.target.value})}/>
+                </Col>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} style={{ marginBottom: 20 }}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{textAlign: 'center'}}>Company</h3></Col>
+                <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                  <Input style={{ width: '100%' }} placeholder='Acme Incorporated' value={this.state.company} onChange={e => this.setState({company: e.target.value})}/>
+                </Col>
+              </Col>
+            </Row>
+            <Row gutter={10}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} style={{ marginBottom: 20 }}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{textAlign: 'center'}}>Plant type</h3></Col>
+                <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                  <Select style={{ width: '100%' }} value={this.state.type} onChange={e => this.setState({type: e})}>
+                    <Select.Option value="excavator">Excavator</Select.Option>
+                    <Select.Option value="rollers">Roller</Select.Option>
+                    <Select.Option value="loader">Loader</Select.Option>
+                    <Select.Option value="compressor">Compressor</Select.Option>
+                  </Select>
+                </Col>
+              </Col>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} style={{ marginBottom: 20 }}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{textAlign: 'center'}}>Make / Model</h3></Col>
+                <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                  <Input style={{ width: '100%' }} placeholder='CAT' value={this.state.make} onChange={e => this.setState({make: e.target.value})}/>
+                </Col>
               </Col>
             </Row>
           </div>
