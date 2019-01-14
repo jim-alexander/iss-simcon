@@ -90,9 +90,9 @@ class SignInForm extends Component {
       error,
     } = this.state;
 
-    const isInvalid =
-      password === '' ||
-      email === '';
+    // const isInvalid =
+    //   password === '' ||
+    //   email === '';
 
     return (
       <Form onSubmit={this.onSubmit} id="SignInForm">
@@ -111,7 +111,7 @@ class SignInForm extends Component {
           placeholder="Password"
         />
         <PasswordForgetLink />
-        <Button disabled={isInvalid} htmlType="submit" id='SignInButton'>
+        <Button htmlType="submit" id='SignInButton'>
           Sign In
         </Button>
         {error && <p id="SignInError">{error.message}</p>}
