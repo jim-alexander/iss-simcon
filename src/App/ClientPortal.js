@@ -94,11 +94,11 @@ class ClientPortal extends Component {
 
       })
       this.loadFulcrumData();
-      this.interval = setInterval(() => this.loadFulcrumData(), 300000);
+      this.interval = setInterval(() => this.loadFulcrumData(), 600000);
     } else {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
-      this.interval = setInterval(() => this.loadFulcrumData(), 300000);
+      this.interval = setInterval(() => this.loadFulcrumData(), 600000);
     }
     window.addEventListener("resize", this.updateDimensions);
     // client.forms.all({ schema: false })
@@ -204,7 +204,7 @@ class ClientPortal extends Component {
       <Layout>
         {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
-          <Tooltip title="Data loads automatically after 5 minutes." mouseEnterDelay={2} placement='bottom'>
+          <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
             <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
               <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
               <span id='lastLoadedRefreash'>Click to Refresh Data</span>
