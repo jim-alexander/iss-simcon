@@ -90,11 +90,16 @@ export default class Timesheets extends Component {
       endTime = moment(`2018-12-10 ${endTime}`, 'YYYY-MM-DD h.mm');
 
       var dayEndTime = moment(`2018-12-10 20:00`, 'YYYY-MM-DD HH:mm');
+      var overTimeOneEndTime = moment(`2018-12-10 22:00`, 'YYYY-MM-DD HH:mm');
       var overtimeOne = moment.duration(0);
 
       if (endTime.isAfter(dayEndTime) && moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
-        var time = startTime.isAfter(dayEndTime) ? startTime : dayEndTime;
-        overtimeOne = moment.duration(endTime.diff(time));
+        if (startTime.isBefore(overTimeOneEndTime)) {
+          var startTimeCalc = startTime.isAfter(dayEndTime) ? startTime : dayEndTime;
+          var endTimeCalc = endTime.isAfter(overTimeOneEndTime) ? overTimeOneEndTime: endTime
+          console.log(startTimeCalc);
+          overtimeOne = moment.duration(endTimeCalc.diff(startTimeCalc));
+        }
       }
       if (day === 'Saturday') {
         overtimeOne = moment.duration(endTime.diff(startTime));
@@ -122,9 +127,11 @@ export default class Timesheets extends Component {
         overtimeTwo = moment.duration(endTime.diff(time));
       }
       if (day === 'Saturday') {
-        if (overtimeTwo.as('hours') >= 2) {
-          overtimeTwo = moment.duration(endTime.diff(startTime));
-          overtimeTwo.subtract(2, 'hours')
+        let satHours = moment.duration(endTime.diff(startTime))
+
+        if (satHours.as('hours') >= 2) {
+          satHours.subtract(2, 'hours')
+          overtimeTwo = satHours;
         }
       }
       if (day === 'Sunday') {
