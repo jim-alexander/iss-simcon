@@ -23,13 +23,13 @@ import { Layout, message, Tooltip, Modal, Button} from 'antd'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
-  { form_id: '0a877c38-ecdb-434a-a0ec-0b283ee8d1b6' }, // Job file
-  { form_id: '8624ca67-d338-428c-8924-6d4e7ae6c17a' }, // Daily prestart
-  { form_id: '99a2f95d-ba0e-4cc8-8d7d-6e08c2c9ca5a' }, // Plant verification
-  { form_id: '1b0fe741-65e4-44eb-b7bb-8aeeb1b2c8d5' }, // Site inspection
-  { form_id: '1b9a6e3c-2c36-4431-8fcb-bcdb2bc3c760' }, // Toolbox minutes
-  { form_id: '08e7cbcf-4ae7-4ec1-8b84-53a3600d9014' },  // Daily Diary
-  { form_id: '24b9e89a-4efd-463f-a200-fa1c33b59c13' }  // Hazard Register
+  { form_id: '4e07314d-e9e4-4efb-9b9b-3f3b9492f345' }, // Job file
+  { form_id: '2f101ab8-a62b-427c-96af-09fd9b5b26bb' }, // Daily prestart
+  { form_id: 'c4307607-a450-4673-8602-fa5bcb36f366' }, // Plant verification
+  { form_id: '572fccd2-4500-4e59-8fac-fd3f428a4094' }, // Site inspection
+  { form_id: '15f5e75d-a3d3-4856-881c-326e5e02ac54' }, // Toolbox minutes
+  { form_id: '48ca5050-04ce-4939-9928-6b4509a330e7' },  // Daily Diary
+  { form_id: '3e7888a5-26fa-449d-a183-b5a228c6e59a' }  // Hazard Register
 ]
 
 const { Content, Footer } = Layout
@@ -95,12 +95,10 @@ class ClientPortal extends Component {
       })
       this.loadFulcrumData();
       this.interval = setInterval(() => this.loadFulcrumData(), 300000);
-      this.autoReload()
     } else {
       this.setState({ loadingScreen: true })
       this.loadFulcrumData();
       this.interval = setInterval(() => this.loadFulcrumData(), 300000);
-      this.autoReload()
     }
     window.addEventListener("resize", this.updateDimensions);
     // client.forms.all({ schema: false })
@@ -119,17 +117,6 @@ class ClientPortal extends Component {
   }
   componentWillMount() {
     this.updateDimensions();
-  }
-  autoReload() {
-    // // setTimeout(this.autoReload.bind(this), 605000);
-    // setTimeout(this.autoReload.bind(this), 60000);
-    // var reload = moment().subtract(1, 'minutes').format("LTS");
-    // if (this.state.lastLoaded !== null) {
-    //   if (moment(reload, 'h:mm:ss') > moment(this.state.lastLoaded, 'h:mm:ss')) {
-    //     console.log('%c 1 minutes has passed, Reloading data.', 'color: green; font-size: 12px');
-    //     this.loadFulcrumData();
-    //   }
-    // }
   }
 
   loadFulcrumData(evt) {

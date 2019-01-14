@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Select, Table, DatePicker, Row, Col } from 'antd'
 import * as column from './columns'
 import moment from 'moment'
+import { db } from '../../firebase'
 import './index.css'
 
 const Option = Select.Option;
@@ -51,12 +52,16 @@ export default class SQEStats extends Component {
     />
   }
   componentDidMount() {
+    db.lastViewedPage(this.props.user.id, 'SQE Stats');
+
     this.buildTable()
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.jobFiles !== this.props.jobFiles ||
       prevState.selectedJob !== this.state.selectedJob ||
       prevState.selectedDate !== this.state.selectedDate) {
+        db.lastViewedPage(this.props.user.id, 'SQE Stats');
+
       this.setState({
         data: null
       }, () => this.buildTable())

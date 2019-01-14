@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Table, DatePicker, Row, Col, Select } from 'antd'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
+import { db } from '../../firebase'
 import * as column from './columns'
 import './index.css'
 
@@ -52,11 +53,15 @@ export default class Timesheets extends Component {
   }
   componentDidMount() {
     this.loadTimesheet()
+    db.lastViewedPage(this.props.user.id, 'timesheets');
+
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.dailyPrestarts !== this.props.dailyPrestarts ||
       prevState.start !== this.state.start ||
       prevState.noDays !== this.state.noDays) {
+      db.lastViewedPage(this.props.user.id, 'timesheets');
+
       this.setState({
         data: null,
         end: moment(this.state.start, 'YYYY-MM-DD').add((this.state.noDays - 1), 'days').format('YYYY-MM-DD')
@@ -86,7 +91,7 @@ export default class Timesheets extends Component {
 
       var dayEndTime = moment(`2018-12-10 20:00`, 'YYYY-MM-DD HH:mm');
       var overtimeOne = moment.duration(0);
-      
+
       if (endTime.isAfter(dayEndTime) && moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
         var time = startTime.isAfter(dayEndTime) ? startTime : dayEndTime;
         overtimeOne = moment.duration(endTime.diff(time));
@@ -120,7 +125,7 @@ export default class Timesheets extends Component {
         if (overtimeTwo.as('hours') >= 2) {
           overtimeTwo = moment.duration(endTime.diff(startTime));
           overtimeTwo.subtract(2, 'hours')
-        } 
+        }
       }
       if (day === 'Sunday') {
         overtimeTwo = moment.duration(endTime.diff(startTime));
@@ -142,7 +147,7 @@ export default class Timesheets extends Component {
               var hoursDiff = this.calcTimeDiff(start, end);
               var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
               var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
-  
+
               var addHours = moment(hoursDiff, 'HH.mm').format('HH')
               var addMins = moment(hoursDiff, 'HH.mm').format('m')
               var name = (entry.form_values['57fb']) ? entry.form_values['57fb'].choice_values[0] : null
@@ -152,9 +157,9 @@ export default class Timesheets extends Component {
               };
               var travel = (entry.form_values['935b']) ? parseFloat(entry.form_values['935b']) : 0
               var lafha = (entry.form_values['b574'] === 'yes') ? 1 : 0
-              
+
               const index = data.findIndex((e) => e.name === obj.name);
-             
+
               if (index === -1) {
                 obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
                 obj.ot1 = overTimeOne;
@@ -182,19 +187,19 @@ export default class Timesheets extends Component {
                   data[index].ot2 += overTimeTwo;
                   data[index].travel += travel;
                   data[index].lafha += lafha;
-                }                
+                }
               }
             }
           })
         }
-        
+
       }
     })
     this.setState({
       data
     })
   }
-  render() {    
+  render() {
     return (
       <div>
         <div>
@@ -204,9 +209,9 @@ export default class Timesheets extends Component {
             <Col xs={0} sm={0} md={4} lg={4} xl={4}><h3>Days</h3></Col>
           </Row>
           <Row gutter={10}>
-            <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{marginBottom: '10px'}}>{this.selectDate()}</Col>
-            <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{marginBottom: '10px'}}>{this.dateTo()}</Col>
-            <Col xs={24} sm={24} md={4} lg={4} xl={4} style={{marginBottom: '10px'}}>{this.selectDayNumber()}</Col>
+            <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{ marginBottom: '10px' }}>{this.selectDate()}</Col>
+            <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{ marginBottom: '10px' }}>{this.dateTo()}</Col>
+            <Col xs={24} sm={24} md={4} lg={4} xl={4} style={{ marginBottom: '10px' }}>{this.selectDayNumber()}</Col>
           </Row>
         </div>
         <Table

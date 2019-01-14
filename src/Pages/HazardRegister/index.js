@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Select, Table } from 'antd'
 import * as column from './columns'
+import { db } from '../../firebase'
 import './index.css'
 
 const Option = Select.Option;
@@ -25,10 +26,12 @@ export default class HazardRegister extends Component {
     )
   }
   componentDidMount() {
+    db.lastViewedPage(this.props.user.id, 'Hazard Register');
     this.loadHazardData()
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedJob !== this.state.selectedJob || prevProps.hazards !== this.props.hazards) {
+      db.lastViewedPage(this.props.user.id, 'Hazard Register');
       this.loadHazardData()
     }
   }

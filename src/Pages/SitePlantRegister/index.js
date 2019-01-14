@@ -4,6 +4,8 @@ import * as column from './columns'
 import PlantVerification from './PlantVerification'
 import moment from 'moment'
 import { Client } from 'fulcrum-app'
+import { db } from '../../firebase'
+
 import './index.css'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
@@ -24,7 +26,7 @@ export default class SitePlantRegister extends Component {
   selectJob() {
     return (
       <Select
-        mode="multiple"
+        mode='multiple'
         placeholder="Select Job Number(s)"
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
@@ -36,11 +38,14 @@ export default class SitePlantRegister extends Component {
     )
   }
   componentDidMount() {
+    db.lastViewedPage(this.props.user.id, 'Plant Register');
     this.plantData()
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.plantVerifications !== this.props.plantVerifications
       || prevState.selectedJob !== this.state.selectedJob) {
+      db.lastViewedPage(this.props.user.id, 'Plant Register');
+
       this.plantData()
     }
   }
@@ -91,14 +96,16 @@ export default class SitePlantRegister extends Component {
         return;
       }
       var obj = {
-        form_id: '99a2f95d-ba0e-4cc8-8d7d-6e08c2c9ca5a',
+        form_id: 'c4307607-a450-4673-8602-fa5bcb36f366',
         status: 'Emailed',
+        project_id: values.job,
         form_values: {
           'c553': moment().format('YYYY-MM-DD'),
           '6a97': values.message,
           '90f8': values.email,
         }
       }
+
       client.records.create(obj)
         .catch(err => console.log(err))
 
@@ -129,7 +136,7 @@ export default class SitePlantRegister extends Component {
       <div>
         <Row gutter={10}>
           <Col xs={24} sm={24} md={24} lg={18} xl={18}>
-            {this.selectJob()}
+            {this.selectJob('multiple')}
           </Col>
           <Col xs={24} sm={24} md={24} lg={6} xl={6} style={{ marginBottom: 10 }}>
             <Button style={{ width: '100%' }} onClick={() => this.setState({ visible: true })} ghost type='primary'>Send Plant Verification</Button>
@@ -137,6 +144,7 @@ export default class SitePlantRegister extends Component {
               visible={this.state.visible}
               onClose={this.onClose}
               onOk={this.onOk}
+              jobFiles={this.props.jobFiles}
               wrappedComponentRef={this.saveFormRef} />
           </Col>
         </Row>
