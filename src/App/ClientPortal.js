@@ -82,7 +82,8 @@ class ClientPortal extends Component {
       localStorage.getItem('siteInspections') !== null &&
       localStorage.getItem('toolboxMinutes') !== null &&
       localStorage.getItem('dailyDiarys') !== null &&
-      localStorage.getItem('hazards') !== null) {
+      localStorage.getItem('hazards') !== null && 
+      localStorage.getItem('user') !== null) {
       this.setState({
         jobFiles: JSON.parse(localStorage.getItem('jobFiles')),
         dailyPrestarts: JSON.parse(localStorage.getItem('dailyPrestarts')),
@@ -91,6 +92,7 @@ class ClientPortal extends Component {
         toolboxMinutes: JSON.parse(localStorage.getItem('toolboxMinutes')),
         dailyDiarys: JSON.parse(localStorage.getItem('dailyDiarys')),
         hazards: JSON.parse(localStorage.getItem('hazards')),
+        user: JSON.parse(localStorage.getItem('user')),
 
       })
       this.loadFulcrumData();
@@ -173,6 +175,7 @@ class ClientPortal extends Component {
         localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
         localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
         localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
+        localStorage.setItem('user', JSON.stringify(this.state.user))
         // console.log("Recent Data Saved Locally");
 
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))

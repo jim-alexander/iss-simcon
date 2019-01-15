@@ -287,6 +287,7 @@ class DailyReportSheet extends React.Component {
         <div className='boresPadding'>
           <Table
             pagination={false}
+            locale={{ emptyText: 'No Data' }}
             bordered
             id='boresTableOne'
             className='boreTables tableResizer dailyReportTables'
@@ -298,6 +299,7 @@ class DailyReportSheet extends React.Component {
         <div className='boresPadding'>
           <Table
             pagination={false}
+            locale={{ emptyText: 'No Data' }}
             title={() => 'Company Personnel'}
             footer={() => `Total Hours: ${this.state.compPersTotal.asHours()}`}
             bordered
@@ -311,6 +313,7 @@ class DailyReportSheet extends React.Component {
         <div className='boresPadding'>
           <Table
             pagination={false}
+            locale={{ emptyText: 'No Data' }}
             title={() => 'Sub Contractors'}
             footer={() => `Total Hours: ${this.state.subContrTotal.asHours()}`}
             bordered
@@ -326,6 +329,7 @@ class DailyReportSheet extends React.Component {
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Table
                 pagination={false}
+                locale={{ emptyText: 'No Data' }}
                 title={() => 'Company Plant'}
                 bordered
                 id='boresTableFour'
@@ -338,6 +342,7 @@ class DailyReportSheet extends React.Component {
             <Col xs={24} sm={24} md={24} lg={16} xl={16}>
               <Table
                 pagination={false}
+                locale={{ emptyText: 'No Data' }}
                 title={() => 'Hired Plant'}
                 bordered
                 id='boresTableFive'
@@ -352,6 +357,7 @@ class DailyReportSheet extends React.Component {
         <div className='boresPadding'>
           <Table
             pagination={false}
+            locale={{ emptyText: 'No Data' }}
             title={() => 'Materials Delivered'}
             bordered
             id='boresTableSeven'
@@ -366,6 +372,7 @@ class DailyReportSheet extends React.Component {
             size='small'
             rowKey='id'
             pagination={false}
+            locale={{ emptyText: 'No Data' }}
             dataSource={this.state.comments}
             className='boreTables tableResizer dailyReportTables'
             columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
