@@ -60,7 +60,9 @@ function registerValidSW(swUrl) {
               console.log('New content is available; please refresh.');
               notification.info({
                 message: 'Please refresh the page.',
-                description: 'A new version of this site has been released.'
+                description: 'A new version of this site has been released.',
+                duration: 0,
+                placement: "bottomRight"
               })
             } else {
               // At this point, everything has been precached.

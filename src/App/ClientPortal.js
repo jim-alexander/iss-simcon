@@ -19,7 +19,7 @@ import Loader from '../Pages/Loader'
 import PageNotes from './PageNotes'
 
 import './index.css'
-import { Layout, message, Tooltip, Modal, Button} from 'antd'
+import { Layout, message, Tooltip, Modal, Button } from 'antd'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
@@ -81,7 +81,7 @@ class ClientPortal extends Component {
       localStorage.getItem('plantVerifications') !== null &&
       localStorage.getItem('siteInspections') !== null &&
       localStorage.getItem('toolboxMinutes') !== null &&
-      localStorage.getItem('dailyDiarys') !== null && 
+      localStorage.getItem('dailyDiarys') !== null &&
       localStorage.getItem('hazards') !== null) {
       this.setState({
         jobFiles: JSON.parse(localStorage.getItem('jobFiles')),
@@ -135,7 +135,7 @@ class ClientPortal extends Component {
           hazards: dataReceived[6].objects
         });
         // console.log("Data loaded");
-        
+
 
       }).then(() => {
         this.setState({
@@ -162,7 +162,7 @@ class ClientPortal extends Component {
         localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
         localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
         // console.log("Recent Data Saved Locally");
-        
+
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
         message.destroy()
         if (evt === 'Button Refresh') { message.success('Data is up to date.') }
@@ -170,18 +170,18 @@ class ClientPortal extends Component {
         console.log(error)
       });
   }
-  
+
   PageNotes() {
     Modal.info({
       title: 'Page Notes',
       content: (
         <PageNotes currentPage={window.location.pathname} />
       ),
-      onOk() {},
+      onOk() { },
     });
   }
-  
-  render() {    
+
+  render() {
     function navigationBased(width, user) {
       if (width >= 992) { return <Navigation user={user} /> }
       else if (width <= 991) { return <NavigationSmaller user={user} /> }
@@ -241,7 +241,7 @@ class ClientPortal extends Component {
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
               <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} />} />
             </div>
-            <Button block onClick={this.PageNotes} style={{maxWidth: 200, margin: '15px auto'}} className='printHide'>Page Notes</Button>
+            <Button block onClick={this.PageNotes} style={{ maxWidth: 200, margin: '15px auto' }} className='printHide'>Page Notes</Button>
           </Content>
           <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>
             Info Sync Solutions ©2018 Created by Jim Alexander
