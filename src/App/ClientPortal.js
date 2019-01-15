@@ -105,7 +105,10 @@ class ClientPortal extends Component {
         message: 'Please refresh the page.',
         description: 'A new version of this site has been released.',
         duration: 0,
-        placement: "bottomRight"
+        placement: "bottomRight",
+        style: {
+          borderTop: '2px solid #0099e1'
+      }
       })
     });
 
