@@ -39,6 +39,8 @@ export default class SitePlantRegister extends Component {
   }
   componentDidMount() {
     db.lastViewedPage(this.props.user.id, 'Plant Register');
+    console.log(this.props.plantVerifications);
+    
     this.plantData()
   }
   componentDidUpdate(prevProps, prevState) {

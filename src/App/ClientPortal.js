@@ -19,7 +19,7 @@ import Loader from '../Pages/Loader'
 import PageNotes from './PageNotes'
 
 import './index.css'
-import { Layout, message, Tooltip, Modal, Button } from 'antd'
+import { Layout, message, Tooltip, Modal, Button, notification } from 'antd'
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY)
 const listFormIds = [
@@ -100,6 +100,15 @@ class ClientPortal extends Component {
       this.loadFulcrumData();
       this.interval = setInterval(() => this.loadFulcrumData(), 600000);
     }
+    window.addEventListener("newContentAvailable", () => {
+      notification.info({
+        message: 'Please refresh the page.',
+        description: 'A new version of this site has been released.',
+        duration: 0,
+        placement: "bottomRight"
+      })
+    });
+
     window.addEventListener("resize", this.updateDimensions);
     // client.forms.all({ schema: false })
     //   .then((page) => {

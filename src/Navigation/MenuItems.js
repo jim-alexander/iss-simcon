@@ -79,7 +79,7 @@ export const Fulcrum = (role) => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/fulcrum/" id='fulcrum'>
-        <a href='https://web.fulcrumapp.com/dash/48ca5050-04ce-4939-9928-6b4509a330e7' target='_blank' rel="noopener noreferrer">
+        <a href='https://web.fulcrumapp.com/' target='_blank' rel="noopener noreferrer">
           <Icon type="mobile" theme='outlined' />
           <span className="nav-text">Fulcrum</span>
         </a>
