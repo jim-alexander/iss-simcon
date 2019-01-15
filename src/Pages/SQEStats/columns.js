@@ -52,7 +52,7 @@ export function plantRegister(){
     }]
   }, {
     title: 'Documents Completed',
-    className: 'documentsCompleted titleHeader hideThis',
+    className: 'documentsCompleted titleHeader',
     children: [{
       title: 'Site Inspections',
       dataIndex: 'siteInspections',
@@ -69,7 +69,7 @@ export function plantRegister(){
     }, {
       title: 'Hazards Closed',
       dataIndex: 'hazardsClosed',
-      className: 'subHeader hideThis',
+      className: 'subHeader',
       key: 'hazards',
       render: (val) => {
         if (val > 0) {
@@ -82,7 +82,7 @@ export function plantRegister(){
     }, {
       title: 'Toolbox Meetings',
       dataIndex: 'toolbox',
-      className: 'subHeader hideThis',
+      className: 'subHeader',
       key: 'toolbox',
       render: (val) => {
         if (val > 0) {
@@ -95,7 +95,7 @@ export function plantRegister(){
     }]
   }, {
     title: 'Materials (L)',
-    className: 'materials titleHeader',
+    className: 'materials titleHeader hideThis',
     children: [{
       title: 'Diesel',
       dataIndex: 'diesel',
@@ -112,7 +112,7 @@ export function plantRegister(){
     }, {
       title: 'Unleaded',
       dataIndex: 'unleaded',
-      className: 'subHeader',
+      className: 'subHeader hideThis',
       key: 'unleaded',
       render: (val) => {
         if (val > 0) {
@@ -125,7 +125,7 @@ export function plantRegister(){
     }, {
       title: 'Water',
       dataIndex: 'water',
-      className: 'subHeader',
+      className: 'subHeader hideThis',
       key: 'water',
       render: (val) => {
         if (val > 0) {
@@ -180,7 +180,7 @@ export function sqeTotals(){
   },{
     title: 'siteInspections',
     dataIndex: 'siteInspections',
-    className: 'hideThis siteInspectionsTotal',
+    className: 'siteInspectionsTotal',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -192,7 +192,7 @@ export function sqeTotals(){
   },{
     title: 'hazards',
     dataIndex: 'hazards',
-    className: 'hideThis hazardsTotal',
+    className: 'hazardsTotal',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -204,7 +204,7 @@ export function sqeTotals(){
   },{
     title: 'toolboxs',
     dataIndex: 'toolboxs',
-    className: 'hideThis toolboxsTotal',
+    className: 'toolboxsTotal',
     width: 100,
     render: val => {
       if (val > 0) {
@@ -216,7 +216,7 @@ export function sqeTotals(){
   },{
     title: 'diesel',
     dataIndex: 'diesel',
-    className:'dieselTotal',
+    className:'dieselTotal hideThis',
     width: 80,
     render: val => {
       if (val > 0) {
@@ -228,7 +228,7 @@ export function sqeTotals(){
   },{
     title: 'unleaded',
     dataIndex: 'unleaded',
-    className:'unleadedTotal',
+    className:'unleadedTotal hideThis',
     width: 80,
     render: val => {
       if (val > 0) {
@@ -240,7 +240,7 @@ export function sqeTotals(){
   },{
     title: 'water',
     dataIndex: 'water',
-    className:'waterTotal',
+    className:'waterTotal hideThis',
     width: 80,
     render: val => {
       if (val > 0) {

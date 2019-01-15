@@ -82,7 +82,7 @@ class ClientPortal extends Component {
       localStorage.getItem('siteInspections') !== null &&
       localStorage.getItem('toolboxMinutes') !== null &&
       localStorage.getItem('dailyDiarys') !== null &&
-      localStorage.getItem('hazards') !== null && 
+      localStorage.getItem('hazards') !== null &&
       localStorage.getItem('user') !== null) {
       this.setState({
         jobFiles: JSON.parse(localStorage.getItem('jobFiles')),
@@ -109,10 +109,13 @@ class ClientPortal extends Component {
         duration: 0,
         placement: "bottomRight",
         style: {
-          borderTop: '2px solid #0099e1'
-      }
+          borderTop: '2px solid #3ea08e',
+          background: '#1c3538',
+          color: '#fff'
+        }
       })
     });
+    
 
     window.addEventListener("resize", this.updateDimensions);
     // client.forms.all({ schema: false })

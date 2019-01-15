@@ -210,6 +210,12 @@ th.outlineAwaitingPayment {
   width: 250px;
   text-align: right;
 }
+.ant-notification-notice-message {
+  color: white;
+}
+.ant-notification-notice-icon-info {
+  color: #3ea08e;
+}
 
 #lastLoadedRefreash {
   display: none;
