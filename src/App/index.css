@@ -219,6 +219,9 @@ th.outlineAwaitingPayment {
 .ant-notification-notice-icon-info {
   color: #3ea08e;
 }
+i.anticon.anticon-close.ant-notification-close-icon {
+  color: #fff;
+}
 
 #lastLoadedRefreash {
   display: none;

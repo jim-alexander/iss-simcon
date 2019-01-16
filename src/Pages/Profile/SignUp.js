@@ -91,7 +91,7 @@ class SignUpForm extends Component {
         footer={null}
       >
         <Form onSubmit={this.onSubmit} id='signupForm'>
-          <Select onChange={event => this.setState(updateByPropertyName('role', event))} className='somePadding' placeholder="Select a role">
+          <Select defaultValue='admin' onChange={event => this.setState(updateByPropertyName('role', event))} className='somePadding' placeholder="Select a role">
             {/* <Option value="client">Client</Option> */}
             <Option value="admin">Admin</Option>
             {/* <Option value="maintenance">Maintenance</Option> */}
