@@ -75,6 +75,7 @@
     left: 100%;
   }
 }
+
 .logo {
   height: 40px;
   margin: 16px;
@@ -108,9 +109,9 @@
   font-size: smaller !important;
 }
 
-.hideThis {
+/* .hideThis {
   display: none;
-}
+} */
 
 .ant-table-content {
   color: black !important;
@@ -210,9 +211,11 @@ th.outlineAwaitingPayment {
   width: 250px;
   text-align: right;
 }
+
 .ant-notification-notice-message {
   color: white;
 }
+
 .ant-notification-notice-icon-info {
   color: #3ea08e;
 }
@@ -233,6 +236,12 @@ th.outlineAwaitingPayment {
 .DEVTESTLOCATION {
   font-weight: 600;
   text-align: right;
+}
+@media only screen and (max-width: 760px) {
+  .hideThis {
+    display: none;
+  }
+  
 }
 
 
@@ -288,7 +297,7 @@ th.outlineAwaitingPayment {
   #menuProfile {
     display: none
   }
-  
+
   #menuRole {
     display: none
   }

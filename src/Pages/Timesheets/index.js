@@ -96,8 +96,7 @@ export default class Timesheets extends Component {
       if (endTime.isAfter(dayEndTime) && moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
         if (startTime.isBefore(overTimeOneEndTime)) {
           var startTimeCalc = startTime.isAfter(dayEndTime) ? startTime : dayEndTime;
-          var endTimeCalc = endTime.isAfter(overTimeOneEndTime) ? overTimeOneEndTime: endTime
-          console.log(startTimeCalc);
+          var endTimeCalc = endTime.isAfter(overTimeOneEndTime) ? overTimeOneEndTime : endTime
           overtimeOne = moment.duration(endTimeCalc.diff(startTimeCalc));
         }
       }
@@ -149,14 +148,15 @@ export default class Timesheets extends Component {
         if (prestart.form_values['86b7']) {
           prestart.form_values['86b7'].forEach(entry => {
             if (entry.form_values['cc82'] === 'company_personnel') {
-              var start = (entry.form_values['33d3']) ? entry.form_values['33d3'].choice_values[1] : '';
-              var end = (entry.form_values['2748']) ? entry.form_values['2748'].choice_values[1] : '';
+              var start = (entry.form_values['33d3']) ? entry.form_values['33d3'].choice_values[1] : undefined;
+              var end = (entry.form_values['2748']) ? entry.form_values['2748'].choice_values[1] : undefined;
+
               var hoursDiff = this.calcTimeDiff(start, end);
               var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
               var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
 
-              var addHours = moment(hoursDiff, 'HH.mm').format('HH')
-              var addMins = moment(hoursDiff, 'HH.mm').format('m')
+              var addHours = (hoursDiff !== null) ? moment(hoursDiff, 'HH.mm').format('HH') : '00'
+              var addMins = (hoursDiff !== null) ? moment(hoursDiff, 'HH.mm').format('m') : '0'
               var name = (entry.form_values['57fb']) ? entry.form_values['57fb'].choice_values[0] : null
               var obj = {
                 id: entry.id,
@@ -177,12 +177,24 @@ export default class Timesheets extends Component {
                   hours: addHours,
                   minutes: addMins
                 })
+                obj.hours_minus = moment.duration({
+                  hours: addHours,
+                  minutes: addMins
+                })
+                  .subtract(obj.ot1, 'hours')
+                  .subtract(obj.ot2, 'hours')
+
                 data.push(obj);
               } else {
                 //Called when multiple signins occure on prestart
                 if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
                   data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += " " + moment(hoursDiff, 'HH.mm').format('HH:mm');
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
+                  data[index].hours_minus = data[index].hours_minus
+                    .add(parseInt(addHours, 0), 'hours')
+                    .add(parseInt(addMins, 0), 'minutes')
+                    .subtract(overTimeOne, 'hours')
+                    .subtract(overTimeTwo, 'hours')
                   data[index].ot1 += overTimeOne;
                   data[index].ot2 += overTimeTwo;
                   data[index].travel += travel;
@@ -190,6 +202,11 @@ export default class Timesheets extends Component {
                 } else {
                   Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
+                  data[index].hours_minus = data[index].hours_minus
+                    .add(parseInt(addHours, 0), 'hours')
+                    .add(parseInt(addMins, 0), 'minutes')
+                    .subtract(overTimeOne, 'hours')
+                    .subtract(overTimeTwo, 'hours')
                   data[index].ot1 += overTimeOne;
                   data[index].ot2 += overTimeTwo;
                   data[index].travel += travel;

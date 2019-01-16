@@ -277,10 +277,10 @@ class DailyReportSheet extends React.Component {
     return (
       <div>
         <Row gutter={10}>
-          <Col xs={24} sm={24} md={24} lg={16} xl={16} style={{marginBottom: 10}}>
+          <Col xs={24} sm={24} md={16} lg={16} xl={16} style={{marginBottom: 10}}>
             {this.selectJob()}
           </Col>
-          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
             {this.selectDate()}
           </Col>
         </Row>
@@ -326,7 +326,7 @@ class DailyReportSheet extends React.Component {
         </div>
         <div className='boresPadding'>
           <Row gutter={10}>
-            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
               <Table
                 pagination={false}
                 locale={{ emptyText: 'No Data' }}
@@ -339,7 +339,7 @@ class DailyReportSheet extends React.Component {
                 rowKey='id'
                 size="middle" />
             </Col>
-            <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+            <Col xs={24} sm={24} md={16} lg={16} xl={16}>
               <Table
                 pagination={false}
                 locale={{ emptyText: 'No Data' }}
@@ -377,17 +377,6 @@ class DailyReportSheet extends React.Component {
             className='boreTables tableResizer dailyReportTables'
             columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
         </div>
-        {/* <div className="boresPadding">
-          <Table
-            pagination={false}
-            title={() => 'SQE Stats'}
-            bordered
-            id='boresTableSeven'
-            className='boreTables tableResizer dailyReportTables'
-            columns={column.sqeStats}
-            dataSource={this.state.SQEStats}
-            rowKey='id'
-            size="middle" /></div> */}
       </div>
     );
   }

@@ -25,9 +25,13 @@ export function timesheet(today, days) {
         className: 'dateSub hideTheseCells',
         key: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd') + i,
         width: 100,
-        // render: (time) => {
-        //   return <div contentEditable>{time}</div>
-        // }
+        render: (time) => {
+          if (time !== 'Invalid date') {
+            return time
+          } else if(time === 'Invalid date') {
+            return 'Err'
+          }          
+        }
       }],
     })
   }
@@ -35,9 +39,20 @@ export function timesheet(today, days) {
     title: 'Totals',
     className: 'totals',
     children: [{
-      title: 'Hours',
+      title: 'All',
       dataIndex: 'hours',
       key: 'hours',
+      width: 90,
+      render: (num) => {
+        // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
+        return moment.duration(num).asHours()
+        
+      },
+      className: 'timesheetTotals'
+    }, {
+      title: 'Regular',
+      dataIndex: 'hours_minus',
+      key: 'hours_minus',
       width: 90,
       render: (num) => {
         // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`

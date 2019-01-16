@@ -4,6 +4,7 @@ import * as routes from '../constants/routes'
 import { Client } from 'fulcrum-app'
 import { firebase, db } from '../firebase'
 import moment from 'moment';
+import { Offline, Online } from "react-detect-offline";
 
 import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
@@ -115,7 +116,7 @@ class ClientPortal extends Component {
         }
       })
     });
-    
+
 
     window.addEventListener("resize", this.updateDimensions);
     // client.forms.all({ schema: false })
@@ -222,12 +223,20 @@ class ClientPortal extends Component {
       <Layout>
         {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
-          <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
-            <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
-              <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
-              <span id='lastLoadedRefreash'>Click to Refresh Data</span>
+          <Online>
+            <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
+              <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
+                <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
+                <span id='lastLoadedRefreash'>Click to Refresh Data</span>
+              </div>
+            </Tooltip>
+          </Online>
+          <Offline>
+            <div id='lastLoaded'>
+              <span style={{color:'#e74c3c', fontWeight:600 }}>No Internet Connection</span>
             </div>
-          </Tooltip>
+          </Offline>
+
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
               <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props}
