@@ -27,6 +27,13 @@ class App extends React.Component {
         <Router>
           <Layout>
             <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
+          </Layout>
+        </Router>
+      );
+    } else if (window.location.pathname.includes('pw-forget')){
+      return (
+        <Router>
+          <Layout style={{height: '100vh'}}>
             <Route exact path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
           </Layout>
         </Router>
@@ -35,8 +42,6 @@ class App extends React.Component {
       return (
         <Router>
           <Layout>
-            <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
-            <Route exact path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
             <Route path={routes.CLIENTPORTAL} component={() => <ClientPortal />} />
           </Layout>
         </Router>

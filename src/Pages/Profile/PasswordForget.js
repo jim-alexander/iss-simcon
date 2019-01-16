@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Button, Form } from 'antd';
+import { Input, Button, Form, message} from 'antd';
 import { auth } from '../../firebase';
 import * as routes from '../../constants/routes';
 import './index.css';
 
 const PasswordForgetPage = () =>
-  <div>
-    <h1>PasswordForget</h1>
-    <PasswordForgetForm />
+
+  <div style={{background: '#fff', margin: '20px auto', padding: 20}}>
+    <div >
+      <h1>Reset Password</h1>
+      <PasswordForgetForm />
+    </div>
   </div>
 
 const updateByPropertyName = (propertyName, value) => () => ({
@@ -29,10 +32,12 @@ class PasswordForgetForm extends Component {
 
   onSubmit = (event) => {
     const { email } = this.state;
-
+    console.log(email);
+    
     auth.doPasswordReset(email)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
+        message.info('Check your email for a password reset link.',10)
       })
       .catch(error => {
         this.setState(updateByPropertyName('error', error));
@@ -58,11 +63,11 @@ class PasswordForgetForm extends Component {
           type="text"
           placeholder="Email Address"
         />
-        <Button disabled={isInvalid} type="submit" id="passwordForgetButton">
+        <Button disabled={isInvalid} htmlType="submit" id="passwordForgetButton">
           Reset My Password
         </Button>
 
-        { error && <p id="passwordForgetError">{error.message}</p> }
+        {error && <p id="passwordForgetError">{error.message}</p>}
       </Form>
     );
   }
