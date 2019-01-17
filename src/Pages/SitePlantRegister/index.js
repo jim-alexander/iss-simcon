@@ -107,25 +107,33 @@ export default class SitePlantRegister extends Component {
       }
 
       client.records.create(obj)
-        .catch(err => console.log(err))
-
+      .then(resp => {
+        console.log(resp);
+        message.success(`Email sent to: ${values.email}`);
+        this.setState({
+          visible: false,
+          data: [...this.state.data, {
+            id: Math.random(),
+            status: 'Emailed',
+            date: moment().format('YYYY-MM-DD'),
+            email: values.email,
+            type: '',
+            make: '',
+            owner: '',
+            serial: '',
+            records: 'todo',
+          }]
+        });
+      })
+      .catch(err => {
+        message.error(`Email failed to send: ${err}`);
+        this.setState({
+          visible: false,
+        })
+        console.log(err)
+      })
       console.log('Received values of form: ', values);
       form.resetFields();
-      message.success(`Email sent to: ${values.email}`);
-      this.setState({
-        visible: false,
-        data: [...this.state.data, {
-          id: Math.random(),
-          status: 'Emailed',
-          date: moment().format('YYYY-MM-DD'),
-          email: values.email,
-          type: '',
-          make: '',
-          owner: '',
-          serial: '',
-          records: 'todo',
-        }]
-      });
     });
   }
   saveFormRef = (formRef) => {
