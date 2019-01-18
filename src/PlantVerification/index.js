@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Input, Row, Col, Button, Divider, Upload, Icon, message, Select } from 'antd'
+import { Layout, Input, Row, Col, Button, Divider, Icon, Select } from 'antd'
 import logo from '../constants/nav_logo_white.png'
 import { Client } from 'fulcrum-app'
 import './index.css'
@@ -37,7 +37,6 @@ export default class PlantVerificationPage extends Component {
     type: null,
     make: null,
     rawForm: null,
-    imagesUploaded: [],
     saved: false,
     error: false
   }
@@ -88,9 +87,9 @@ export default class PlantVerificationPage extends Component {
             </Col>
             <Col span={8}>
               <Button
-                onClick={() => this.selection(question.id, 'N/A')}
+                onClick={() => this.selection(question.id, 'n/a')}
                 className='pvButtons'
-                type={this.state.questions[question.id].selection === 'N/A' ? 'primary' : 'ghost'}>
+                type={this.state.questions[question.id].selection === 'n/a' ? 'primary' : 'ghost'}>
                 N/A
               </Button>
             </Col>
@@ -135,29 +134,6 @@ export default class PlantVerificationPage extends Component {
           choice_values: [this.state.type]
         }
       }
-      let imgKeys = [];
-      this.state.imagesUploaded.forEach(img => {
-        client.photos.create(img.imgFile.originFileObj)
-          .then(created => {
-            imgKeys.push({ key: created.access_key, section: img.imgFile.section })
-          })
-          .catch(err => console.log(err))
-      })
-      imgKeys.forEach(key => {
-        console.log(key);
-
-        if (key.section === 'allplant') {
-          importedForm.form_values['12fa'] = [{ photo_id: key.key }]
-        } else if (key.section === 'crane1') {
-          importedForm.form_values['7213'] = [{ photo_id: key.key }]
-        } else if (key.section === 'crane2') {
-          importedForm.form_values['7213'] = [{ photo_id: key.key }]
-        } else if (key.section === 'lifting') {
-          importedForm.form_values['472a'] = [{ photo_id: key.key }]
-        } else if (key.section === 'concrete') {
-          importedForm.form_values['fe3d'] = [{ photo_id: key.key }]
-        }
-      })
 
       //plant type
       importedForm.form_values['7c25'] = this.state.make //make
@@ -169,53 +145,21 @@ export default class PlantVerificationPage extends Component {
       importedForm.form_values['0aed'] = this.state.questions[3].selection //q4
       importedForm.form_values['a713'] = this.state.questions[4].selection //q5
 
-      // client.records.update(importedForm.id, importedForm)
-      //   .then(form => {
-      //     // message.success(`Form saved and submitted.`)
-      //     this.setState({
-      //       verificationNumber: null,
-      //       saved: true
-      //     })
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //     this.setState({
-      //       error: true
-      //     })
-      //   })
+      client.records.update(importedForm.id, importedForm)
+        .then(form => {
+          // message.success(`Form saved and submitted.`)
+          this.setState({
+            verificationNumber: null,
+            saved: true
+          })
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({
+            error: true
+          })
+        })
     }
-  }
-  imageUpload(section) {
-    return (
-      <Upload
-        name='file'
-        action='//jsonplaceholder.typicode.com/posts/'
-        headers={{
-          authorization: 'authorization-text',
-        }}
-        style={{ display: 'block' }}
-        onChange={(info) => {
-          if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-          }
-          if (info.file.status === 'done') {
-            this.setState({
-              imagesUploaded: [...this.state.imagesUploaded, { imgFile: info.file, section: section }]
-            })
-            console.log(info.file);
-
-            message.success(`${info.file.name} file uploaded successfully`);
-          } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-          }
-        }}>
-        <Button style={{
-          width: '100% !important',
-        }}>
-          <Icon type="upload" /> Click to Upload
-                </Button>
-      </Upload>
-    )
   }
   formAllPlant() {
     if (this.state.verificationNumber && this.state.error !== true) {
@@ -255,13 +199,18 @@ export default class PlantVerificationPage extends Component {
                   <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{ textAlign: 'center' }}>Plant type</h3></Col>
                   <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                     <Select style={{ width: '100%' }} value={this.state.type} onChange={e => this.setState({ type: e })}>
-                      <Select.Option value="excavator">Excavator</Select.Option>
-                      <Select.Option value="rollers">Roller</Select.Option>
-                      <Select.Option value="loader">Loader</Select.Option>
-                      <Select.Option value="compressor">Compressor</Select.Option>
-                      <Select.Option value="crane">Crane</Select.Option>
-                      <Select.Option value="concrete_pump">Concrete Pump</Select.Option>
-                      <Select.Option value="lifting_equipment">Lifting Equipment</Select.Option>
+                      <Select.Option value="Excavator">Excavator</Select.Option>
+                      <Select.Option value="Rollers">Rollers</Select.Option>
+                      <Select.Option value="Loaders">Loaders</Select.Option>
+                      <Select.Option value="Compressors">Compressors</Select.Option>
+                      <Select.Option value="Crane">Crane</Select.Option>
+                      <Select.Option value="Backhoe">Backhoe</Select.Option>
+                      <Select.Option value="Grader">Grader</Select.Option>
+                      <Select.Option value="Piling Rig">Piling Rig</Select.Option>
+                      <Select.Option value="Telehandler">Telehandler</Select.Option>
+                      <Select.Option value="Boom Lift">Boom Lift</Select.Option>
+                      <Select.Option value="Scissor Lift">Scissor Lift</Select.Option>
+                      <Select.Option value="Concrete Pump">Concrete Pump</Select.Option>
                     </Select>
                   </Col>
                 </Col>
@@ -276,9 +225,12 @@ export default class PlantVerificationPage extends Component {
             <div className='container'>
               {this.questions()}
               <h3>
-                Please attach image of the front page of the risk assessment Here.
-              </h3>
-              {this.imageUpload('allplant')}
+                Please ensure a copy of the following documents are brought to site to be verified by Simpsons personnel:</h3>
+              <p>- Plant Hazard Assessment</p>
+
+              {this.plantType(this.state.type)}
+
+
             </div>
 
           </div>
@@ -287,64 +239,25 @@ export default class PlantVerificationPage extends Component {
     }
   }
   plantType(type) {
-    if (type === 'crane') {
-      return (
-        <div className='container'>
-          <h1>Crane</h1>
-          <h3>Attach image of Annual Registration / Certification</h3>
-          {this.imageUpload('crane1')}
-          <Divider />
-          <h3>Attach image of Annual Crack Test on Boom</h3>
-          {this.imageUpload('crane2')}
-        </div>
-      )
-    } else if (type === 'concrete_pump') {
-      return (
-        <div className='container'>
-          <h1>Concrete Pump</h1>
-          <h3>Monthly pipe thickness testing has been conducted and records available</h3>
-          <Row gutter={10}>
-            <Col span={8}>
-              <Button
-                onClick={() => this.setState({ concretePumpQuestion: 'yes' })}
-                className='pvButtons'
-                type={this.state.concretePumpQuestion === 'yes' ? 'primary' : 'ghost'}>
-                Yes
-              </Button>
-            </Col>
-            <Col span={8}>
-              <Button
-                onClick={() => this.setState({ concretePumpQuestion: 'no' })}
-                className='pvButtons'
-                type={this.state.concretePumpQuestion === 'no' ? 'primary' : 'ghost'}>
-                No
-              </Button>
-            </Col>
-            <Col span={8}>
-              <Button
-                onClick={() => this.setState({ concretePumpQuestion: 'N/A' })}
-                className='pvButtons'
-                type={this.state.concretePumpQuestion === 'N/A' ? 'primary' : 'ghost'}>
-                N/A
-              </Button>
-            </Col>
-          </Row>
-          <Divider />
-          <h3>Attach image of Annual Crack Test on Boom</h3>
-          {this.imageUpload('concrete')}
-        </div>
-      )
-    } else if (type === 'lifting_equipment') {
-      return (
-        <div className='container'>
-          <h1>Lifting Equipment</h1>
-          <p>Lifting gear being brought onto the site must be tested and tagged within past 12 months and input into a register showing
-             serial number and test date - register template can be supplied by Simpsons if required.</p>
-          <h3>Attach copy or image of Lifting Gear Register</h3>
-          {this.imageUpload('lifting')}
-        </div>
-      )
+    let checks = [];
+    if (type === 'Crane' || type === 'concrete_pump') {
+      checks.push(<p key='0'> - Annual boom crack test report</p>)
     }
+    if (['Crane', 'Excavator', 'Loaders', 'Backhoe', 'Telehandler', 'Piling Rig'].includes(type)) {
+      checks.push(
+        <div key='3'>
+          <p key='3'> - lifting gear test / tag register or test & Tag reports</p>
+          <h4>Lifting gear being brought onto the site must be tested and tagged within past 12 months and input into a register showing serial number and test date - register template can be supplied by Simpsons if required.</h4>
+        </div>
+      )
+
+    }
+    if (type === 'crane') {
+      checks.push(<p key='1'> - Crane annual registration</p>)
+    } else if (type === 'Concrete Pump') {
+      checks.push(<p key='2'> - Monthly Pipe thickness test report</p>)
+    }
+    return checks
   }
   submitButton() {
     if (this.state.verificationNumber && this.state.error !== true) {
@@ -411,7 +324,6 @@ export default class PlantVerificationPage extends Component {
 
           {this.formStatusMessage()}
           {this.formAllPlant()}
-          {this.plantType(this.state.type)}
           {this.submitButton()}
 
           <div id="builtByContainer" style={{ width: '100%', maxWidth: 1000 }}>
