@@ -25,13 +25,15 @@ export const plantRegister = [{
   },
   defaultSortOrder: 'ascending',
   width: 100
-}, {
-  title: 'Email',
-  dataIndex: 'email',
-  key: 'email',
-  className: 'hideThis email',
-  width: 150
-}, {
+}, 
+// {
+//   title: 'Email',
+//   dataIndex: 'email',
+//   key: 'email',
+//   className: 'hideThis email',
+//   width: 150
+// }, 
+{
   title: 'Type of plant',
   dataIndex: 'type',
   key: 'plantType',

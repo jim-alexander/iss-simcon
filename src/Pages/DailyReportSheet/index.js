@@ -74,8 +74,7 @@ class DailyReportSheet extends React.Component {
         style={{ width: '100%'}}
         onChange={(job) => { this.setState({ selectedJob: job, selectedDate: '' }) }}>
         {this.props.jobFiles.map(job => {
-          let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"]}` : '';
-          return (<Option key={job.project_id}>{job.form_values["5b1c"] + title}</Option>)
+          return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
         })}
       </Select>
 

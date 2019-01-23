@@ -31,10 +31,12 @@ export default class PlantVerificationPage extends Component {
       text: 'Log book / plant pre-start records are with the machine?',
       selection: null
     }],
+    choices: [],
     concretePumpQuestion: null,
     name: null,
     company: null,
     type: null,
+    typeOther: null,
     make: null,
     rawForm: null,
     saved: false,
@@ -49,6 +51,10 @@ export default class PlantVerificationPage extends Component {
         })
       }
     }
+    client.choiceLists.find('bf1b3912-48b1-4f5b-b622-f9d6edac1a85')
+      .then(resp => {
+        this.setState({ choices: resp.choices })
+      })
   }
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.verificationNumber !== this.state.verificationNumber) {
@@ -104,11 +110,14 @@ export default class PlantVerificationPage extends Component {
     if (this.state.verificationNumber !== null) {
       client.records.find(this.state.verificationNumber)
         .then(form => {
+          console.log(form);
+          let type = (form.form_values['d8a2']) ? form.form_values['d8a2'] : null
           this.setState({
             rawForm: form,
             name: form.form_values['f868'],
             company: form.form_values['926d'],
-            type: form.form_values['d8a2'] ? form.form_values['d8a2'].choice_values[0] : null,
+            type: type.choice_values[0] ? type.choice_values[0] : 'Other',
+            typeOther: type.other_values[0] ? type.other_values[0] : null,
             make: form.form_values['7c25']
           })
           this.selection(0, form.form_values['ac34'])
@@ -132,6 +141,11 @@ export default class PlantVerificationPage extends Component {
       if (this.state.type !== null && this.state.type !== '') {
         importedForm.form_values['d8a2'] = {
           choice_values: [this.state.type]
+        }
+      }
+      if (this.state.typeOther !== null && this.state.typeOther !== '') {
+        importedForm.form_values['d8a2'] = {
+          other_values: [this.state.typeOther]
         }
       }
 
@@ -160,6 +174,17 @@ export default class PlantVerificationPage extends Component {
           })
         })
     }
+  }
+  otherType() {
+    let style = (this.state.type === 'Other') ? { display: 'block' } :  { display: 'none' }
+    return (
+      <Row style={style}>
+        <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{ textAlign: 'center' }}>Other</h3></Col>
+        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+          <Input style={{ width: '100%' }} placeholder='Other' value={this.state.typeOther} onChange={e => this.setState({ typeOther: e.target.value })} />
+        </Col>
+      </Row>
+    )
   }
   formAllPlant() {
     if (this.state.verificationNumber && this.state.error !== true) {
@@ -199,18 +224,10 @@ export default class PlantVerificationPage extends Component {
                   <Col xs={24} sm={24} md={8} lg={8} xl={8}> <h3 style={{ textAlign: 'center' }}>Plant type</h3></Col>
                   <Col xs={24} sm={24} md={16} lg={16} xl={16}>
                     <Select style={{ width: '100%' }} value={this.state.type} onChange={e => this.setState({ type: e })}>
-                      <Select.Option value="Excavator">Excavator</Select.Option>
-                      <Select.Option value="Rollers">Rollers</Select.Option>
-                      <Select.Option value="Loaders">Loaders</Select.Option>
-                      <Select.Option value="Compressors">Compressors</Select.Option>
-                      <Select.Option value="Crane">Crane</Select.Option>
-                      <Select.Option value="Backhoe">Backhoe</Select.Option>
-                      <Select.Option value="Grader">Grader</Select.Option>
-                      <Select.Option value="Piling Rig">Piling Rig</Select.Option>
-                      <Select.Option value="Telehandler">Telehandler</Select.Option>
-                      <Select.Option value="Boom Lift">Boom Lift</Select.Option>
-                      <Select.Option value="Scissor Lift">Scissor Lift</Select.Option>
-                      <Select.Option value="Concrete Pump">Concrete Pump</Select.Option>
+                      {this.state.choices.map(choice => {
+                        return (<Select.Option key={choice.label} value={choice.label}>{choice.label}</Select.Option>)
+                      })}
+                      <Select.Option key='Other' value='Other'>Other</Select.Option>
                     </Select>
                   </Col>
                 </Col>
@@ -221,18 +238,16 @@ export default class PlantVerificationPage extends Component {
                   </Col>
                 </Col>
               </Row>
+              {this.otherType()}
+
             </div>
             <div className='container'>
               {this.questions()}
               <h3>
                 Please ensure a copy of the following documents are brought to site to be verified by Simpsons personnel:</h3>
               <p>- Plant Hazard Assessment</p>
-
               {this.plantType(this.state.type)}
-
-
             </div>
-
           </div>
         )
       }
@@ -240,7 +255,7 @@ export default class PlantVerificationPage extends Component {
   }
   plantType(type) {
     let checks = [];
-    if (type === 'Crane' || type === 'concrete_pump') {
+    if (type === 'Crane' || type === 'Concrete Pump') {
       checks.push(<p key='0'> - Annual boom crack test report</p>)
     }
     if (['Crane', 'Excavator', 'Loaders', 'Backhoe', 'Telehandler', 'Piling Rig'].includes(type)) {
