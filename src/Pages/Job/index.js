@@ -1,26 +1,35 @@
 import React, { Component } from 'react'
-import { Client } from 'fulcrum-app'
-import { Button } from 'antd'
-
-const client = new Client(process.env.REACT_APP_SECRET_KEY)
+import { Table } from 'antd'
+import moment from 'moment'
 
 export default class Job extends Component {
   state = {
-    visible: false
-  }
-  findJob(){
-    client.projects.all()
-    .then(resp => {
-      console.log(resp.objects);
-      
-    })
+    visible: false,
   }
   render() {
     return (this.props.user.id === '13nBwfjw44ZOM76bEFrnXsyy1ij1') ? (
       <div>
-        <h1>Jobs</h1>
-        <Button onClick={() => this.findJob()}>Find Job</Button>
-        
+        <h1>Devices</h1>
+        <Table dataSource={this.props.devicesLastSynced} columns={[{
+            title: 'Account Name',
+            dataIndex: 'name',
+            key: 'name',
+          }, {
+            title: 'Last Sync',
+            dataIndex: 'last_sync',
+            key: 'last_sync',
+            render: date => {
+              if (date) {
+                return moment(date).fromNow()
+              }
+            }
+          }]}
+          style={{
+            maxWidth: 500
+          }}
+          rowKey='name'
+          bordered
+          pagination={false}/>
       </div>
     ) : null
   }

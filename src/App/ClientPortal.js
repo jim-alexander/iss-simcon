@@ -55,6 +55,7 @@ class ClientPortal extends Component {
       loadingScreen: false,
       width: '',
       lastLoaded: null,
+      devicesLastSynced: []
     };
   }
   componentDidMount() {
@@ -126,6 +127,17 @@ class ClientPortal extends Component {
     //   .catch((error) => {
     //     console.log('Error getting your forms.', error.message);
     //   });
+    client.query(`SELECT memberships.name,
+      (SELECT FCM_FormatTimestamp(MAX(closed_at), 'America/New_York')
+        FROM changesets WHERE closed_by_id=memberships.user_id) AS last_sync
+        FROM memberships
+      ORDER BY name;`)
+      .then(result => {
+        this.setState({
+          devicesLastSynced: result.rows
+        })
+      })
+      .catch(error => console.log(error))
   }
   componentWillUnmount() {
     clearInterval(this.interval);
@@ -233,7 +245,7 @@ class ClientPortal extends Component {
           </Online>
           <Offline>
             <div id='lastLoaded'>
-              <span style={{color:'#e74c3c', fontWeight:600 }}>No Internet Connection</span>
+              <span style={{ color: '#e74c3c', fontWeight: 600 }}>No Internet Connection</span>
             </div>
           </Offline>
 
@@ -266,7 +278,7 @@ class ClientPortal extends Component {
                 jobFiles={this.state.jobFiles}
                 hazards={this.state.hazards} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
-              <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} />} />
+              <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} devicesLastSynced={this.state.devicesLastSynced} />} />
             </div>
             <Button block onClick={this.PageNotes} style={{ maxWidth: 200, margin: '15px auto' }} className='printHide'>Page Notes</Button>
           </Content>
