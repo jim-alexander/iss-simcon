@@ -6,3 +6,16 @@
     /* background-color: #f6ffed !important; */
     border-right: 2px solid #2ecc71 !important;
 }
+
+th.hideThis.hazardAction {
+    background: #fafafa;
+    text-align: center
+}
+td.hideThis.hazardAction {
+    background: #fafafa;
+    text-align: center;
+}
+td.hideThis.hazardAction span{
+    cursor: not-allowed;
+    color: #3498db
+}

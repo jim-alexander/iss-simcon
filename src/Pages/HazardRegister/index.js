@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Select, Table } from 'antd'
 import * as column from './columns'
 import { db } from '../../firebase'
+import { inspectionHazards } from './inspectionHazards'
 import './index.css'
 
 const Option = Select.Option;
@@ -34,14 +35,11 @@ export default class HazardRegister extends Component {
       this.loadHazardData()
     }
   }
-  // toolboxMinutes
-  // siteInspections
-  // dailyDiarys
   loadHazardData() {
     var data = []
     const createObj = (hazard, recordedBy, assignedTo, dateIdentified, description, closeOutDate) => {
       let obj = {
-        id: hazard.id,
+        id: `${hazard.id}-${description}`,
         status: hazard.status,
         dateIdentified,
         recordedBy,
@@ -72,13 +70,13 @@ export default class HazardRegister extends Component {
         }
       })
       this.props.siteInspections.forEach(inspection => {
-        console.log(inspection);
-        
-        // if (inspection.form_values['eda0']) {
-        //   let recordedBy = (inspection.form_values['cfa2']) ? inspection.form_values['cfa2'].choice_values[0] : ''
-        //   let assignedTo = (inspection.form_values['5b46']) ? inspection.form_values['5b46'].choice_values[0] : ''
-        //   data.push(createObj(inspection, recordedBy, assignedTo, inspection.form_values['bea6'], inspection.form_values['eda0'], inspection.form_values['e2ab']))
-        // }
+        let inspectedBy = (inspection.form_values['0923']) ? inspection.form_values['0923'].choice_values[0] : null
+        let dateInspected = inspection.form_values['91dd']
+        inspectionHazards(inspection.form_values).forEach(entry => {
+          if (entry.comments) {
+            data.push(createObj(inspection, inspectedBy, entry.assignedTo, dateInspected, entry.comments, null))
+          }
+        })
       })
     } else {
       this.props.hazards.forEach(hazard => {
@@ -88,6 +86,41 @@ export default class HazardRegister extends Component {
             let assignedTo = (hazard.form_values['81c2']) ? hazard.form_values['81c2'].choice_values[0] : ''
             data.push(createObj(hazard, recordedBy, assignedTo, hazard.form_values['9ab6'], hazard.form_values['9c0b'], hazard.form_values['126d']))
 
+          }
+        })
+      })
+      this.props.toolboxMinutes.forEach(toolbox => {
+        if (toolbox.form_values['042c']) {
+          this.state.selectedJob.forEach(job => {
+            if (toolbox.project_id === job) {
+              let recordedBy = (toolbox.form_values['014b']) ? toolbox.form_values['014b'].choice_values[0] : ''
+              let assignedTo = (toolbox.form_values['6718']) ? toolbox.form_values['6718'].choice_values[0] : ''
+              data.push(createObj(toolbox, recordedBy, assignedTo, toolbox.form_values['2318'], toolbox.form_values['042c'], toolbox.form_values['6796']))
+            }
+          })
+        }
+      })
+      this.props.dailyDiarys.forEach(diary => {
+        if (diary.form_values['eda0']) {
+          this.state.selectedJob.forEach(job => {
+            if (diary.project_id === job) {
+              let recordedBy = (diary.form_values['cfa2']) ? diary.form_values['cfa2'].choice_values[0] : ''
+              let assignedTo = (diary.form_values['5b46']) ? diary.form_values['5b46'].choice_values[0] : ''
+              data.push(createObj(diary, recordedBy, assignedTo, diary.form_values['bea6'], diary.form_values['eda0'], diary.form_values['e2ab']))
+            }
+          })
+        }
+      })
+      this.props.siteInspections.forEach(inspection => {
+        this.state.selectedJob.forEach(job => {
+          if (inspection.project_id === job) {
+            let inspectedBy = (inspection.form_values['0923']) ? inspection.form_values['0923'].choice_values[0] : null
+            let dateInspected = inspection.form_values['91dd']
+            inspectionHazards(inspection.form_values).forEach(entry => {
+              if (entry.comments) {
+                data.push(createObj(inspection, inspectedBy, entry.assignedTo, dateInspected, entry.comments, null))
+              }
+            })
           }
         })
       })

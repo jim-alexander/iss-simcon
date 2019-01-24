@@ -50,9 +50,7 @@ export default class SitePlantRegister extends Component {
   }
   plantData() {
     var data = []
-    function verifications(verification) {
-      console.log(verification.id);
-      
+    function verifications(verification) {     
       let type = (verification.form_values['d8a2']) ? verification.form_values['d8a2'].choice_values[0] : ''
       let date = (verification.form_values['c553']) ? verification.form_values['c553'] : moment(verification.created_at).format('YYYY-MM-DD')
       let obj = {

@@ -1,4 +1,5 @@
 import moment from 'moment'
+import React from 'react'
 
 export const hazardRegister = [{
   title: 'Date Identified',
@@ -45,4 +46,12 @@ export const hazardRegister = [{
     }
   },
   width: 100
+},{
+  title: 'Action',
+  width: 50,
+  dataIndex: '_',
+  render: (text, record) => {
+    return <span onClick={() => console.log(record)}>Close</span>
+  },
+  className: 'hideThis hazardAction'
 }];
