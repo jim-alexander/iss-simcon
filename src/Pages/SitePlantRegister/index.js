@@ -31,8 +31,7 @@ export default class SitePlantRegister extends Component {
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
         {this.props.jobFiles.map(job => {
-          let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"]}` : '';
-          return (<Option key={job.project_id}>{job.form_values["5b1c"] + title}</Option>)
+          return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
         })}
       </Select>
     )
@@ -51,7 +50,7 @@ export default class SitePlantRegister extends Component {
   }
   plantData() {
     var data = []
-    function verifications(verification) {
+    function verifications(verification) {     
       let type = (verification.form_values['d8a2']) ? verification.form_values['d8a2'].choice_values[0] : ''
       let date = (verification.form_values['c553']) ? verification.form_values['c553'] : moment(verification.created_at).format('YYYY-MM-DD')
       let obj = {
@@ -63,7 +62,7 @@ export default class SitePlantRegister extends Component {
         make: verification.form_values['7c25'],
         owner: verification.form_values['926d'],
         serial: verification.form_values['0abe'],
-        records: 'todo',
+        records: '', //TODO
       }
       return obj
     }

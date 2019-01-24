@@ -276,7 +276,10 @@ class ClientPortal extends Component {
               <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props}
                 user={this.state.user}
                 jobFiles={this.state.jobFiles}
-                hazards={this.state.hazards} />} />
+                hazards={this.state.hazards}
+                toolboxMinutes={this.state.toolboxMinutes}
+                siteInspections={this.state.siteInspections}
+                dailyDiarys={this.state.dailyDiarys} />} />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
               <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} devicesLastSynced={this.state.devicesLastSynced} />} />
             </div>

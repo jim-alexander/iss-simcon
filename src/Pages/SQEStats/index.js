@@ -22,8 +22,7 @@ export default class SQEStats extends Component {
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
         {this.props.jobFiles.map(job => {
-          let title = (job.form_values["7af6"]) ? ` - ${job.form_values["7af6"] }`: '';
-          return (<Option key={job.project_id}>{job.form_values["5b1c"] + title}</Option>)
+          return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
         })}
       </Select>
     )
@@ -88,9 +87,11 @@ export default class SQEStats extends Component {
       endOf = moment('2100-01-01', 'YYYY-MM-DD').endOf('year');
     }
     function dataCalc(job, dailyPrestarts, siteInspections, toolboxMinutes, dailyDiarys, calcTimeDiff, hazards) {
+      console.log(job);
+      
       var obj = {
         id: job.id,
-        job: job.form_values['5b1c'],
+        job: job.form_values['5f36'],
         title: job.form_values['7af6'],
         manHours: moment.duration(0),
         manHoursSub: moment.duration(0),
