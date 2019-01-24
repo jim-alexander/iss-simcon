@@ -96,13 +96,15 @@ export const hiredPlant = [{
     dataIndex: 'total',
     key: 'total',
     width: 40
-}, {
-    title: 'Docket',
-    dataIndex: 'docket',
-    key: 'docket',
-    className: 'hideThis',
-    width: 40
-}];
+}
+//  {
+    // title: 'Docket',
+    // dataIndex: 'docket',
+    // key: 'docket',
+    // className: 'hideThis',
+    // width: 40
+// }
+];
 
 export const materialsReceived = [{
     title: 'Supplier',
@@ -116,13 +118,15 @@ export const materialsReceived = [{
     title: 'Quantity',
     dataIndex: 'quantity',
     key: 'quantity'
-}, {
-    title: 'Docket No',
-    dataIndex: 'docket',
-    key: 'docket',
-    className: 'hideThis',
-}, {
-    title: 'Photo',
+}, 
+// {
+//     title: 'Docket No',
+//     dataIndex: 'docket',
+//     key: 'docket',
+//     className: 'hideThis',
+// }, 
+{
+    title: 'Records',
     dataIndex: 'photo',
     key: 'photo',
     className: 'hideThis',

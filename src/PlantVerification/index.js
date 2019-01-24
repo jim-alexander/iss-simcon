@@ -116,8 +116,8 @@ export default class PlantVerificationPage extends Component {
             rawForm: form,
             name: form.form_values['f868'],
             company: form.form_values['926d'],
-            type: type.choice_values[0] ? type.choice_values[0] : 'Other',
-            typeOther: type.other_values[0] ? type.other_values[0] : null,
+            type: (type && type.choice_values[0]) ? type.choice_values[0] : null,
+            // typeOther: (type && type.other_values[0] && type.other_values[0] === 'Other') ? type.other_values[0] : null,
             make: form.form_values['7c25']
           })
           this.selection(0, form.form_values['ac34'])

@@ -50,7 +50,15 @@ export default class SitePlantRegister extends Component {
   }
   plantData() {
     var data = []
-    function verifications(verification) {     
+    function verifications(verification) {    
+      let photos = []       
+      if (verification.form_values['4f44']) {
+        verification.form_values['4f44'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Risk Assessment</a><br/></div>))
+      }
+      if (verification.form_values['472a']) {
+        verification.form_values['472a'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Lifting Gear Register</a><br/></div>))
+      }
+      
       let type = (verification.form_values['d8a2']) ? verification.form_values['d8a2'].choice_values[0] : ''
       let date = (verification.form_values['c553']) ? verification.form_values['c553'] : moment(verification.created_at).format('YYYY-MM-DD')
       let obj = {
@@ -62,7 +70,7 @@ export default class SitePlantRegister extends Component {
         make: verification.form_values['7c25'],
         owner: verification.form_values['926d'],
         serial: verification.form_values['0abe'],
-        records: '', //TODO
+        records: photos, //TODO
       }
       return obj
     }

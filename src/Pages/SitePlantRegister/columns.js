@@ -56,9 +56,9 @@ export const plantRegister = [{
   className: 'hideThis',
   width: 80
 }, {
-  title: 'Verification Records',
+  title: 'Records',
   dataIndex: 'records',
   key: 'records',
   className: 'hideThis',
-  width: 100
+  width: 100,
 }];

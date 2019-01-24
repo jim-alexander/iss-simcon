@@ -71,7 +71,7 @@ class DailyReportSheet extends React.Component {
       <Select
         showSearch
         placeholder="Select a job Number"
-        style={{ width: '100%'}}
+        style={{ width: '100%' }}
         onChange={(job) => { this.setState({ selectedJob: job, selectedDate: '' }) }}>
         {this.props.jobFiles.map(job => {
           return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
@@ -81,14 +81,19 @@ class DailyReportSheet extends React.Component {
     )
   }
   selectDate() {
+    let disabled = (!this.state.selectedJob) ? true : false;
+    let dates = []
+    this.props.dailyPrestarts.forEach(prestart => {
+      if (this.state.selectedJob === prestart.project_id) {
+        if(dates.indexOf(prestart.form_values["80e9"]) === -1) {
+          dates.push(prestart.form_values["80e9"]);
+        }
+      }
+    }) 
     return (
-      <Select showSearch placeholder="Select date" style={{ width: '100%', paddingBottom: 10 }} onChange={(date) => { this.setState({ selectedDate: date }) }}>
-        {this.props.dailyPrestarts.map(prestart => {
-          if (this.state.selectedJob === prestart.project_id) {
-            return (<Option key={prestart.form_values["80e9"]}>{moment(prestart.form_values["80e9"]).format('DD/MM/YYYY')}</Option>)
-          } else {
-            return null
-          }
+      <Select showSearch placeholder="Select date" disabled={disabled} style={{ width: '100%', paddingBottom: 10 }} onChange={(date) => { this.setState({ selectedDate: date }) }}>
+        {dates.map(date => {
+            return (<Option key={date}>{moment(date).format('DD/MM/YYYY')}</Option>)
         })}
       </Select>
     )
@@ -174,24 +179,37 @@ class DailyReportSheet extends React.Component {
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours2 = moment(diff, 'HH:mm').format('HH');
                 } else { addHours2 = 0 }
-                const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);               
-                if (index === -1) {
-                  contractors.push({
-                    id: log.id,
-                    company: log.form_values['c1e2'],
-                    noOfEmployees: 1,
-                    hours: moment.duration({
-                      hours: parseFloat(addHours2),
-                      minutes: parseFloat(addMins2)
-                    })
-                  })
+                const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);
+                if (log.form_values['86f1']) {
+                  this.setState(prevState => ({
+                    hiredPlant: [...prevState.hiredPlant, {
+                      id: log.id,
+                      supplier: log.form_values['c1e2'],
+                      equipment: log.form_values['d9b4'],
+                      start,
+                      end,
+                      total: diff,
+                      // docket: '',
+                    }]
+                  }))
                 } else {
-                  contractors[index].noOfEmployees++
-                  contractors[index].hours.add(parseFloat(addMins2), 'minutes').add(parseFloat(addHours2), 'hours')
+                  if (index === -1) {
+                    contractors.push({
+                      id: log.id,
+                      company: log.form_values['c1e2'],
+                      noOfEmployees: 1,
+                      hours: moment.duration({
+                        hours: parseFloat(addHours2),
+                        minutes: parseFloat(addMins2)
+                      })
+                    })
+                  } else {
+                    contractors[index].noOfEmployees++
+                    contractors[index].hours.add(parseFloat(addMins2), 'minutes').add(parseFloat(addHours2), 'hours')
+                  }
                 }
-
               }
-              this.setState({subContractors: contractors})
+              this.setState({ subContractors: contractors })
             })
           }
           if (file.form_values['2cf0']) {
@@ -205,6 +223,9 @@ class DailyReportSheet extends React.Component {
             })
           }
           if (file.form_values['0bd7']) {
+            let comments = []
+            let listComments = file.form_values['0bd7'].split('\n')
+            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br/></div>))
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: file.id,
@@ -218,14 +239,17 @@ class DailyReportSheet extends React.Component {
         if (diary.form_values['bea6'] === this.state.selectedDate && diary.project_id === this.state.selectedJob) {
           if (diary.form_values['7d44']) {
             diary.form_values['7d44'].forEach(material => {
+              let photos = []
+              if (material.form_values['76de']) {
+                material.form_values['76de'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Photo</a><br /></div>))
+              }              
               this.setState(prevState => ({
                 materialsDelivered: [...prevState.materialsDelivered, {
                   id: material.id,
                   supplier: material.form_values['0e3e'],
                   item: material.form_values['2672'],
                   quantity: material.form_values['b178'],
-                  docket: 'todo',
-                  photo: 'todo'
+                  photo: photos //todo
                 }]
               }))
             })
@@ -240,7 +264,7 @@ class DailyReportSheet extends React.Component {
                   start: plant.form_values['2851'],
                   end: plant.form_values['acac'],
                   total: calcTimeDiff(plant.form_values['2851'], plant.form_values['acac']),
-                  docket: 'todo',
+                  docket: '', //todo
                 }]
               }))
             })
@@ -254,14 +278,17 @@ class DailyReportSheet extends React.Component {
             }]
           })
           if (diary.form_values['d5e3']) {
+            let comments = []
+            let listComments = diary.form_values['d5e3'].split('\n')
+            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br/></div>))
+
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: diary.id,
-                comments: diary.form_values['d5e3'],
+                comments: comments,
               }]
             }))
           }
-
         }
       })
     }
@@ -269,14 +296,14 @@ class DailyReportSheet extends React.Component {
       this.setState({
         jobInfo
       })
-    }    
+    }
   }
 
-  render() {
+  render() {   
     return (
       <div>
         <Row gutter={10}>
-          <Col xs={24} sm={24} md={16} lg={16} xl={16} style={{marginBottom: 10}}>
+          <Col xs={24} sm={24} md={16} lg={16} xl={16} style={{ marginBottom: 10 }}>
             {this.selectJob()}
           </Col>
           <Col xs={24} sm={24} md={8} lg={8} xl={8}>
@@ -374,7 +401,7 @@ class DailyReportSheet extends React.Component {
             locale={{ emptyText: 'No Data' }}
             dataSource={this.state.comments}
             className='boreTables tableResizer dailyReportTables'
-            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
+            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments'}]}></Table>
         </div>
       </div>
     );

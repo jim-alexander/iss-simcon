@@ -79,16 +79,14 @@ export default class SQEStats extends Component {
   buildTable() {
     var data = []
     if (this.state.selectedDate !== null) {
-      var startOf = moment(this.state.selectedDate[0], 'YYYY-MM-DD');
-      var endOf = moment(this.state.selectedDate[1], 'YYYY-MM-DD');
+      var startOf = moment(this.state.selectedDate[0], 'YYYY-MM-DD').startOf('day');
+      var endOf = moment(this.state.selectedDate[1], 'YYYY-MM-DD').endOf('day');
     } else {
       //this will work until year 2100
       startOf = moment('2000-01-01', 'YYYY-MM-DD').startOf('year');
       endOf = moment('2100-01-01', 'YYYY-MM-DD').endOf('year');
     }
     function dataCalc(job, dailyPrestarts, siteInspections, toolboxMinutes, dailyDiarys, calcTimeDiff, hazards) {
-      console.log(job);
-      
       var obj = {
         id: job.id,
         job: job.form_values['5f36'],
