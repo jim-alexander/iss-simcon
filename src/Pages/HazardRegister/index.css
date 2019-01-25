@@ -16,6 +16,6 @@ td.hideThis.hazardAction {
     text-align: center;
 }
 td.hideThis.hazardAction span{
-    cursor: not-allowed;
+    cursor: pointer;
     color: #3498db
 }

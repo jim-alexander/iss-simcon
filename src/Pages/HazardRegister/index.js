@@ -3,14 +3,23 @@ import { Select, Table } from 'antd'
 import * as column from './columns'
 import { db } from '../../firebase'
 import { inspectionHazards } from './inspectionHazards'
+import { Client } from 'fulcrum-app'
+import moment from 'moment'
 import './index.css'
+
+const client = new Client(process.env.REACT_APP_SECRET_KEY)
+
 
 const Option = Select.Option;
 
 export default class HazardRegister extends Component {
-  state = {
-    selectedJob: [],
-    data: null
+  constructor() {
+    super();
+    this.state = {
+      selectedJob: [],
+      data: null
+    }
+    this.closeHazard = this.closeHazard.bind(this)
   }
   selectJob() {
     return (
@@ -37,44 +46,51 @@ export default class HazardRegister extends Component {
   }
   loadHazardData() {
     var data = []
-    const createObj = (hazard, recordedBy, assignedTo, dateIdentified, description, closeOutDate) => {
+    const createObj = (hazard, recordedBy, assignedTo, dateIdentified, description, closeOutDate, formValues, closeOutLocation) => {
+      let status = (hazard.status) ? hazard.status : 'Action Required'
       let obj = {
         id: `${hazard.id}-${description}`,
-        status: hazard.status,
+        status,
         dateIdentified,
         recordedBy,
         description,
         assignedTo,
         closeOutDate,
+        formValues,
+        closeOutLocation
       }
       return obj
     }
     if (this.state.selectedJob.length === 0) {
       this.props.hazards.forEach(hazard => {
+        console.log(hazard);
+
         let recordedBy = (hazard.form_values['4a01']) ? hazard.form_values['4a01'].choice_values[0] : ''
         let assignedTo = (hazard.form_values['81c2']) ? hazard.form_values['81c2'].choice_values[0] : ''
-        data.push(createObj(hazard, recordedBy, assignedTo, hazard.form_values['9ab6'], hazard.form_values['9c0b'], hazard.form_values['126d']))
+        data.push(createObj(hazard, recordedBy, assignedTo, hazard.form_values['9ab6'], hazard.form_values['9c0b'], hazard.form_values['126d'], hazard, '126d'))
       })
       this.props.toolboxMinutes.forEach(toolbox => {
         if (toolbox.form_values['042c']) {
           let recordedBy = (toolbox.form_values['014b']) ? toolbox.form_values['014b'].choice_values[0] : ''
           let assignedTo = (toolbox.form_values['6718']) ? toolbox.form_values['6718'].choice_values[0] : ''
-          data.push(createObj(toolbox, recordedBy, assignedTo, toolbox.form_values['2318'], toolbox.form_values['042c'], toolbox.form_values['6796']))
+          data.push(createObj(toolbox, recordedBy, assignedTo, toolbox.form_values['2318'], toolbox.form_values['042c'], toolbox.form_values['6796'], toolbox, '6796'))
         }
       })
       this.props.dailyDiarys.forEach(diary => {
         if (diary.form_values['eda0']) {
           let recordedBy = (diary.form_values['cfa2']) ? diary.form_values['cfa2'].choice_values[0] : ''
           let assignedTo = (diary.form_values['5b46']) ? diary.form_values['5b46'].choice_values[0] : ''
-          data.push(createObj(diary, recordedBy, assignedTo, diary.form_values['bea6'], diary.form_values['eda0'], diary.form_values['e2ab']))
+          data.push(createObj(diary, recordedBy, assignedTo, diary.form_values['bea6'], diary.form_values['eda0'], diary.form_values['e2ab'], diary, 'e2ab'))
         }
       })
       this.props.siteInspections.forEach(inspection => {
         let inspectedBy = (inspection.form_values['0923']) ? inspection.form_values['0923'].choice_values[0] : null
         let dateInspected = inspection.form_values['91dd']
         inspectionHazards(inspection.form_values).forEach(entry => {
-          if (entry.comments) {
-            data.push(createObj(inspection, inspectedBy, entry.assignedTo, dateInspected, entry.comments, null))
+          if (!entry.closeOutDate) {
+            if (entry.comments) {
+              data.push(createObj(inspection, inspectedBy, entry.assignedTo, dateInspected, entry.comments, null, inspection, entry.closeOutLocation))
+            }
           }
         })
       })
@@ -129,6 +145,63 @@ export default class HazardRegister extends Component {
       data
     })
   }
+  closeHazard(hazard) {
+    let obj = {
+      form_id: '3e7888a5-26fa-449d-a183-b5a228c6e59a',
+      status: 'Closed Out',
+      project_id: hazard.formValues.project_id,
+      form_values: {
+        '4a01': { choice_values: [hazard.recordedBy] },
+        '81c2': { choice_values: [hazard.assignedTo] },
+        '9ab6': hazard.dateIdentified,
+        '9c0b': hazard.description,
+        '126d': moment().format('YYYY-MM-DD')
+      }
+    }
+    if (hazard.formValues.form_id === '3e7888a5-26fa-449d-a183-b5a228c6e59a') {
+      let update = hazard.formValues
+      update.form_values[hazard.closeOutLocation] = moment().format('YYYY-MM-DD')
+      update.status = 'Closed Out'
+      client.records.update(update.id, update)
+        .then(resp => {
+          const index = this.state.data.findIndex((e) => e.id === `${hazard.formValues.id}-${hazard.description}`);
+          let data = this.state.data;
+          data[index].closeOutDate = obj.form_values['126d']
+          data[index].status = 'Closed Out'
+          this.setState({ data })
+
+          console.log('Closed out hazard in form.', resp);
+
+        })
+        .catch(err => console.log(err))
+    } else {
+      client.records.create(obj)
+        .then(resp => {
+          let update = hazard.formValues
+          update.form_values[hazard.closeOutLocation] = moment().format('YYYY-MM-DD')
+          update.status = 'Closed Out'
+
+          console.log('Created Hazard in register.', resp);
+
+          client.records.update(update.id, update)
+            .then(resp => {
+              const index = this.state.data.findIndex((e) => e.id === `${hazard.formValues.id}-${hazard.description}`);
+              let data = this.state.data;
+              data[index].closeOutDate = obj.form_values['126d']
+              data[index].status = 'Closed Out'
+              this.setState({ data })
+
+              console.log('Closed out hazard in form.', resp);
+
+            })
+            .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+    }
+
+
+
+  }
   render() {
     return (
       <div>
@@ -138,7 +211,7 @@ export default class HazardRegister extends Component {
           bordered
           id='boresTableOne'
           className='boreTables tableResizer'
-          columns={column.hazardRegister}
+          columns={column.hazardRegister(this.closeHazard)}
           dataSource={this.state.data}
           rowKey='id'
           rowClassName={(record) => {
