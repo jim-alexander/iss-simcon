@@ -18,6 +18,7 @@ import Profile from "../Pages/Profile"
 import Job from "../Pages/Job"
 import Loader from '../Pages/Loader'
 import PageNotes from './PageNotes'
+import PrintPage from './PrintPage.js'
 
 import './index.css'
 import { Layout, message, Tooltip, Modal, Button, notification } from 'antd'
@@ -230,7 +231,7 @@ class ClientPortal extends Component {
           </Footer>
         </Layout>
       )
-    }
+    }    
     return (
       <Layout>
         {navigationBased(this.state.width, this.state.user)}
@@ -248,9 +249,9 @@ class ClientPortal extends Component {
               <span style={{ color: '#e74c3c', fontWeight: 600 }}>No Internet Connection</span>
             </div>
           </Offline>
-
           <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
             <div style={{ padding: 24, background: "#fff", height: "100%" }}>
+              <PrintPage />
               <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props}
                 user={this.state.user}
                 dailyPrestarts={this.state.dailyPrestarts}

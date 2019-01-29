@@ -281,6 +281,24 @@ i.anticon.anticon-close.ant-notification-close-icon {
   }
 
 }
+.printShow{
+  display: none
+}
+.printHeader{
+  font-weight: bold;
+  font-size: 26px;
+   margin-bottom: 30px;
+   line-height: 1.2;
+}
+.printSubHeader{
+  font-weight: normal;
+  font-size: 20px
+}
+.printDateHeader{
+  font-weight: normal;
+  font-size: 15px;
+  font-style: italic
+}
 
 @media print {
   .hideThis {
@@ -289,6 +307,9 @@ i.anticon.anticon-close.ant-notification-close-icon {
 
   .printHide {
     display: none;
+  }
+  .printShow{
+    display: block
   }
 
   .layoutContent {
