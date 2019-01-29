@@ -89,25 +89,26 @@ export default class Timesheets extends Component {
       startTime = moment(`2018-12-10 ${startTime}`, 'YYYY-MM-DD h.mm');
       endTime = moment(`2018-12-10 ${endTime}`, 'YYYY-MM-DD h.mm');
 
-      var dayEndTime = moment(`2018-12-10 20:00`, 'YYYY-MM-DD HH:mm');
-      var overTimeOneEndTime = moment(`2018-12-10 22:00`, 'YYYY-MM-DD HH:mm');
-      var overtimeOne = moment.duration(0);
+      let overtimeOne = moment.duration(0);
+      let hours = moment.duration(endTime.diff(startTime))
 
-      if (endTime.isAfter(dayEndTime) && moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
-        if (startTime.isBefore(overTimeOneEndTime)) {
-          var startTimeCalc = startTime.isAfter(dayEndTime) ? startTime : dayEndTime;
-          var endTimeCalc = endTime.isAfter(overTimeOneEndTime) ? overTimeOneEndTime : endTime
-          overtimeOne = moment.duration(endTimeCalc.diff(startTimeCalc));
+      if (moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
+        if (hours.asHours() >= 8 && hours.asHours() <= 10) {
+          overtimeOne.add(hours.subtract(8, 'hours'))
+        }
+        else if (hours.asHours() > 10) {
+          overtimeOne.add(2, 'hours')
         }
       }
       if (day === 'Saturday') {
-        overtimeOne = moment.duration(endTime.diff(startTime));
+        if (hours.asHours() <= 2) {
+          overtimeOne.add(hours)
+        } else if (hours.asHours() > 2) {
+          overtimeOne.add(2, 'hours')
+        }
       }
-      if (overtimeOne.as('hours') >= 2) {
-        return 2
-      } else {
-        return overtimeOne.as('hours')
-      }
+      return overtimeOne.asHours()
+
     } else {
       return 0
     }
@@ -118,25 +119,23 @@ export default class Timesheets extends Component {
       startTime = moment(`2018-12-10 ${startTime}`, 'YYYY-MM-DD h.mm');
       endTime = moment(`2018-12-10 ${endTime}`, 'YYYY-MM-DD h.mm');
 
-      var dayEndTimeTwo = moment(`2018-12-10 22:00`, 'YYYY-MM-DD HH:mm');
-      var overtimeTwo = moment.duration(0);
+      let overtimeTwo = moment.duration(0);
+      let hours = moment.duration(endTime.diff(startTime))
 
-      if (endTime.isAfter(dayEndTimeTwo)) {
-        var time = startTime.isAfter(dayEndTimeTwo) ? startTime : dayEndTimeTwo;
-        overtimeTwo = moment.duration(endTime.diff(time));
+      if (hours.asHours() > 10) {
+        overtimeTwo.add(hours.subtract(10, 'hours'))
       }
       if (day === 'Saturday') {
-        let satHours = moment.duration(endTime.diff(startTime))
-
-        if (satHours.as('hours') >= 2) {
-          satHours.subtract(2, 'hours')
-          overtimeTwo = satHours;
+        if (hours.asHours() > 2) {
+          overtimeTwo.add(hours.subtract(2, 'hours'))
+        } else {
+          overtimeTwo.add(hours)
         }
       }
       if (day === 'Sunday') {
-        overtimeTwo = moment.duration(endTime.diff(startTime));
+        overtimeTwo.add(hours)
       }
-      return overtimeTwo.as('hours')
+      return overtimeTwo.asHours()
     } else {
       return 0
     }

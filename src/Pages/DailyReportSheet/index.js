@@ -85,15 +85,15 @@ class DailyReportSheet extends React.Component {
     let dates = []
     this.props.dailyPrestarts.forEach(prestart => {
       if (this.state.selectedJob === prestart.project_id) {
-        if(dates.indexOf(prestart.form_values["80e9"]) === -1) {
+        if (dates.indexOf(prestart.form_values["80e9"]) === -1) {
           dates.push(prestart.form_values["80e9"]);
         }
       }
-    }) 
+    })
     return (
       <Select showSearch placeholder="Select date" disabled={disabled} style={{ width: '100%', paddingBottom: 10 }} onChange={(date) => { this.setState({ selectedDate: date }) }}>
         {dates.map(date => {
-            return (<Option key={date}>{moment(date).format('DD/MM/YYYY')}</Option>)
+          return (<Option key={date}>{moment(date).format('DD/MM/YYYY')}</Option>)
         })}
       </Select>
     )
@@ -181,6 +181,11 @@ class DailyReportSheet extends React.Component {
                 } else { addHours2 = 0 }
                 const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);
                 if (log.form_values['86f1']) {
+                  console.log(log);
+                  let photos = []
+                  if (log.form_values['c92c']) {
+                    log.form_values['c92c'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Photo</a><br /></div>))
+                  }
                   this.setState(prevState => ({
                     hiredPlant: [...prevState.hiredPlant, {
                       id: log.id,
@@ -189,7 +194,7 @@ class DailyReportSheet extends React.Component {
                       start,
                       end,
                       total: diff,
-                      // docket: '',
+                      docket: photos,
                     }]
                   }))
                 } else {
@@ -225,7 +230,7 @@ class DailyReportSheet extends React.Component {
           if (file.form_values['0bd7']) {
             let comments = []
             let listComments = file.form_values['0bd7'].split('\n')
-            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br/></div>))
+            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br /></div>))
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: file.id,
@@ -242,7 +247,7 @@ class DailyReportSheet extends React.Component {
               let photos = []
               if (material.form_values['76de']) {
                 material.form_values['76de'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Photo</a><br /></div>))
-              }              
+              }
               this.setState(prevState => ({
                 materialsDelivered: [...prevState.materialsDelivered, {
                   id: material.id,
@@ -280,7 +285,7 @@ class DailyReportSheet extends React.Component {
           if (diary.form_values['d5e3']) {
             let comments = []
             let listComments = diary.form_values['d5e3'].split('\n')
-            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br/></div>))
+            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br /></div>))
 
             this.setState(prevState => ({
               comments: [...prevState.comments, {
@@ -299,7 +304,7 @@ class DailyReportSheet extends React.Component {
     }
   }
 
-  render() {   
+  render() {
     return (
       <div>
         <Row gutter={10}>
@@ -401,7 +406,7 @@ class DailyReportSheet extends React.Component {
             locale={{ emptyText: 'No Data' }}
             dataSource={this.state.comments}
             className='boreTables tableResizer dailyReportTables'
-            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments'}]}></Table>
+            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
         </div>
       </div>
     );
