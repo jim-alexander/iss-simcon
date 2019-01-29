@@ -22,7 +22,7 @@ const updateByPropertyName = (propertyName, value) => () => ({
 });
 
 const INITIAL_STATE = {
-  role: '',
+  role: 'admin',
   username: '',
   email: '',
   passwordOne: '',

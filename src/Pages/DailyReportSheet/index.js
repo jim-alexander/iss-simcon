@@ -72,7 +72,7 @@ class DailyReportSheet extends React.Component {
         showSearch
         placeholder="Select a job Number"
         style={{ width: '100%' }}
-        onChange={(job) => { this.setState({ selectedJob: job, selectedDate: '' }) }}>
+        onChange={(job) => { this.setState({ selectedJob: job }) }}>
         {this.props.jobFiles.map(job => {
           return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
         })}
@@ -132,8 +132,8 @@ class DailyReportSheet extends React.Component {
         jobInfo[0].projectManager = proMan
       }
     })
-    if (this.state.selectedJob || this.state.selectedJob !== '') {
-      this.props.dailyPrestarts.forEach(file => {
+    if (this.state.selectedJob) {
+      this.props.dailyPrestarts.forEach(file => {      
         if (file.form_values['80e9'] === this.state.selectedDate && file.project_id === this.state.selectedJob) {
           if (file.form_values['556f']) {
             var siteSuper = file.form_values['556f'].choice_values[0]
@@ -304,7 +304,7 @@ class DailyReportSheet extends React.Component {
     }
   }
 
-  render() {
+  render() {   
     return (
       <div>
         <Row gutter={10}>
