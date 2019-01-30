@@ -1,0 +1,27 @@
+[debug] [2019-01-30T03:33:47.766Z] ----------------------------------------------------------------------
+[debug] [2019-01-30T03:33:47.768Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2019-01-30T03:33:47.769Z] CLI Version:   6.3.0
+[debug] [2019-01-30T03:33:47.769Z] Platform:      darwin
+[debug] [2019-01-30T03:33:47.769Z] Node Version:  v8.11.3
+[debug] [2019-01-30T03:33:47.769Z] Time:          Wed Jan 30 2019 14:33:47 GMT+1100 (AEDT)
+[debug] [2019-01-30T03:33:47.769Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-01-30T03:33:47.786Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-01-30T03:33:47.787Z] > authorizing via signed-in user
+[debug] [2019-01-30T03:33:47.787Z] [iam] checking project simpson-construction for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-01-30T03:33:47.789Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-01-30T03:33:47.789Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-01-30T03:33:48.307Z] <<< HTTP RESPONSE 200
+[debug] [2019-01-30T03:33:48.321Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/simpson-construction:testIamPermissions  
+
+[debug] [2019-01-30T03:33:50.043Z] <<< HTTP RESPONSE 200
+[debug] [2019-01-30T03:33:50.045Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/simpson-construction  
+ 
+[debug] [2019-01-30T03:33:51.124Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'simpson-construction'...
+[info] 
+[info] i  deploying hosting
+[debug] [2019-01-30T03:33:51.129Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/simpson-construction/versions  
+

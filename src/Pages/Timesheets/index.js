@@ -81,7 +81,7 @@ export default class Timesheets extends Component {
     // calculate the duration
     var d = moment.duration(end.diff(start));
     // format a string result    
-    return moment.utc(+d).format('HH.mm')
+    return moment.utc(+d).format('H.mm')
   }
   calcOverTimeOne(startTime, endTime, day) {
     if (startTime && endTime) {
@@ -154,8 +154,8 @@ export default class Timesheets extends Component {
               var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
               var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
 
-              var addHours = (hoursDiff !== null) ? moment(hoursDiff, 'HH.mm').format('HH') : '00'
-              var addMins = (hoursDiff !== null) ? moment(hoursDiff, 'HH.mm').format('m') : '0'
+              var addHours = (hoursDiff !== null) ? moment(hoursDiff, 'H.mm').format('H') : '00'
+              var addMins = (hoursDiff !== null) ? moment(hoursDiff, 'H.mm').format('m') : '0'
               var name = (entry.form_values['57fb']) ? entry.form_values['57fb'].choice_values[0] : null
               var obj = {
                 id: entry.id,
@@ -167,7 +167,7 @@ export default class Timesheets extends Component {
               const index = data.findIndex((e) => e.name === obj.name);
 
               if (index === -1) {
-                obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'HH.mm').format('HH:mm');
+                obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment(hoursDiff, 'H.mm').format('H:mm');
                 obj.ot1 = overTimeOne;
                 obj.ot2 = overTimeTwo;
                 obj.travel = travel;
@@ -187,7 +187,7 @@ export default class Timesheets extends Component {
               } else {
                 //Called when multiple signins occure on prestart
                 if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
-                  data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += " " + moment(hoursDiff, 'HH.mm').format('HH:mm');
+                  data[index][moment(prestart.form_values['80e9']).format('D-MMM')] += " " + moment(hoursDiff, 'H.mm').format('H:mm');
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
                   data[index].hours_minus = data[index].hours_minus
                     .add(parseInt(addHours, 0), 'hours')
@@ -199,7 +199,7 @@ export default class Timesheets extends Component {
                   data[index].travel += travel;
                   data[index].lafha += lafha;
                 } else {
-                  Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'HH.mm').format('HH:mm') })
+                  Object.assign(data[index], { [moment(prestart.form_values['80e9']).format('D-MMM')]: moment(hoursDiff, 'H.mm').format('H:mm') })
                   data[index].hours = data[index].hours.add(parseInt(addHours, 0), 'hours').add(parseInt(addMins, 0), 'minutes')
                   data[index].hours_minus = data[index].hours_minus
                     .add(parseInt(addHours, 0), 'hours')

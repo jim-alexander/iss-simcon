@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Select, Table } from 'antd'
+import { Select, Table, message } from 'antd'
 import * as column from './columns'
 import { db } from '../../firebase'
 import { inspectionHazards } from './inspectionHazards'
@@ -58,13 +58,11 @@ export default class HazardRegister extends Component {
         closeOutDate,
         formValues,
         closeOutLocation
-      }
+      }      
       return obj
     }
     if (this.state.selectedJob.length === 0) {
       this.props.hazards.forEach(hazard => {
-        console.log(hazard);
-
         let recordedBy = (hazard.form_values['4a01']) ? hazard.form_values['4a01'].choice_values[0] : ''
         let assignedTo = (hazard.form_values['81c2']) ? hazard.form_values['81c2'].choice_values[0] : ''
         data.push(createObj(hazard, recordedBy, assignedTo, hazard.form_values['9ab6'], hazard.form_values['9c0b'], hazard.form_values['126d'], hazard, '126d'))
@@ -100,7 +98,7 @@ export default class HazardRegister extends Component {
           if (hazard.project_id === job) {
             let recordedBy = (hazard.form_values['4a01']) ? hazard.form_values['4a01'].choice_values[0] : ''
             let assignedTo = (hazard.form_values['81c2']) ? hazard.form_values['81c2'].choice_values[0] : ''
-            data.push(createObj(hazard, recordedBy, assignedTo, hazard.form_values['9ab6'], hazard.form_values['9c0b'], hazard.form_values['126d']))
+            data.push(createObj(hazard, recordedBy, assignedTo, hazard.form_values['9ab6'], hazard.form_values['9c0b'], hazard.form_values['126d'], hazard, '126d'))
 
           }
         })
@@ -111,7 +109,7 @@ export default class HazardRegister extends Component {
             if (toolbox.project_id === job) {
               let recordedBy = (toolbox.form_values['014b']) ? toolbox.form_values['014b'].choice_values[0] : ''
               let assignedTo = (toolbox.form_values['6718']) ? toolbox.form_values['6718'].choice_values[0] : ''
-              data.push(createObj(toolbox, recordedBy, assignedTo, toolbox.form_values['2318'], toolbox.form_values['042c'], toolbox.form_values['6796']))
+              data.push(createObj(toolbox, recordedBy, assignedTo, toolbox.form_values['2318'], toolbox.form_values['042c'], toolbox.form_values['6796'], toolbox, '6796'))
             }
           })
         }
@@ -122,7 +120,7 @@ export default class HazardRegister extends Component {
             if (diary.project_id === job) {
               let recordedBy = (diary.form_values['cfa2']) ? diary.form_values['cfa2'].choice_values[0] : ''
               let assignedTo = (diary.form_values['5b46']) ? diary.form_values['5b46'].choice_values[0] : ''
-              data.push(createObj(diary, recordedBy, assignedTo, diary.form_values['bea6'], diary.form_values['eda0'], diary.form_values['e2ab']))
+              data.push(createObj(diary, recordedBy, assignedTo, diary.form_values['bea6'], diary.form_values['eda0'], diary.form_values['e2ab'], diary, 'e2ab'))
             }
           })
         }
@@ -133,8 +131,11 @@ export default class HazardRegister extends Component {
             let inspectedBy = (inspection.form_values['0923']) ? inspection.form_values['0923'].choice_values[0] : null
             let dateInspected = inspection.form_values['91dd']
             inspectionHazards(inspection.form_values).forEach(entry => {
-              if (entry.comments) {
-                data.push(createObj(inspection, inspectedBy, entry.assignedTo, dateInspected, entry.comments, null))
+              if (!entry.closeOutDate) {
+
+                if (entry.comments) {
+                  data.push(createObj(inspection, inspectedBy, entry.assignedTo, dateInspected, entry.comments, null, inspection, entry.closeOutLocation))
+                }
               }
             })
           }
@@ -146,6 +147,7 @@ export default class HazardRegister extends Component {
     })
   }
   closeHazard(hazard) {
+    message.info('Closing Hazard please wait.')
     let obj = {
       form_id: '3e7888a5-26fa-449d-a183-b5a228c6e59a',
       status: 'Closed Out',
@@ -170,17 +172,21 @@ export default class HazardRegister extends Component {
           data[index].status = 'Closed Out'
           this.setState({ data })
 
-          console.log('Closed out hazard in form.', resp);
+          message.success('Hazard closed out. ')
 
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          message.error('An error occured.')
+
+          console.log(err)
+        })
     } else {
       client.records.create(obj)
         .then(resp => {
           let update = hazard.formValues
           update.form_values[hazard.closeOutLocation] = moment().format('YYYY-MM-DD')
-          update.status = 'Closed Out'
 
+          message.success('Created Hazard in register.')
           console.log('Created Hazard in register.', resp);
 
           client.records.update(update.id, update)
@@ -191,23 +197,29 @@ export default class HazardRegister extends Component {
               data[index].status = 'Closed Out'
               this.setState({ data })
 
+              message.success('Hazard closed out. ')
+
               console.log('Closed out hazard in form.', resp);
 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              message.error('An error occured.')
+
+              console.log(err)
+            })
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          message.error('An error occured.')
+          console.log(err)
+        })
     }
-
-
-
   }
   render() {
+
     return (
       <div>
         {this.selectJob()}
         <Table
-          pagination={false}
           bordered
           id='boresTableOne'
           className='boreTables tableResizer'

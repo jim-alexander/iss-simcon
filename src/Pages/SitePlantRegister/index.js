@@ -164,7 +164,6 @@ export default class SitePlantRegister extends Component {
           </Col>
         </Row>
         <Table
-          pagination={false}
           bordered
           id='boresTableOne'
           className='boreTables tableResizer'

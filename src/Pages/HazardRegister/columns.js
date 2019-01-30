@@ -53,7 +53,9 @@ export function hazardRegister(closeHazard){
     dataIndex: '_',
     render: (text, record) => {
       if (!record.closeOutDate) {
-        return <span onClick={() => closeHazard(record)}>Close</span>
+        return <span onClick={() => {
+          closeHazard(record)
+        }}>Close</span>
         
       }
     },
