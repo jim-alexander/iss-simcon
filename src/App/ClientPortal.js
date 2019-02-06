@@ -186,12 +186,12 @@ class ClientPortal extends Component {
           return returned
         }
         localStorage.setItem('jobFiles', JSON.stringify(saveRecentData(this.state.jobFiles, 10)))
-        localStorage.setItem('dailyPrestarts', JSON.stringify(saveRecentData(this.state.dailyPrestarts, 200)))
-        localStorage.setItem('plantVerifications', JSON.stringify(saveRecentData(this.state.plantVerifications, 40)))
+        localStorage.setItem('dailyPrestarts', JSON.stringify(saveRecentData(this.state.dailyPrestarts, 150)))
+        localStorage.setItem('plantVerifications', JSON.stringify(saveRecentData(this.state.plantVerifications, 20)))
         localStorage.setItem('siteInspections', JSON.stringify(saveRecentData(this.state.siteInspections, 20)))
         localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
-        localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 200)))
-        localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 200)))
+        localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 50)))
+        localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 100)))
         localStorage.setItem('user', JSON.stringify(this.state.user))
         // console.log("Recent Data Saved Locally");
 

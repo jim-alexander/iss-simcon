@@ -49,7 +49,7 @@ export default class HazardRegister extends Component {
     const createObj = (hazard, recordedBy, assignedTo, dateIdentified, description, closeOutDate, formValues, closeOutLocation) => {
       let status = (hazard.status) ? hazard.status : 'Action Required'
       let obj = {
-        id: `${hazard.id}-${description}`,
+        id: `${hazard.id}-${Math.random()}`,
         status,
         dateIdentified,
         recordedBy,
@@ -221,6 +221,7 @@ export default class HazardRegister extends Component {
         {this.selectJob()}
         <Table
           bordered
+          pagination={false}
           id='boresTableOne'
           className='boreTables tableResizer'
           columns={column.hazardRegister(this.closeHazard)}
