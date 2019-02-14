@@ -133,7 +133,7 @@ class DailyReportSheet extends React.Component {
       }
     })
     if (this.state.selectedJob) {
-      this.props.dailyPrestarts.forEach(file => {      
+      this.props.dailyPrestarts.forEach(file => {
         if (file.form_values['80e9'] === this.state.selectedDate && file.project_id === this.state.selectedJob) {
           if (file.form_values['556f']) {
             var siteSuper = file.form_values['556f'].choice_values[0]
@@ -181,7 +181,6 @@ class DailyReportSheet extends React.Component {
                 } else { addHours2 = 0 }
                 const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);
                 if (log.form_values['86f1']) {
-                  console.log(log);
                   let photos = []
                   if (log.form_values['c92c']) {
                     log.form_values['c92c'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Photo</a><br /></div>))
@@ -208,13 +207,21 @@ class DailyReportSheet extends React.Component {
                         minutes: parseFloat(addMins2)
                       })
                     })
+                    this.state.subContrTotal
+                      .add(parseInt(addHours2, 0), 'hours')
+                      .add(parseInt(addMins2, 0), 'minutes')
                   } else {
                     contractors[index].noOfEmployees++
                     contractors[index].hours.add(parseFloat(addMins2), 'minutes').add(parseFloat(addHours2), 'hours')
+                    this.state.subContrTotal
+                      .add(parseInt(addHours2, 0), 'hours')
+                      .add(parseInt(addMins2, 0), 'minutes')
                   }
                 }
               }
-              this.setState({ subContractors: contractors })
+              this.setState({
+                subContractors: contractors,
+              })
             })
           }
           if (file.form_values['2cf0']) {
@@ -304,7 +311,7 @@ class DailyReportSheet extends React.Component {
     }
   }
 
-  render() {   
+  render() {
     return (
       <div>
         <Row gutter={10}>
