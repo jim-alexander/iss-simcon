@@ -27,8 +27,8 @@ export function timesheet(today, days) {
         width: 100,
         render: (time) => {
           if (time !== 'Invalid date' && time) {
-            return `${time.hours()}:${time.minutes()}`
-            // return time.asHours()
+            // return `${time.hours()}:${time.minutes()}`
+            return time.asHours()
           } else if (time === 'Invalid date') {
             return 'Err'
           } else {

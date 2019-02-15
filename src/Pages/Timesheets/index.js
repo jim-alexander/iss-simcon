@@ -95,7 +95,9 @@ export default class Timesheets extends Component {
 
       let overtimeOne = moment.duration(0);
       let hours = moment.duration(endTime.diff(startTime))
-
+      if (hours.asHours() > 5) {
+        hours.subtract(30, 'minutes')
+      }
       if (moment(day, 'dddd').day() <= 5 && moment(day, 'dddd').day() >= 1) {
         if (hours.asHours() >= 8 && hours.asHours() <= 10) {
           overtimeOne.add(hours.subtract(8, 'hours'))
@@ -125,7 +127,9 @@ export default class Timesheets extends Component {
 
       let overtimeTwo = moment.duration(0);
       let hours = moment.duration(endTime.diff(startTime))
-
+      if (hours.asHours() > 5) {
+        hours.subtract(30, 'minutes')
+      }
       if (hours.asHours() > 10) {
         overtimeTwo.add(hours.subtract(10, 'hours'))
       }
@@ -139,6 +143,7 @@ export default class Timesheets extends Component {
       if (day === 'Sunday') {
         overtimeTwo.add(hours)
       }
+
       return overtimeTwo.asHours()
     } else {
       return 0
@@ -187,13 +192,19 @@ export default class Timesheets extends Component {
                   hours: addHours,
                   minutes: addMins
                 })
-                  .subtract(obj.ot1, 'hours')
-                  .subtract(obj.ot2, 'hours')
-
+                  .subtract(overTimeOne, 'hours')
+                  .subtract(overTimeTwo, 'hours')
                 data.push(obj);
               } else {
                 //Called when multiple signins occure on prestart
                 if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
+                  var overTimeOneMultiple = (data, key) => {
+                    return this.calcOverTimeOne('00.00', `${data.hours()}.${data.minutes()}`, key)
+                  }
+                  var overTimeTwoMultiple = (data, key) => {
+                    return this.calcOverTimeTwo('00.00', `${data.hours()}.${data.minutes()}`, key)
+                  }
+
                   data[index][moment(prestart.form_values['80e9']).format('D-MMM')]
                     .add(parseInt(addHours, 0), 'hours')
                     .add(parseInt(addMins, 0), 'minutes')
@@ -201,10 +212,10 @@ export default class Timesheets extends Component {
                   data[index].hours_minus = data[index].hours_minus
                     .add(parseInt(addHours, 0), 'hours')
                     .add(parseInt(addMins, 0), 'minutes')
-                    .subtract(overTimeOne, 'hours')
-                    .subtract(overTimeTwo, 'hours')
-                  data[index].ot1 += overTimeOne;
-                  data[index].ot2 += overTimeTwo;
+                    .subtract(overTimeOneMultiple(data[index].hours, moment(prestart.form_values['80e9']).format('dddd')), 'hours')
+                    .subtract(overTimeTwoMultiple(data[index].hours, moment(prestart.form_values['80e9']).format('dddd')), 'hours')
+                  data[index].ot1 += overTimeOneMultiple(data[index].hours, moment(prestart.form_values['80e9']).format('dddd'));
+                  data[index].ot2 += overTimeTwoMultiple(data[index].hours, moment(prestart.form_values['80e9']).format('dddd'));
                   data[index].travel += travel;
                   data[index].lafha += lafha;
                 } else {
