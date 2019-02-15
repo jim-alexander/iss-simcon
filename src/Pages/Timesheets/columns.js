@@ -40,7 +40,7 @@ export function timesheet(today, days) {
   }
   columns.push({
     title: 'Totals',
-    className: 'totals',
+    className: 'totals leftBorder',
     children: [{
       title: 'All',
       dataIndex: 'hours',
@@ -51,7 +51,7 @@ export function timesheet(today, days) {
         return moment.duration(num).asHours()
 
       },
-      className: 'timesheetTotals'
+      className: 'timesheetTotals leftBorder'
     }, {
       title: 'Regular',
       dataIndex: 'hours_minus',

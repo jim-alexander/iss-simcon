@@ -21,7 +21,7 @@ export default class PageNotes extends Component {
           <p>By default, the start date will be 14 days in the past. Selecting a date will automatically genorate a timesheet report for the days following.</p>
           <p>The data can be viewed in fortnightly or weekly formats by changing the 'days' parameter in the top right corner.</p>
           <p>The report can be genorated for any date selected; not limited to weekdays or workdays.</p>
-          <p>It is possible to filter the data to job level aswell if desired. For example (Site supervisors). Contact Info Sync if desired.</p>
+          <p>30 minutes is deducted automatically after 8 hours worked for each particular day.</p>
         </div>
       )
     }

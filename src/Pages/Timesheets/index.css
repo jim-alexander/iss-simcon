@@ -11,6 +11,15 @@
 .date {
     background: #fafafa;
 }
+td.timesheetTotals.leftBorder {
+    border-left: 2px solid #e0e0e0;
+}
+th.timesheetTotals.leftBorder {
+    border-left: 2px solid #e0e0e0;
+}
+th.totals.leftBorder {
+    border-left: 2px solid #e0e0e0;
+}
 
 #timesheet th {
     text-align: center;

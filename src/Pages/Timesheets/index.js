@@ -195,6 +195,7 @@ export default class Timesheets extends Component {
                   .subtract(overTimeOne, 'hours')
                   .subtract(overTimeTwo, 'hours')
                 data.push(obj);
+                
               } else {
                 //Called when multiple signins occure on prestart
                 if (data[index][moment(prestart.form_values['80e9']).format('D-MMM')]) {
