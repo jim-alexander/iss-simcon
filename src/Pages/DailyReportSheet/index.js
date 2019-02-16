@@ -72,9 +72,11 @@ class DailyReportSheet extends React.Component {
         showSearch
         placeholder="Select a job Number"
         style={{ width: '100%' }}
-        onChange={(job) => { this.setState({ selectedJob: job }) }}>
+        onChange={(job) => { 
+          this.setState({ selectedJob: job.substring(0, job.indexOf('p.lSS#@')) }) 
+          }}>
         {this.props.jobFiles.map(job => {
-          return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
+          return (<Option key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>{job.form_values["5b1c"]}</Option>)
         })}
       </Select>
 
