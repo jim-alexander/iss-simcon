@@ -1,17 +1,17 @@
 import React from 'react'
-import { Select, Table, Row, Col } from 'antd'
+import { Select, Table, Row, Col, Button, Icon, Input } from 'antd'
 import './index.css'
 import * as column from './columns'
 import { db } from '../../firebase'
 import moment from 'moment'
 
 const Option = Select.Option;
-
 class DailyReportSheet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDate: '',
+      datesList: [],
+      selectedDate: 'Select a date',
       selectedJob: '',
       reportList: [],
       hideDate: true,
@@ -44,6 +44,7 @@ class DailyReportSheet extends React.Component {
       || this.props.dailyPrestarts !== prevProps.dailyPrestarts) {
 
       this.setState({
+        datesList: [],
         hideDate: false,
         jobInfo: null,
         companyPersonnel: [],
@@ -72,18 +73,16 @@ class DailyReportSheet extends React.Component {
         showSearch
         placeholder="Select a job Number"
         style={{ width: '100%' }}
-        onChange={(job) => { 
-          this.setState({ selectedJob: job.substring(0, job.indexOf('p.lSS#@')) }) 
-          }}>
+        onChange={(job) => {
+          this.setState({ selectedJob: job.substring(0, job.indexOf('p.lSS#@')) })
+        }}>
         {this.props.jobFiles.map(job => {
           return (<Option key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>{job.form_values["5b1c"]}</Option>)
         })}
       </Select>
-
     )
   }
-  selectDate() {
-    let disabled = (!this.state.selectedJob) ? true : false;
+  getDates() {
     let dates = []
     this.props.dailyPrestarts.forEach(prestart => {
       if (this.state.selectedJob === prestart.project_id) {
@@ -92,16 +91,63 @@ class DailyReportSheet extends React.Component {
         }
       }
     })
+    dates.sort((a, b) => {
+      a = moment(a, 'YYYY-MM-DD')
+      b = moment(b, 'YYYY-MM-DD')
+      if (a.isAfter(b)) {
+        return -1
+      } else if (a.isBefore(b)) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+    this.setState({
+      datesList: dates,
+    })
+  }
+  selectDate() {
+    let disabled = (this.state.datesList.length <= 0) ? true : false;
     return (
-      <Select showSearch placeholder="Select date" disabled={disabled} style={{ width: '100%', paddingBottom: 10 }} onChange={(date) => { this.setState({ selectedDate: date }) }}>
-        {dates.map(date => {
+      <Select showSearch value={this.state.selectedDate} placeholder="Select date" disabled={disabled} style={{ width: '100%', paddingBottom: 10 }} onChange={(date) => { this.setState({ selectedDate: date }) }}>
+        {this.state.datesList.map(date => {
           return (<Option key={date}>{moment(date).format('DD/MM/YYYY')}</Option>)
         })}
       </Select>
     )
   }
-
+  dateButtons() {
+    const index = this.state.datesList.indexOf(this.state.selectedDate)
+    let previousDisabled = (index >= (this.state.datesList.length - 1)) ? true : false
+    let nextDisabled = (index <= 0) ? true : false
+    return (
+      <Button.Group style={{ width: '100%', marginBottom: 10 }}>
+        <Button disabled={previousDisabled} style={{ width: '50%' }} onClick={() => {
+          this.setState({ selectedDate: this.state.datesList[(index + 1)] })
+        }}>
+          <Icon type="left" />Previous Date
+        </Button>
+        <Button disabled={nextDisabled} style={{ width: '50%' }} onClick={() => {
+          this.setState({ selectedDate: this.state.datesList[(index - 1)] })
+        }}>
+          Next Date<Icon type="right" />
+        </Button>
+      </Button.Group>
+    )
+  }
+  searchBar() {
+    return (
+      <Input.Search
+        placeholder="What are you looking for?"
+        enterButton="Search"
+        size="large"
+        className="ant-dropdown-link"
+        onSearch={value => console.log(value)}
+      />
+    )
+  }
   updatePageData() {
+    this.getDates()
     var jobInfo = [{
       id: 0,
       title: null,
@@ -121,6 +167,10 @@ class DailyReportSheet extends React.Component {
       if (end.isBefore(start)) end.add(1, 'day');
       // calculate the duration
       var d = moment.duration(end.diff(start));
+      if (d.asHours() > 5) {
+        d.subtract(30, 'minutes')
+      }
+
       // format a string result
       return moment.utc(+d).format('HH:mm');
     }
@@ -316,12 +366,18 @@ class DailyReportSheet extends React.Component {
   render() {
     return (
       <div>
+        {/* <Row style={{ marginBottom: 10 }}>
+          {this.searchBar()}
+        </Row> */}
         <Row gutter={10}>
-          <Col xs={24} sm={24} md={16} lg={16} xl={16} style={{ marginBottom: 10 }}>
+          <Col xs={24} sm={24} md={10} lg={10} xl={10} style={{ marginBottom: 10 }}>
             {this.selectJob()}
           </Col>
-          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+          <Col xs={24} sm={24} md={7} lg={7} xl={7}>
             {this.selectDate()}
+          </Col>
+          <Col xs={24} sm={24} md={7} lg={7} xl={7}>
+            {this.dateButtons()}
           </Col>
         </Row>
         <div className='boresPadding'>
@@ -335,6 +391,17 @@ class DailyReportSheet extends React.Component {
             dataSource={this.state.jobInfo}
             rowKey='id'
             size="middle" />
+        </div>
+
+        <div className='boresPadding'>
+          <Table
+            size='small'
+            rowKey='id'
+            pagination={false}
+            locale={{ emptyText: 'No Data' }}
+            dataSource={this.state.comments}
+            className='boreTables tableResizer dailyReportTables'
+            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
         </div>
         <div className='boresPadding'>
           <Table
@@ -406,16 +473,6 @@ class DailyReportSheet extends React.Component {
             dataSource={this.state.materialsDelivered}
             rowKey='id'
             size="middle" />
-        </div>
-        <div className='boresPadding'>
-          <Table
-            size='small'
-            rowKey='id'
-            pagination={false}
-            locale={{ emptyText: 'No Data' }}
-            dataSource={this.state.comments}
-            className='boreTables tableResizer dailyReportTables'
-            columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
         </div>
       </div>
     );

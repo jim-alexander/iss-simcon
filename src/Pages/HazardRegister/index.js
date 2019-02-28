@@ -17,7 +17,8 @@ export default class HazardRegister extends Component {
     super();
     this.state = {
       selectedJob: [],
-      data: null
+      data: null,
+      loadingTable: false
     }
     this.closeHazard = this.closeHazard.bind(this)
   }
@@ -147,7 +148,7 @@ export default class HazardRegister extends Component {
     })
   }
   closeHazard(hazard) {
-    message.info('Closing Hazard please wait.')
+    this.setState({loadingTable: true})
     let obj = {
       form_id: '3e7888a5-26fa-449d-a183-b5a228c6e59a',
       status: 'Closed Out',
@@ -166,18 +167,17 @@ export default class HazardRegister extends Component {
       update.status = 'Closed Out'
       client.records.update(update.id, update)
         .then(resp => {
-          const index = this.state.data.findIndex((e) => e.id === `${hazard.formValues.id}-${hazard.description}`);
           let data = this.state.data;
+          const index = data.indexOf(hazard)
           data[index].closeOutDate = obj.form_values['126d']
           data[index].status = 'Closed Out'
-          this.setState({ data })
-
+          this.setState({ data,
+          loadingTable: false})
           message.success('Hazard closed out. ')
-
         })
         .catch(err => {
           message.error('An error occured.')
-
+          this.setState({loadingTable: false})
           console.log(err)
         })
     } else {
@@ -186,30 +186,27 @@ export default class HazardRegister extends Component {
           let update = hazard.formValues
           update.form_values[hazard.closeOutLocation] = moment().format('YYYY-MM-DD')
 
-          message.success('Created Hazard in register.')
-          console.log('Created Hazard in register.', resp);
+          message.success('Created hazard in register.')
+          console.log('Created hazard in register.', resp);
 
           client.records.update(update.id, update)
             .then(resp => {
-              const index = this.state.data.findIndex((e) => e.id === `${hazard.formValues.id}-${hazard.description}`);
               let data = this.state.data;
+              const index = data.indexOf(hazard)
               data[index].closeOutDate = obj.form_values['126d']
               data[index].status = 'Closed Out'
-              this.setState({ data })
-
-              message.success('Hazard closed out. ')
-
+              this.setState({ data, loadingTable: false })
               console.log('Closed out hazard in form.', resp);
-
             })
             .catch(err => {
               message.error('An error occured.')
-
+              this.setState({loadingTable: false})
               console.log(err)
             })
         })
         .catch(err => {
           message.error('An error occured.')
+          this.setState({loadingTable: false})
           console.log(err)
         })
     }
@@ -227,6 +224,7 @@ export default class HazardRegister extends Component {
           columns={column.hazardRegister(this.closeHazard)}
           dataSource={this.state.data}
           rowKey='id'
+          loading={this.state.loadingTable}
           rowClassName={(record) => {
             return record.status
           }}

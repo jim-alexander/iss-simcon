@@ -74,6 +74,9 @@ export default class SQEStats extends Component {
     var end = moment.utc(endTime, "h.mm");
     if (end.isBefore(start)) end.add(1, 'day');
     var d = moment.duration(end.diff(start));
+    if (d.asHours() > 5) {
+      d.subtract(30, 'minutes')
+    }
     return moment.utc(+d).format('HH:mm')
   }
   buildTable() {
