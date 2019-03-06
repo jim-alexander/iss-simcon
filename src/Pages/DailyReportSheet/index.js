@@ -142,7 +142,18 @@ class DailyReportSheet extends React.Component {
         enterButton="Search"
         size="large"
         className="ant-dropdown-link"
-        onSearch={value => console.log(value)}
+        onSearch={value => {
+          console.log(value);
+
+          // this.props.jobFiles.forEach(record => {
+          //   // (Object.values(record.form_values).includes(value)) ? results.push(record.form_values) 
+          //   //  : null
+          // }) 
+          // this.props.dailyPrestarts.forEach(record => {
+          // })
+          // this.props.dailyDiarys.forEach(record => {
+          // })
+        }}
       />
     )
   }
@@ -156,10 +167,14 @@ class DailyReportSheet extends React.Component {
       day: null,
     }]
     var contractors = [];
-    function calcTimeDiff(startTime, endTime) {
+    function calcTimeDiff(startTime, endTime, lunch) {
       if (!startTime || !endTime) {
         return '00:00'
       }
+      let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
+      console.log(lunch, breakTime);
+      
+      
       // parse time using 24-hour clock and use UTC to prevent DST issues
       var start = moment.utc(startTime, "HH:mm");
       var end = moment.utc(endTime, "HH:mm");
@@ -167,7 +182,7 @@ class DailyReportSheet extends React.Component {
       if (end.isBefore(start)) end.add(1, 'day');
       // calculate the duration
       var d = moment.duration(end.diff(start));
-      if (d.asHours() > 5) {
+      if (d.asHours() > 5 && breakTime) {
         d.subtract(30, 'minutes')
       }
 
@@ -197,9 +212,10 @@ class DailyReportSheet extends React.Component {
             file.form_values['86b7'].forEach(log => {
               var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1].replace('.', ':') : '';
               var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1].replace('.', ':') : '';
-              var diff = calcTimeDiff(start, end);
+              var diff = calcTimeDiff(start, end, log.form_values['54aa']);
 
               if (log.form_values['cc82'] === 'company_personnel') {
+                
                 if (log.form_values['57fb']) {
                   var compName = log.form_values['57fb'].choice_values[0]
                 }

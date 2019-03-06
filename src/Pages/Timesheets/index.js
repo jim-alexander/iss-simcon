@@ -69,10 +69,12 @@ export default class Timesheets extends Component {
     }
   }
   //TODO: Total hours fix and OT1 OT2 check 
-  calcTimeDiff(startTime, endTime) {
+  calcTimeDiff(startTime, endTime, lunch) {
     if (!startTime || !endTime) {
       return null
     }
+    let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
+
     // parse time using 24-hour clock and use UTC to prevent DST issues
     var start = moment.utc(startTime, "h.mm");
     var end = moment.utc(endTime, "h.mm");
@@ -81,14 +83,15 @@ export default class Timesheets extends Component {
     // calculate the duration
     var d = moment.duration(end.diff(start));
     // format a string result    
-    if (d.asHours() > 5) {
+    if (d.asHours() > 5 && breakTime) {
       d.subtract(30, 'minutes')
     }
     return moment.utc(+d).format('H.mm')
 
   }
-  calcOverTimeOne(startTime, endTime, day) {
+  calcOverTimeOne(startTime, endTime, day, lunch) {
     if (startTime && endTime) {
+      // let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
 
       startTime = moment(`2018-12-10 ${startTime}`, 'YYYY-MM-DD h.mm');
       endTime = moment(`2018-12-10 ${endTime}`, 'YYYY-MM-DD h.mm');
@@ -119,8 +122,9 @@ export default class Timesheets extends Component {
       return 0
     }
   }
-  calcOverTimeTwo(startTime, endTime, day) {
+  calcOverTimeTwo(startTime, endTime, day, lunch) {
     if (startTime && endTime) {
+      // let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
 
       startTime = moment(`2018-12-10 ${startTime}`, 'YYYY-MM-DD h.mm');
       endTime = moment(`2018-12-10 ${endTime}`, 'YYYY-MM-DD h.mm');
@@ -159,9 +163,9 @@ export default class Timesheets extends Component {
               var start = (entry.form_values['33d3']) ? entry.form_values['33d3'].choice_values[1] : undefined;
               var end = (entry.form_values['2748']) ? entry.form_values['2748'].choice_values[1] : undefined;
 
-              var hoursDiff = this.calcTimeDiff(start, end);
-              var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
-              var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) : 0
+              var hoursDiff = this.calcTimeDiff(start, end, entry.form_values['54aa']);
+              var overTimeOne = (this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeOne(start, end, moment(prestart.form_values['80e9']).format('dddd'), entry.form_values['54aa']) : 0
+              var overTimeTwo = (this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd')) !== 0) ? this.calcOverTimeTwo(start, end, moment(prestart.form_values['80e9']).format('dddd'), entry.form_values['54aa']) : 0
 
               var addHours = (hoursDiff !== null) ? moment(hoursDiff, 'H.mm').format('H') : '00'
               var addMins = (hoursDiff !== null) ? moment(hoursDiff, 'H.mm').format('m') : '0'

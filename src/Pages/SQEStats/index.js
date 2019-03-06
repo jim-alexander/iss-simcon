@@ -66,15 +66,17 @@ export default class SQEStats extends Component {
       }, () => this.buildTable())
     }
   }
-  calcTimeDiff(startTime, endTime) {
+  calcTimeDiff(startTime, endTime, lunch) {
     if (!startTime || !endTime) {
       return null
     }
+    let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
+
     var start = moment.utc(startTime, "h.mm");
     var end = moment.utc(endTime, "h.mm");
     if (end.isBefore(start)) end.add(1, 'day');
     var d = moment.duration(end.diff(start));
-    if (d.asHours() > 5) {
+    if (d.asHours() > 5 && breakTime) {
       d.subtract(30, 'minutes')
     }
     return moment.utc(+d).format('HH:mm')
@@ -113,7 +115,7 @@ export default class SQEStats extends Component {
               prestart.form_values['86b7'].forEach(log => {
                 var start = (log.form_values['33d3']) ? log.form_values['33d3'].choice_values[1] : '';
                 var end = (log.form_values['2748']) ? log.form_values['2748'].choice_values[1] : '';
-                var hoursWorked = calcTimeDiff(start, end)
+                var hoursWorked = calcTimeDiff(start, end, log.form_values['54aa'])
                 var addHours = moment(hoursWorked, 'HH:mm').format('HH')
                 var addMins = moment(hoursWorked, 'HH:mm').format('m')
 
