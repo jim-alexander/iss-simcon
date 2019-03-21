@@ -176,11 +176,12 @@ export default class Timesheets extends Component {
               };
               var travel = (entry.form_values['935b']) ? parseFloat(entry.form_values['935b']) : 0
               var lafha = (entry.form_values['b574'] === 'yes') ? 1 : 0
-
+              var absent = (entry.form_values['d0b3'] !== 'No') ? entry.form_values['d0b3'] : null
+                            
               const index = data.findIndex((e) => e.name === obj.name);
-
+              
               if (index === -1) {
-                obj[moment(prestart.form_values['80e9']).format('D-MMM')] = moment.duration({
+                obj[moment(prestart.form_values['80e9']).format('D-MMM')] = (absent) ? absent : moment.duration({
                   hours: addHours,
                   minutes: addMins
                 })
@@ -209,7 +210,6 @@ export default class Timesheets extends Component {
                   var overTimeTwoMultiple = (data, key) => {
                     return this.calcOverTimeTwo('00.00', `${data.hours()}.${data.minutes()}`, key)
                   }
-
                   data[index][moment(prestart.form_values['80e9']).format('D-MMM')]
                     .add(parseInt(addHours, 0), 'hours')
                     .add(parseInt(addMins, 0), 'minutes')

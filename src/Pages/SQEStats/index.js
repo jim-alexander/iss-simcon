@@ -22,7 +22,10 @@ export default class SQEStats extends Component {
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
         {this.props.jobFiles.map(job => {
-          return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
+          if (job.project_id) {
+            return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
+          } 
+          return null
         })}
       </Select>
     )

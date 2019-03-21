@@ -77,7 +77,10 @@ class DailyReportSheet extends React.Component {
           this.setState({ selectedJob: job.substring(0, job.indexOf('p.lSS#@')) })
         }}>
         {this.props.jobFiles.map(job => {
-          return (<Option key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>{job.form_values["5b1c"]}</Option>)
+          if (job.project_id) {
+            return (<Option key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>{job.form_values["5b1c"]}</Option>)
+          } 
+          return null
         })}
       </Select>
     )
@@ -172,7 +175,7 @@ class DailyReportSheet extends React.Component {
         return '00:00'
       }
       let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
-      console.log(lunch, breakTime);
+      // console.log(lunch, breakTime);
       
       
       // parse time using 24-hour clock and use UTC to prevent DST issues

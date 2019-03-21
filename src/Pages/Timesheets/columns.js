@@ -25,7 +25,10 @@ export function timesheet(today, days) {
         className: 'dateSub hideTheseCells',
         key: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd') + i,
         width: 100,
-        render: (time) => {
+        render: (time) => { 
+          if (time === 'Sick' || time === 'Training') {
+            return time.substring(0,1).toUpperCase()
+          }    
           if (time !== 'Invalid date' && time) {
             // return `${time.hours()}:${time.minutes()}`
             return time.asHours()
