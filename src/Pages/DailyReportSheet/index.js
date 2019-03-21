@@ -218,7 +218,8 @@ class DailyReportSheet extends React.Component {
               var diff = calcTimeDiff(start, end, log.form_values['54aa']);
 
               if (log.form_values['cc82'] === 'company_personnel') {
-                
+                var lafha = (log.form_values['b574'] === 'yes') ? '✔' : null
+
                 if (log.form_values['57fb']) {
                   var compName = log.form_values['57fb'].choice_values[0]
                 }
@@ -235,7 +236,8 @@ class DailyReportSheet extends React.Component {
                     name: compName,
                     start,
                     end,
-                    hours: diff
+                    hours: diff,
+                    lafha
                   }],
                   compPersTotal: prevState.compPersTotal
                     .add(parseInt(addHours, 0), 'hours')

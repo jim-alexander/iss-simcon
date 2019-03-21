@@ -42,6 +42,12 @@ export const timesheet = [{
     dataIndex: 'hours',
     key: 'hours',
     width: 100
+}, {
+    title: 'LAFHA',
+    dataIndex: 'lafha',
+    key: 'lafha',
+    width: 20,
+    className: 'lafha'
 }];
 export const timesheetContractors = [{
     title: 'Company',
