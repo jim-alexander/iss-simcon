@@ -24,13 +24,23 @@ export default class SitePlantRegister extends Component {
   }
 
   selectJob() {
+    let sorted = this.props.jobFiles.sort((a, b) => {
+      if (a.form_values['5f36']) {
+        if (a.form_values['5f36'] < b.form_values['5f36'])
+          return 1;
+        if (a.form_values['5f36'] > b.form_values['5f36'])
+          return -1;
+        return 0;
+      }
+      return null
+    })
     return (
       <Select
         mode='multiple'
         placeholder="Select Job Number(s)"
         style={{ width: '100%', paddingBottom: 10 }}
         onChange={(job) => { this.setState({ selectedJob: job }) }}>
-        {this.props.jobFiles.map(job => {
+        {sorted.map(job => {
           if (job.project_id) {
             return (<Option key={job.project_id}>{job.form_values["5b1c"]}</Option>)
           } 

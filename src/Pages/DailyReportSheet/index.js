@@ -76,6 +76,16 @@ class DailyReportSheet extends React.Component {
     }
   }
   selectJob() {
+    let sorted = this.props.jobFiles.sort((a, b) => {
+      if (a.form_values['5f36']) {
+        if (a.form_values['5f36'] < b.form_values['5f36'])
+          return 1;
+        if (a.form_values['5f36'] > b.form_values['5f36'])
+          return -1;
+        return 0;
+      }
+      return null
+    })
     return (
       <Select
         showSearch
@@ -84,7 +94,7 @@ class DailyReportSheet extends React.Component {
         onChange={(job) => {
           this.setState({ selectedJob: job.substring(0, job.indexOf('p.lSS#@')) })
         }}>
-        {this.props.jobFiles.map(job => {
+        {sorted.map(job => {
           if (job.project_id) {
             return (<Option key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>{job.form_values["5b1c"]}</Option>)
           }
@@ -465,13 +475,13 @@ class DailyReportSheet extends React.Component {
     } else if (type === 'diary') {
       client.records.update(originalDiary.id, originalDiary)
         .then(resp => {
-            let index = this.state.hiredPlant.findIndex(e => e.id === record.id)
-            originalPlantState[index].invoiced = invoiced
-            this.setState({
-              hiredPlant: originalPlantState,
-              loadingSubContractorsTable: false,
-              loadingHiredPlantTable: false
-            })
+          let index = this.state.hiredPlant.findIndex(e => e.id === record.id)
+          originalPlantState[index].invoiced = invoiced
+          this.setState({
+            hiredPlant: originalPlantState,
+            loadingSubContractorsTable: false,
+            loadingHiredPlantTable: false
+          })
           message.success('Invoice Status Changed!')
         })
         .catch(err => {
