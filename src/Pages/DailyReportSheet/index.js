@@ -123,8 +123,13 @@ class DailyReportSheet extends React.Component {
         return 0
       }
     })
+    if (this.state.selectedDate === 'Select a date' && dates.length !== 0) {
+      this.setState({
+        selectedDate: dates[0]
+      })
+    }
     this.setState({
-      datesList: dates,
+      datesList: dates
     })
   }
   selectDate() {
@@ -275,7 +280,12 @@ class DailyReportSheet extends React.Component {
                 if (moment(diff, 'HH:mm').format('h') !== 0) {
                   var addHours2 = moment(diff, 'HH:mm').format('HH');
                 } else { addHours2 = 0 }
-                const index = contractors.findIndex((e) => e.company === log.form_values['c1e2']);
+                const index = contractors.findIndex((e) => {
+                  let check = (e.company) ? e.company.replace(' ',"").toUpperCase() : e.company
+                  let checkTwo = (log.form_values['c1e2']) ? log.form_values['c1e2'].replace(' ',"").toUpperCase() : log.form_values['c1e2']
+                  return check === checkTwo
+                });
+                
                 if (log.form_values['86f1']) {
                   let photos = []
                   if (log.form_values['c92c']) {
@@ -338,7 +348,7 @@ class DailyReportSheet extends React.Component {
           if (file.form_values['0bd7']) {
             let comments = []
             let listComments = file.form_values['0bd7'].split('\n')
-            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br /></div>))
+            listComments.forEach(comment => comments.push(<div key={Math.random()}>{comment}<br /></div>))
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: file.id,
@@ -403,8 +413,11 @@ class DailyReportSheet extends React.Component {
           if (diary.form_values['d5e3']) {
             let comments = []
             let listComments = diary.form_values['d5e3'].split('\n')
-            listComments.forEach(comment => comments.push(<div key={comment}>{comment}<br /></div>))
-
+            listComments.forEach(comment => {
+                comments.push(<div key={Math.random()}>{comment}<br /></div>)
+            })
+            console.log(comments);
+            
             this.setState(prevState => ({
               comments: [...prevState.comments, {
                 id: diary.id,
@@ -497,6 +510,12 @@ class DailyReportSheet extends React.Component {
     }
 
   }
+  // printAll() {
+  //   const index = this.state.datesList.indexOf(this.state.selectedDate)
+  //   this.state.datesList.forEach(date => {
+  //     this.setState({ selectedDate: this.state.datesList[(index + 1)] }, window.print())
+  //   })
+  // }
   render() {
     return (
       <div>
@@ -537,6 +556,37 @@ class DailyReportSheet extends React.Component {
             className='boreTables tableResizer dailyReportTables'
             columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}></Table>
         </div>
+        {/* <Row gutter={10}>
+          <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ marginBottom: 10 }}>
+          <Table
+            pagination={false}
+            locale={{ emptyText: 'No Data' }}
+            title={() => 'Company Personnel'}
+            footer={() => `Total Hours: ${this.state.compPersTotal.asHours()}`}
+            bordered
+            id='boresTableTwo'
+            className='boreTables tableResizer dailyReportTables'
+            columns={column.timesheet}
+            dataSource={this.state.companyPersonnel}
+            rowKey='id'
+            size="middle" />
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+          <Table
+            pagination={false}
+            locale={{ emptyText: 'No Data' }}
+            title={() => 'Sub Contractors'}
+            footer={() => `Total Hours: ${this.state.subContrTotal.asHours()}`}
+            bordered
+            id='boresTableThree'
+            className='boreTables tableResizer dailyReportTables'
+            columns={column.timesheetContractors(this.invoice)}
+            loading={this.state.loadingSubContractorsTable}
+            dataSource={this.state.subContractors}
+            rowKey='id'
+            size="middle" />
+          </Col>
+        </Row> */}
         <div className='boresPadding'>
           <Table
             pagination={false}
@@ -610,6 +660,9 @@ class DailyReportSheet extends React.Component {
             rowKey='id'
             size="middle" />
         </div>
+        {/* <Button onClick={() => {
+          this.printAll()
+        }}>Print All Dates</Button> */}
       </div>
     );
   }
