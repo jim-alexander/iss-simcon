@@ -1,3 +1,4 @@
+import React from 'react'
 export const jobDetails1 = [{
     title: 'Title',
     dataIndex: 'title',
@@ -49,25 +50,45 @@ export const timesheet = [{
     width: 20,
     className: 'lafha'
 }];
-export const timesheetContractors = [{
-    title: 'Company',
-    dataIndex: 'company',
-    key: 'company',
-    width: 200,
-}, {
-    title: 'No. of employees',
-    dataIndex: 'noOfEmployees',
-    key: 'noOfEmployees',
-    width: 100,
-}, {
-    title: 'Hours / Mins',
-    dataIndex: 'hours',
-    key: 'hours',
-    render: hours => {
-       return hours ? hours.asHours(): 0
-    },
-    width: 100
-}];
+export const timesheetContractors = (invoice) => {
+    return ([{
+        title: 'Company',
+        dataIndex: 'company',
+        key: 'company',
+        width: 200,
+    }, {
+        title: 'No. of employees',
+        dataIndex: 'noOfEmployees',
+        key: 'noOfEmployees',
+        width: 100,
+    }, {
+        title: 'Hours / Mins',
+        dataIndex: 'hours',
+        key: 'hours',
+        render: hours => {
+            return hours ? hours.asHours() : 0
+        },
+        width: 100
+    }, {
+        title: 'Invoiced?',
+        dataIndex: 'invoiced',
+        key: 'invoiced',
+        width: 10,
+        className: 'invoiced',
+        render: (text, record) => {
+            if (!record.invoiced) {
+                return <span onClick={() => {
+                    invoice(record, !record.invoiced, 'sub')
+                }}>Invoice</span>
+
+            } else {
+                return <span onClick={() => {
+                    invoice(record, !record.invoiced, 'sub')
+                }}>✔</span>
+            }
+        }
+    }]);
+}
 
 export const companyPlant = [{
     title: 'Item',
@@ -75,41 +96,62 @@ export const companyPlant = [{
     key: 'item'
 }];
 
-export const hiredPlant = [{
-    title: 'Supplier',
-    dataIndex: 'supplier',
-    key: 'supplier',
-    width: 100
-}, {
-    title: 'Equipment',
-    dataIndex: 'equipment',
-    key: 'equipment',
-    width: 100
-}, {
-    title: 'Start',
-    dataIndex: 'start',
-    key: 'start',
-    className: 'hideThis',
-    width: 40
-}, {
-    title: 'End',
-    dataIndex: 'end',
-    key: 'end',
-    className: 'hideThis',
-    width: 40
-}, {
-    title: 'Total',
-    dataIndex: 'total',
-    key: 'total',
-    width: 40
-},{
-    title: 'Docket',
-    dataIndex: 'docket',
-    key: 'docket',
-    className: 'hideThis',
-    width: 40
+export const hiredPlant = (invoice) => {
+    return (
+        [{
+            title: 'Supplier',
+            dataIndex: 'supplier',
+            key: 'supplier',
+            width: 100
+        }, {
+            title: 'Equipment',
+            dataIndex: 'equipment',
+            key: 'equipment',
+            width: 100
+        }, {
+            title: 'Start',
+            dataIndex: 'start',
+            key: 'start',
+            className: 'hideThis',
+            width: 40
+        }, {
+            title: 'End',
+            dataIndex: 'end',
+            key: 'end',
+            className: 'hideThis',
+            width: 40
+        }, {
+            title: 'Total',
+            dataIndex: 'total',
+            key: 'total',
+            width: 40
+        }, {
+            title: 'Docket',
+            dataIndex: 'docket',
+            key: 'docket',
+            className: 'hideThis',
+            width: 40
+        }, {
+            title: 'Invoiced?',
+            dataIndex: 'invoiced',
+            key: 'invoiced',
+            width: 10,
+            className: 'invoiced',
+            render: (text, record) => {
+                if (!record.invoiced) {
+                    return <span onClick={() => {                        
+                        invoice(record, !record.invoiced, record.from)
+                    }}>Invoice</span>
+    
+                } else {
+                    return <span onClick={() => {
+                        invoice(record, !record.invoiced, record.from)
+                    }}>✔</span>
+                }
+            }
+        }]
+    )
 }
-];
 
 export const materialsReceived = [{
     title: 'Supplier',
@@ -123,7 +165,7 @@ export const materialsReceived = [{
     title: 'Quantity',
     dataIndex: 'quantity',
     key: 'quantity'
-}, 
+},
 // {
 //     title: 'Docket No',
 //     dataIndex: 'docket',

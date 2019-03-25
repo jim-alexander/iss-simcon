@@ -1,9 +1,12 @@
 import React from 'react'
-import { Select, Table, Row, Col, Button, Icon, Input } from 'antd'
+import { Select, Table, Row, Col, Button, Icon, Input, message } from 'antd'
 import './index.css'
 import * as column from './columns'
 import { db } from '../../firebase'
+import { Client } from 'fulcrum-app'
 import moment from 'moment'
+
+const client = new Client(process.env.REACT_APP_SECRET_KEY)
 
 const Option = Select.Option;
 class DailyReportSheet extends React.Component {
@@ -14,6 +17,8 @@ class DailyReportSheet extends React.Component {
       selectedDate: 'Select a date',
       selectedJob: '',
       reportList: [],
+      currentDailyPreStart: null,
+      currentDailyDiary: null,
       hideDate: true,
       jobInfo: null,
       companyPersonnel: [],
@@ -32,6 +37,7 @@ class DailyReportSheet extends React.Component {
       materialsDelivered: [],
       SQEStats: []
     };
+    this.invoice = this.invoice.bind(this)
   }
   componentDidMount() {
     db.lastViewedPage(this.props.user.id, 'home');
@@ -61,7 +67,9 @@ class DailyReportSheet extends React.Component {
         companyPlant: [],
         hiredPlant: [],
         materialsDelivered: [],
-        SQEStats: []
+        SQEStats: [],
+        loadingSubContractorsTable: false,
+        loadingHiredPlantTable: false
       }, () => {
         this.updatePageData();
       })
@@ -79,7 +87,7 @@ class DailyReportSheet extends React.Component {
         {this.props.jobFiles.map(job => {
           if (job.project_id) {
             return (<Option key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>{job.form_values["5b1c"]}</Option>)
-          } 
+          }
           return null
         })}
       </Select>
@@ -176,8 +184,8 @@ class DailyReportSheet extends React.Component {
       }
       let breakTime = (lunch === 'yes' || lunch === undefined) ? true : false
       // console.log(lunch, breakTime);
-      
-      
+
+
       // parse time using 24-hour clock and use UTC to prevent DST issues
       var start = moment.utc(startTime, "HH:mm");
       var end = moment.utc(endTime, "HH:mm");
@@ -210,6 +218,9 @@ class DailyReportSheet extends React.Component {
           }
           jobInfo[0].siteSupervisor = siteSuper
           jobInfo[0].day = moment(file.form_values['80e9']).format('dddd')
+          this.setState({
+            currentDailyPreStart: file
+          })
 
           if (file.form_values['86b7']) {
             file.form_values['86b7'].forEach(log => {
@@ -246,6 +257,8 @@ class DailyReportSheet extends React.Component {
 
               }
               else if (log.form_values['cc82'] === 'sub_contractor') {
+                let invoiced = (log.form_values['fb30'] === 'yes') ? true : false
+
                 if (moment(diff, 'HH:mm').format('m') !== 0) {
                   var addMins2 = moment(diff, 'HH:mm').format('m');
                 } else { addMins2 = 0 }
@@ -260,6 +273,8 @@ class DailyReportSheet extends React.Component {
                   }
                   this.setState(prevState => ({
                     hiredPlant: [...prevState.hiredPlant, {
+                      from: 'prestart',
+                      invoiced,
                       id: log.id,
                       supplier: log.form_values['c1e2'],
                       equipment: log.form_values['d9b4'],
@@ -272,6 +287,8 @@ class DailyReportSheet extends React.Component {
                 } else {
                   if (index === -1) {
                     contractors.push({
+                      invoiced,
+                      ids: [log.id],
                       id: log.id,
                       company: log.form_values['c1e2'],
                       noOfEmployees: 1,
@@ -285,6 +302,7 @@ class DailyReportSheet extends React.Component {
                       .add(parseInt(addMins2, 0), 'minutes')
                   } else {
                     contractors[index].noOfEmployees++
+                    contractors[index].ids.push(log.id)
                     contractors[index].hours.add(parseFloat(addMins2), 'minutes').add(parseFloat(addHours2), 'hours')
                     this.state.subContrTotal
                       .add(parseInt(addHours2, 0), 'hours')
@@ -322,6 +340,9 @@ class DailyReportSheet extends React.Component {
       })
       this.props.dailyDiarys.forEach(diary => {
         if (diary.form_values['bea6'] === this.state.selectedDate && diary.project_id === this.state.selectedJob) {
+          this.setState({
+            currentDailyDiary: diary
+          })
           if (diary.form_values['7d44']) {
             diary.form_values['7d44'].forEach(material => {
               let photos = []
@@ -341,8 +362,12 @@ class DailyReportSheet extends React.Component {
           }
           if (diary.form_values['f491']) {
             diary.form_values['f491'].forEach(plant => {
+              console.log(plant);
+              let invoiced = (plant.form_values['7449'] === 'yes') ? true : false
               this.setState(prevState => ({
+
                 hiredPlant: [...prevState.hiredPlant, {
+                  from: 'diary',
                   id: plant.id,
                   supplier: plant.form_values['b889'],
                   equipment: plant.form_values['8c5c'],
@@ -350,6 +375,7 @@ class DailyReportSheet extends React.Component {
                   end: plant.form_values['acac'],
                   total: calcTimeDiff(plant.form_values['2851'], plant.form_values['acac']),
                   docket: '', //todo
+                  invoiced
                 }]
               }))
             })
@@ -383,7 +409,82 @@ class DailyReportSheet extends React.Component {
       })
     }
   }
+  invoice(record, invoiced, type) {
+    this.setState({
+      loadingSubContractorsTable: true,
+      loadingHiredPlantTable: true
+    })
+    let originalPrestart = this.state.currentDailyPreStart
+    let originalDiary = this.state.currentDailyDiary
+    let originalContractorsState = this.state.subContractors
+    let originalPlantState = this.state.hiredPlant
+    let value = invoiced ? 'yes' : 'no'
+    if (type === 'sub') {
+      record.ids.forEach(id => {
+        let index = originalPrestart.form_values['86b7'].findIndex((e) => e.id === id);
+        originalPrestart.form_values['86b7'][index].form_values['fb30'] = value;
+      })
+    } else if (type === 'prestart') {
+      let index = originalPrestart.form_values['86b7'].findIndex((e) => e.id === record.id);
+      originalPrestart.form_values['86b7'][index].form_values['fb30'] = value;
+    } else if (type === 'diary') {
+      let index = originalDiary.form_values['f491'].findIndex((e) => e.id === record.id);
+      originalDiary.form_values['f491'][index].form_values['7449'] = value;
+    }
+    console.log(originalDiary);
+    if (type === 'sub' || type === 'prestart') {
+      client.records.update(originalPrestart.id, originalPrestart)
+        .then(resp => {
+          if (type === 'sub') {
+            let index = this.state.subContractors.findIndex(e => e.id === record.id)
+            originalContractorsState[index].invoiced = invoiced
+            this.setState({
+              subContractors: originalContractorsState,
+              loadingSubContractorsTable: false,
+              loadingHiredPlantTable: false
+            })
+          } else if (type === 'prestart') {
+            let index = this.state.hiredPlant.findIndex(e => e.id === record.id)
+            originalPlantState[index].invoiced = invoiced
+            this.setState({
+              hiredPlant: originalPlantState,
+              loadingSubContractorsTable: false,
+              loadingHiredPlantTable: false
+            })
+          }
+          message.success('Invoice Status Changed!')
+        })
+        .catch(err => {
+          message.error('An error occured.')
+          this.setState({
+            loadingSubContractorsTable: false,
+            loadingHiredPlantTable: false
+          })
+          console.log(err)
+        })
+    } else if (type === 'diary') {
+      client.records.update(originalDiary.id, originalDiary)
+        .then(resp => {
+            let index = this.state.hiredPlant.findIndex(e => e.id === record.id)
+            originalPlantState[index].invoiced = invoiced
+            this.setState({
+              hiredPlant: originalPlantState,
+              loadingSubContractorsTable: false,
+              loadingHiredPlantTable: false
+            })
+          message.success('Invoice Status Changed!')
+        })
+        .catch(err => {
+          message.error('An error occured.')
+          this.setState({
+            loadingSubContractorsTable: false,
+            loadingHiredPlantTable: false
+          })
+          console.log(err)
+        })
+    }
 
+  }
   render() {
     return (
       <div>
@@ -447,7 +548,8 @@ class DailyReportSheet extends React.Component {
             bordered
             id='boresTableThree'
             className='boreTables tableResizer dailyReportTables'
-            columns={column.timesheetContractors}
+            columns={column.timesheetContractors(this.invoice)}
+            loading={this.state.loadingSubContractorsTable}
             dataSource={this.state.subContractors}
             rowKey='id'
             size="middle" />
@@ -475,7 +577,8 @@ class DailyReportSheet extends React.Component {
                 bordered
                 id='boresTableFive'
                 className='boreTables tableResizer dailyReportTables'
-                columns={column.hiredPlant}
+                columns={column.hiredPlant(this.invoice)}
+                loading={this.state.loadingHiredPlantTable}
                 dataSource={this.state.hiredPlant}
                 rowKey='id'
                 size="middle" />
