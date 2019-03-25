@@ -372,10 +372,12 @@ class DailyReportSheet extends React.Component {
           }
           if (diary.form_values['f491']) {
             diary.form_values['f491'].forEach(plant => {
-              console.log(plant);
               let invoiced = (plant.form_values['7449'] === 'yes') ? true : false
+              let photos = []
+              if (plant.form_values['5829']) {
+                plant.form_values['5829'].forEach(photo => photos.push(<div key={photo.photo_id}><a href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`} target="_blank" rel="noopener noreferrer">Photo</a><br /></div>))
+              }
               this.setState(prevState => ({
-
                 hiredPlant: [...prevState.hiredPlant, {
                   from: 'diary',
                   id: plant.id,
@@ -384,7 +386,7 @@ class DailyReportSheet extends React.Component {
                   start: plant.form_values['2851'],
                   end: plant.form_values['acac'],
                   total: calcTimeDiff(plant.form_values['2851'], plant.form_values['acac']),
-                  docket: '', //todo
+                  docket: photos,
                   invoiced
                 }]
               }))
