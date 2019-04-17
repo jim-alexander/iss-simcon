@@ -148,15 +148,21 @@ export default class Timesheets extends Component {
           totalOvertime.add(hours);
         }
       } else {
-        if (parseFloat(startTime) > 18) {
-          totalOvertime.add(hours);
-        } else if (parseFloat(startTime) < 6) {
-          let calcBefore = moment.duration(
-            moment('6:00', 'h:mm').diff(moment(startTime, 'h.mm'))
-          );
-          totalOvertime.add(calcBefore);
+        if (hours.asHours() > 10) {
+          totalOvertime.add(hours.subtract(10, 'hours'));
         }
       }
+      // //After 6pm and before 6 am
+      // else {
+      //   if (parseFloat(startTime) > 18) {
+      //     totalOvertime.add(hours);
+      //   } else if (parseFloat(startTime) < 6) {
+      //     let calcBefore = moment.duration(
+      //       moment('6:00', 'h:mm').diff(moment(startTime, 'h.mm'))
+      //     );
+      //     totalOvertime.add(calcBefore);
+      //   }
+      // }
       return totalOvertime.asHours();
     } else {
       return 0;
