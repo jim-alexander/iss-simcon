@@ -61,9 +61,16 @@ export default class HazardRegister extends Component {
   loadHazardData() {
     var data = []
     const createObj = (hazard, recordedBy, assignedTo, dateIdentified, description, closeOutDate, formValues, closeOutLocation) => {
-      let status = (hazard.status) ? hazard.status : 'Action Required'
+      let status = (hazard.status ||closeOutDate ) ? 'Closed Out' : 'Action Required'
+      const job = () => {
+       let index = this.props.jobFiles.findIndex(job => job.project_id === hazard.project_id )
+       let jobNumber = (index > 0) ? this.props.jobFiles[index].form_values['5f36'] : 'none'
+       return jobNumber
+      }
+      job()
       let obj = {
         id: `${hazard.id}-${Math.random()}`,
+        jobNumber: job(),
         status,
         dateIdentified,
         recordedBy,
@@ -72,7 +79,8 @@ export default class HazardRegister extends Component {
         closeOutDate,
         formValues,
         closeOutLocation
-      }      
+      }  
+    
       return obj
     }
     if (this.state.selectedJob.length === 0) {

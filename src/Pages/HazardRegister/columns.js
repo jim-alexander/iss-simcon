@@ -2,7 +2,12 @@ import moment from 'moment'
 import React from 'react'
 
 export function hazardRegister(closeHazard){
-  return [{
+  return [ {
+    title: 'Job',
+    dataIndex: 'jobNumber',
+    key: 'jobNumber',
+    width: 50
+  }, {
     title: 'Date Identified',
     dataIndex: 'dateIdentified',
     key: 'dateIdentified',

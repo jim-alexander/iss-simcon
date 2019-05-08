@@ -159,6 +159,9 @@ class DailyReportSheet extends React.Component {
               <Option key={date}>{moment(date).format('DD/MM/YYYY')}</Option>
             );
           }
+          else {
+            return null
+          }
         })}
       </Select>
     );
