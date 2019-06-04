@@ -1,11 +1,10 @@
-import React from 'react';
-import * as routes from '../constants/routes';
-import { Menu, Icon } from 'antd';
-import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
+import React from 'react'
+import * as routes from '../constants/routes'
+import { Menu, Icon } from 'antd'
+import { Link } from 'react-router-dom'
+import { auth } from '../firebase'
 
-
-export const DailyReport = (role) => {
+export const DailyReport = role => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/">
@@ -16,24 +15,35 @@ export const DailyReport = (role) => {
       </Menu.Item>
     )
   } else {
-    return;
+    return
   }
 }
-export const Timesheets = (role) => {
-  if (role === 'client' || role === 'admin') {
-    return (
-      <Menu.Item key="/timesheets/">
-        <Link to={routes.TIMESHEETS}>
-          <Icon type="team" />
-          <span className="nav-text">Timesheets</span>
-        </Link>
-      </Menu.Item>
-    )
+export const Timesheets = user => {
+  let allowed = [
+    'loIW6RyixpYTQGmIiUN0Dcm9o8m1', // andy
+    'LrLh95vCZYg7w01m5HTl8kdQj1j2', // tom
+    'SWxXq519VhhzP2T5Sk4Vd05dGn72', // kevin
+    '13nBwfjw44ZOM76bEFrnXsyy1ij1' // ME (JIM)
+  ]
+
+  let isAllowed = allowed.findIndex(id => id === user.id)
+
+  if (user.role === 'client' || user.role === 'admin') {
+    if (isAllowed !== -1) {
+      return (
+        <Menu.Item key="/timesheets/">
+          <Link to={routes.TIMESHEETS}>
+            <Icon type="team" />
+            <span className="nav-text">Timesheets</span>
+          </Link>
+        </Menu.Item>
+      )
+    }
   } else {
-    return;
+    return
   }
 }
-export const SitePlantRegister = (role) => {
+export const SitePlantRegister = role => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/site-plant-register/">
@@ -44,10 +54,10 @@ export const SitePlantRegister = (role) => {
       </Menu.Item>
     )
   } else {
-    return;
+    return
   }
 }
-export const SQEStats = (role) => {
+export const SQEStats = role => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/sqe-stats/">
@@ -58,10 +68,10 @@ export const SQEStats = (role) => {
       </Menu.Item>
     )
   } else {
-    return;
+    return
   }
 }
-export const HazardRegister = (role) => {
+export const HazardRegister = role => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/hazard-register/">
@@ -72,21 +82,21 @@ export const HazardRegister = (role) => {
       </Menu.Item>
     )
   } else {
-    return;
+    return
   }
 }
-export const Fulcrum = (role) => {
+export const Fulcrum = role => {
   if (role === 'client' || role === 'admin') {
     return (
-      <Menu.Item key="/fulcrum/" id='fulcrum'>
-        <a href='https://web.fulcrumapp.com/' target='_blank' rel="noopener noreferrer">
-          <Icon type="mobile" theme='outlined' />
+      <Menu.Item key="/fulcrum/" id="fulcrum">
+        <a href="https://web.fulcrumapp.com/" target="_blank" rel="noopener noreferrer">
+          <Icon type="mobile" theme="outlined" />
           <span className="nav-text">Fulcrum</span>
         </a>
       </Menu.Item>
     )
   } else {
-    return;
+    return
   }
 }
 

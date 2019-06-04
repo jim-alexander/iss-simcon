@@ -1,126 +1,148 @@
 // import React from 'react'
-import moment from 'moment'
+import moment from 'moment';
 
 export function timesheet(today, days) {
-  var columns = [{
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    className: 'nameSub',
-    width: 200,
-    sorter: (a, b) => {
-      if (a.name < b.name) { return -1; }
-      if (a.name > b.name) { return 1; }
-      return 0;
-    },
-    defaultSortOrder: 'ascending'
-  }];
+  var columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      className: 'nameSub',
+      width: 200,
+      sorter: (a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      },
+      defaultSortOrder: 'ascending'
+    }
+  ];
   for (let i = 0; i < days; i++) {
     columns.push({
-      title: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd'),
+      title: moment(today, 'D-MMM-YYYY')
+        .add(i, 'days')
+        .format('ddd'),
       className: 'timesheetDay hideTheseCells',
-      children: [{
-        title: moment(today, 'D-MMM-YYYY').add(i, 'days').format('D-MMM'),
-        dataIndex: moment(today, 'D-MMM-YYYY').add(i, 'days').format('D-MMM'),
-        className: 'dateSub hideTheseCells',
-        key: moment(today, 'D-MMM-YYYY').add(i, 'days').format('ddd') + i,
-        width: 100,
-        render: (time) => { 
-          if (time === 'Sick' || time === 'Training') {
-            return time.substring(0,1).toUpperCase()
-          }    
-          if (time !== 'Invalid date' && time) {
-            // return `${time.hours()}:${time.minutes()}`
-            return time.asHours()
-          } else if (time === 'Invalid date') {
-            return 'Err'
-          } else {
-            return null
+      children: [
+        {
+          title: moment(today, 'D-MMM-YYYY')
+            .add(i, 'days')
+            .format('D-MMM'),
+          dataIndex: moment(today, 'D-MMM-YYYY')
+            .add(i, 'days')
+            .format('D-MMM'),
+          className: 'dateSub hideTheseCells',
+          key:
+            moment(today, 'D-MMM-YYYY')
+              .add(i, 'days')
+              .format('ddd') + i,
+          width: 100,
+          render: time => {
+            if (time === 'Sick' || time === 'Training') {
+              return time.substring(0, 1).toUpperCase();
+            }
+            if (time !== 'Invalid date' && time) {
+              // return `${time.hours()}:${time.minutes()}`
+              return time.asHours();
+            } else if (time === 'Invalid date') {
+              return 'Err';
+            } else {
+              return null;
+            }
           }
         }
-      }],
-    })
+      ]
+    });
   }
   columns.push({
     title: 'Totals',
     className: 'totals leftBorder',
-    children: [{
-      title: 'All',
-      dataIndex: 'hours',
-      key: 'hours',
-      width: 90,
-      render: (num) => {
-        // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
-        return moment.duration(num).asHours()
-
+    children: [
+      {
+        title: 'All',
+        dataIndex: 'hours',
+        key: 'hours',
+        width: 90,
+        render: num => {
+          // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
+          return moment.duration(num).asHours();
+        },
+        className: 'timesheetTotals leftBorder'
       },
-      className: 'timesheetTotals leftBorder'
-    }, {
-      title: 'Regular',
-      dataIndex: 'hours_minus',
-      key: 'hours_minus',
-      width: 90,
-      render: (num) => {
-        // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
-        return moment.duration(num).asHours()
-
+      {
+        title: 'Regular',
+        dataIndex: 'hours_minus',
+        key: 'hours_minus',
+        width: 90,
+        render: num => {
+          // return `${moment.duration(num).hours()}:${moment.duration(num).minutes()}`
+          return moment.duration(num).asHours();
+        },
+        className: 'timesheetTotals'
       },
-      className: 'timesheetTotals'
-    }, {
-      title: 'OT1',
-      dataIndex: 'ot1',
-      key: 'ot1',
-      width: 90,
-      render: (num) => {
-        if (num === 0) {
-          return null
-        } else {
-          return num
-        }
+      {
+        title: 'OT1',
+        dataIndex: 'ot1',
+        key: 'ot1',
+        width: 90,
+        render: num => {
+          if (num === 0) {
+            return null;
+          } else {
+            return num;
+          }
+        },
+        className: 'timesheetTotals'
       },
-      className: 'timesheetTotals'
-    }, {
-      title: 'OT2',
-      dataIndex: 'ot2',
-      key: 'ot2',
-      width: 90,
-      render: (num) => {
-        if (num === 0) {
-          return null
-        } else {
-          return num
-        }
+      {
+        title: 'OT2',
+        dataIndex: 'ot2',
+        key: 'ot2',
+        width: 90,
+        render: num => {
+          if (num === 0) {
+            return null;
+          } else {
+            return num;
+          }
+        },
+        className: 'timesheetTotals'
       },
-      className: 'timesheetTotals'
-    }, {
-      title: 'Travel',
-      dataIndex: 'travel',
-      key: 'travel',
-      width: 90,
-      render: (num) => {
-        if (num === 0) {
-          return null
-        } else {
-          return num
-        }
+      {
+        title: 'Travel',
+        dataIndex: 'travel',
+        key: 'travel',
+        width: 90,
+        render: num => {
+          if (num === 0) {
+            return null;
+          } else {
+            return num;
+          }
+        },
+        className: 'timesheetTotals'
       },
-      className: 'timesheetTotals'
-    }, {
-      title: 'LAFHA',
-      dataIndex: 'lafha',
-      key: 'lafha',
-      width: 90,
-      render: (num) => {
-        if (num === 0) {
-          return null
-        } else {
-          return num
-        }
-      },
-      className: 'timesheetTotals'
-    }]
-  })
-  return columns
+      {
+        title: 'LAFHA',
+        dataIndex: 'lafha',
+        key: 'lafha',
+        width: 90,
+        render: num => {
+          if (num === 0) {
+            return null;
+          } else {
+            return num;
+          }
+        },
+        className: 'timesheetTotals'
+      }
+    ]
+  });
+  return columns;
 }
 
 // export function timesheet(today) {
