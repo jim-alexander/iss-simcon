@@ -37,8 +37,10 @@ export default class SitePlantRegister extends Component {
         mode="multiple"
         placeholder="Select Job Number(s)"
         style={{ width: '100%', paddingBottom: 10 }}
-        onChange={job => {
-          this.setState({ selectedJob: job.substring(0, job.indexOf('p.lSS#@')) })
+        onChange={jobs => {
+          this.setState({
+            selectedJob: jobs.map(job => job.substring(0, job.indexOf('p.lSS#@')))
+          })
         }}>
         {sorted.map(job => {
           if (job.project_id) {
