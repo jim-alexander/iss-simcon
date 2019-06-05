@@ -4,6 +4,8 @@ import { Menu, Icon } from 'antd'
 import { Link } from 'react-router-dom'
 import { auth } from '../firebase'
 
+const { SubMenu } = Menu
+
 export const DailyReport = role => {
   if (role === 'client' || role === 'admin') {
     return (
@@ -43,13 +45,73 @@ export const Timesheets = user => {
     return
   }
 }
-export const SitePlantRegister = role => {
+export const Registers = role => {
+  if (role === 'client' || role === 'admin') {
+    return (
+      <SubMenu
+        title={
+          <div>
+            <Icon type="unordered-list" />
+            <span className="nav-text">Registers</span>
+          </div>
+        }>
+        {SitePlantRegister(role)}
+        {IncidentRegister(role)}
+        {HazardRegister(role)}
+        {NonConformanceRegister(role)}
+      </SubMenu>
+    )
+  }
+}
+const SitePlantRegister = role => {
   if (role === 'client' || role === 'admin') {
     return (
       <Menu.Item key="/site-plant-register/">
         <Link to={routes.SITEPLANTREGISTER}>
           <Icon type="dashboard" />
-          <span className="nav-text">Site Plant Register</span>
+          <span className="nav-text">Site Plant</span>
+        </Link>
+      </Menu.Item>
+    )
+  } else {
+    return
+  }
+}
+const IncidentRegister = role => {
+  if (role === 'client' || role === 'admin') {
+    return (
+      <Menu.Item key="/incident-register/">
+        <Link to={routes.INCIDENTREGISTER}>
+          <Icon type="fire" />
+          <span className="nav-text">Incidents</span>
+        </Link>
+      </Menu.Item>
+    )
+  } else {
+    return
+  }
+}
+const NonConformanceRegister = role => {
+  if (role === 'client' || role === 'admin') {
+    return (
+      <Menu.Item key="/non-conformance-register/">
+        <Link to={routes.NONCONFORMANCE}>
+          <Icon type="pushpin" />
+          <span className="nav-text">Conformance</span>
+        </Link>
+      </Menu.Item>
+    )
+  } else {
+    return
+  }
+}
+const HazardRegister = role => {
+  if (role === 'client' || role === 'admin') {
+    return (
+      <Menu.Item key="/hazard-register/">
+        <Link to={routes.HAZARDREGISTER}>
+          <Icon type="warning" />
+          <span className="nav-text">Hazards</span>
         </Link>
       </Menu.Item>
     )
@@ -64,20 +126,6 @@ export const SQEStats = role => {
         <Link to={routes.SQESTATS}>
           <Icon type="line-chart" />
           <span className="nav-text">SQE Stats</span>
-        </Link>
-      </Menu.Item>
-    )
-  } else {
-    return
-  }
-}
-export const HazardRegister = role => {
-  if (role === 'client' || role === 'admin') {
-    return (
-      <Menu.Item key="/hazard-register/">
-        <Link to={routes.HAZARDREGISTER}>
-          <Icon type="warning" />
-          <span className="nav-text">Hazard Register</span>
         </Link>
       </Menu.Item>
     )

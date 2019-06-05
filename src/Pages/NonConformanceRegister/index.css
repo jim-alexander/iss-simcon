@@ -1,0 +1,14 @@
+.action {
+    cursor: pointer;
+    color: #3498db;
+    text-align: center;
+}
+
+.subHeader {
+    text-align: center;
+}
+
+th.typeOf {
+    background-color: #fffbe6 !important;
+    border-bottom: 2px solid #f1c40f !important;
+}

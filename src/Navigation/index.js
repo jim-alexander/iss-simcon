@@ -23,8 +23,11 @@ const navMenu = user => {
         style={{ borderTop: '#b3b3b333 solid 1px' }}>
         {item.DailyReport(user.role)}
         {item.Timesheets(user)}
-        {item.SitePlantRegister(user.role)}
+        {item.Registers(user.role)}
+        {/* {item.SitePlantRegister(user.role)}
         {item.HazardRegister(user.role)}
+        {item.IncidentRegister(user.role)}
+        {item.NonConformanceRegister(user.role)} */}
         {item.SQEStats(user.role)}
         {item.Fulcrum(user.role)}
         {item.Role(user.role)}

@@ -3,19 +3,21 @@ import { Route } from 'react-router-dom'
 import * as routes from '../constants/routes'
 import { Client } from 'fulcrum-app'
 import { firebase, db } from '../firebase'
-import moment from 'moment';
-import { Offline, Online } from "react-detect-offline";
+import moment from 'moment'
+import { Offline, Online } from 'react-detect-offline'
 
 import withAuthorization from '../Session/withAuthorization'
 import { Navigation, NavigationSmaller } from '../Navigation'
 
 import DailyReportSheet from '../Pages/DailyReportSheet'
-import Timesheets from "../Pages/Timesheets"
-import SitePlantRegister from "../Pages/SitePlantRegister"
-import SQEStats from "../Pages/SQEStats"
-import HazardRegister from "../Pages/HazardRegister"
-import Profile from "../Pages/Profile"
-import Job from "../Pages/Job"
+import Timesheets from '../Pages/Timesheets'
+import SitePlantRegister from '../Pages/SitePlantRegister'
+import SQEStats from '../Pages/SQEStats'
+import HazardRegister from '../Pages/HazardRegister'
+import IncidentRegister from '../Pages/IncidentRegister'
+import NonConformanceRegister from '../Pages/NonConformanceRegister'
+import Profile from '../Pages/Profile'
+import Job from '../Pages/Job'
 import Loader from '../Pages/Loader'
 import PageNotes from './PageNotes'
 import PrintPage from './PrintPage.js'
@@ -30,15 +32,16 @@ const listFormIds = [
   { form_id: 'c4307607-a450-4673-8602-fa5bcb36f366' }, // Plant verification
   { form_id: '572fccd2-4500-4e59-8fac-fd3f428a4094' }, // Site inspection
   { form_id: '15f5e75d-a3d3-4856-881c-326e5e02ac54' }, // Toolbox minutes
-  { form_id: '48ca5050-04ce-4939-9928-6b4509a330e7' },  // Daily Diary
-  { form_id: '3e7888a5-26fa-449d-a183-b5a228c6e59a' }  // Hazard Register
+  { form_id: '48ca5050-04ce-4939-9928-6b4509a330e7' }, // Daily Diary
+  { form_id: '3e7888a5-26fa-449d-a183-b5a228c6e59a' }, // Hazard Register
+  { form_id: '774f7f47-0b0f-40cd-9bd0-80e17e7bf256' } // Incident / Non-Conformance Report
 ]
 
 const { Content, Footer } = Layout
 
 class ClientPortal extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       user: {
         id: '',
@@ -53,21 +56,22 @@ class ClientPortal extends Component {
       toolboxMinutes: [],
       dailyDiarys: [],
       hazards: [],
+      incidentNonConf: [],
       loadingScreen: false,
       width: '',
       lastLoaded: null,
       devicesLastSynced: []
-    };
+    }
   }
   componentDidMount() {
     if (firebase.auth.currentUser) {
       db.getCurrentUsername(firebase.auth.currentUser.uid)
         .then(snapshot => {
-          var idFound = snapshot.key;
-          var usernameFound = snapshot.child("username").val();
-          var roleFound = snapshot.child("role").val();
-          var emailFound = snapshot.child("email").val();
-          var colorFound = snapshot.child("color").val();
+          var idFound = snapshot.key
+          var usernameFound = snapshot.child('username').val()
+          var roleFound = snapshot.child('role').val()
+          var emailFound = snapshot.child('email').val()
+          var colorFound = snapshot.child('color').val()
           this.setState({
             user: {
               id: idFound,
@@ -77,16 +81,20 @@ class ClientPortal extends Component {
               color: colorFound
             }
           })
-        }).catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
+        })
+        .catch(err => message.error('There has been an error loading user data. Please be patient. Error: ' + err, 10))
     }
-    if (localStorage.getItem('jobFiles') !== null &&
+    if (
+      localStorage.getItem('jobFiles') !== null &&
       localStorage.getItem('dailyPrestarts') !== null &&
       localStorage.getItem('plantVerifications') !== null &&
       localStorage.getItem('siteInspections') !== null &&
       localStorage.getItem('toolboxMinutes') !== null &&
       localStorage.getItem('dailyDiarys') !== null &&
       localStorage.getItem('hazards') !== null &&
-      localStorage.getItem('user') !== null) {
+      localStorage.getItem('incidentNonConf') !== null &&
+      localStorage.getItem('user') !== null
+    ) {
       this.setState({
         jobFiles: JSON.parse(localStorage.getItem('jobFiles')),
         dailyPrestarts: JSON.parse(localStorage.getItem('dailyPrestarts')),
@@ -95,32 +103,31 @@ class ClientPortal extends Component {
         toolboxMinutes: JSON.parse(localStorage.getItem('toolboxMinutes')),
         dailyDiarys: JSON.parse(localStorage.getItem('dailyDiarys')),
         hazards: JSON.parse(localStorage.getItem('hazards')),
-        user: JSON.parse(localStorage.getItem('user')),
-
+        incidentNonConf: JSON.parse(localStorage.getItem('incidentNonConf')),
+        user: JSON.parse(localStorage.getItem('user'))
       })
-      this.loadFulcrumData();
-      this.interval = setInterval(() => this.loadFulcrumData(), 600000);
+      this.loadFulcrumData()
+      this.interval = setInterval(() => this.loadFulcrumData(), 600000)
     } else {
       this.setState({ loadingScreen: true })
-      this.loadFulcrumData();
-      this.interval = setInterval(() => this.loadFulcrumData(), 600000);
+      this.loadFulcrumData()
+      this.interval = setInterval(() => this.loadFulcrumData(), 600000)
     }
-    window.addEventListener("newContentAvailable", () => {
+    window.addEventListener('newContentAvailable', () => {
       notification.info({
         message: 'Please refresh the page.',
         description: 'A new version of this site has been released.',
         duration: 0,
-        placement: "bottomRight",
+        placement: 'bottomRight',
         style: {
           borderTop: '2px solid #3ea08e',
           background: '#1c3538',
           color: '#fff'
         }
       })
-    });
+    })
 
-
-    window.addEventListener("resize", this.updateDimensions);
+    window.addEventListener('resize', this.updateDimensions)
     // client.forms.all({ schema: false })
     //   .then((page) => {
     //     console.log(page.objects);
@@ -128,11 +135,14 @@ class ClientPortal extends Component {
     //   .catch((error) => {
     //     console.log('Error getting your forms.', error.message);
     //   });
-    client.query(`SELECT memberships.name,
+    client
+      .query(
+        `SELECT memberships.name,
       (SELECT FCM_FormatTimestamp(MAX(closed_at), 'America/New_York')
         FROM changesets WHERE closed_by_id=memberships.user_id) AS last_sync
         FROM memberships
-      ORDER BY name;`)
+      ORDER BY name;`
+      )
       .then(result => {
         this.setState({
           devicesLastSynced: result.rows
@@ -141,21 +151,22 @@ class ClientPortal extends Component {
       .catch(error => console.log(error))
   }
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.interval)
   }
   updateDimensions = () => {
-    this.setState({ width: window.innerWidth });
+    this.setState({ width: window.innerWidth })
   }
   componentWillMount() {
-    this.updateDimensions();
+    this.updateDimensions()
   }
 
   loadFulcrumData(evt) {
-    if (evt === 'Button Refresh') { message.loading('Loading Fulcrum data..', 0) }
-    var promises = listFormIds.map(form_id => client.records.all(form_id));
+    if (evt === 'Button Refresh') {
+      message.loading('Loading Fulcrum data..', 0)
+    }
+    var promises = listFormIds.map(form_id => client.records.all(form_id))
     Promise.all(promises)
       .then(dataReceived => {
-
         this.setState({
           jobFiles: dataReceived[0].objects,
           dailyPrestarts: dataReceived[1].objects,
@@ -163,20 +174,20 @@ class ClientPortal extends Component {
           siteInspections: dataReceived[3].objects,
           toolboxMinutes: dataReceived[4].objects,
           dailyDiarys: dataReceived[5].objects,
-          hazards: dataReceived[6].objects
-        });
+          hazards: dataReceived[6].objects,
+          incidentNonConf: dataReceived[7].objects
+        })
         // console.log("Data loaded");
-
-
-      }).then(() => {
+      })
+      .then(() => {
         this.setState({
-          lastLoaded: moment().format("LT"),
+          lastLoaded: moment().format('LT'),
           loadingScreen: false
-        });
+        })
 
         //console.log('%c Data has been loaded successfuly.', 'color: green; font-size: 12px');
         function saveRecentData(data, num) {
-          var returned = [];
+          var returned = []
           data = data.reverse()
           for (let i = 0; i < num; i++) {
             if (data[i]) {
@@ -192,31 +203,36 @@ class ClientPortal extends Component {
         localStorage.setItem('toolboxMinutes', JSON.stringify(saveRecentData(this.state.toolboxMinutes, 10)))
         localStorage.setItem('dailyDiarys', JSON.stringify(saveRecentData(this.state.dailyDiarys, 50)))
         localStorage.setItem('hazards', JSON.stringify(saveRecentData(this.state.hazards, 100)))
+        localStorage.setItem('incidentNonConf', JSON.stringify(saveRecentData(this.state.incidentNonConf, 100)))
         localStorage.setItem('user', JSON.stringify(this.state.user))
         // console.log("Recent Data Saved Locally");
 
         db.lastLoadedData(this.state.user.id, moment().format('Do MMMM YYYY, h:mm:ss a'))
         message.destroy()
-        if (evt === 'Button Refresh') { message.success('Data is up to date.') }
-      }).catch((error) => {
+        if (evt === 'Button Refresh') {
+          message.success('Data is up to date.')
+        }
+      })
+      .catch(error => {
         console.log(error)
-      });
+      })
   }
 
   PageNotes() {
     Modal.info({
       title: 'Page Notes',
-      content: (
-        <PageNotes currentPage={window.location.pathname} />
-      ),
-      onOk() { },
-    });
+      content: <PageNotes currentPage={window.location.pathname} />,
+      onOk() {}
+    })
   }
 
   render() {
     function navigationBased(width, user) {
-      if (width >= 992) { return <Navigation user={user} /> }
-      else if (width <= 991) { return <NavigationSmaller user={user} /> }
+      if (width >= 992) {
+        return <Navigation user={user} />
+      } else if (width <= 991) {
+        return <NavigationSmaller user={user} />
+      }
     }
     if (this.state.loadingScreen === true) {
       return (
@@ -231,62 +247,126 @@ class ClientPortal extends Component {
           </Footer>
         </Layout>
       )
-    }    
+    }
     return (
       <Layout>
         {navigationBased(this.state.width, this.state.user)}
         <Layout className="layoutContent">
           <Online>
-            <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement='bottom'>
-              <div id="lastLoaded" onClick={() => this.loadFulcrumData("Button Refresh")} className='printHide'>
-                <span id='lastLoadedDefault'>Data Last Loaded {this.state.lastLoaded}</span>
-                <span id='lastLoadedRefreash'>Click to Refresh Data</span>
+            <Tooltip title="Data loads automatically after 10 minutes." mouseEnterDelay={2} placement="bottom">
+              <div id="lastLoaded" onClick={() => this.loadFulcrumData('Button Refresh')} className="printHide">
+                <span id="lastLoadedDefault">Data Last Loaded {this.state.lastLoaded}</span>
+                <span id="lastLoadedRefreash">Click to Refresh Data</span>
               </div>
             </Tooltip>
           </Online>
           <Offline>
-            <div id='lastLoaded'>
+            <div id="lastLoaded">
               <span style={{ color: '#e74c3c', fontWeight: 600 }}>No Internet Connection</span>
             </div>
           </Offline>
-          <Content style={{ margin: "24px 16px 0", minHeight: "89vh" }}>
-            <div style={{ padding: 24, background: "#fff", height: "100%" }}>
+          <Content style={{ margin: '24px 16px 0', minHeight: '89vh' }}>
+            <div style={{ padding: 24, background: '#fff', height: '100%' }}>
               <PrintPage />
-              <Route exact path={routes.CLIENTPORTAL} render={props => <DailyReportSheet {...props}
-                user={this.state.user}
-                dailyPrestarts={this.state.dailyPrestarts}
-                jobFiles={this.state.jobFiles}
-                dailyDiarys={this.state.dailyDiarys} />} />
-              <Route path={routes.TIMESHEETS} render={props => <Timesheets {...props}
-                jobFiles={this.state.jobFiles}
-                dailyPrestarts={this.state.dailyPrestarts}
-                user={this.state.user} />} />
-              <Route path={routes.SITEPLANTREGISTER} render={props => <SitePlantRegister {...props}
-                user={this.state.user}
-                jobFiles={this.state.jobFiles}
-                plantVerifications={this.state.plantVerifications}
-              />} />
-              <Route path={routes.SQESTATS} render={props => <SQEStats {...props}
-                user={this.state.user}
-                dailyPrestarts={this.state.dailyPrestarts}
-                jobFiles={this.state.jobFiles}
-                dailyDiarys={this.state.dailyDiarys}
-                siteInspections={this.state.siteInspections}
-                toolboxMinutes={this.state.toolboxMinutes}
-                hazards={this.state.hazards} />} />
-              <Route path={routes.HAZARDREGISTER} render={props => <HazardRegister {...props}
-                user={this.state.user}
-                jobFiles={this.state.jobFiles}
-                hazards={this.state.hazards}
-                toolboxMinutes={this.state.toolboxMinutes}
-                siteInspections={this.state.siteInspections}
-                dailyDiarys={this.state.dailyDiarys} />} />
+              <Route
+                exact
+                path={routes.CLIENTPORTAL}
+                render={props => (
+                  <DailyReportSheet
+                    {...props}
+                    user={this.state.user}
+                    dailyPrestarts={this.state.dailyPrestarts}
+                    jobFiles={this.state.jobFiles}
+                    dailyDiarys={this.state.dailyDiarys}
+                  />
+                )}
+              />
+              <Route
+                path={routes.TIMESHEETS}
+                render={props => (
+                  <Timesheets
+                    {...props}
+                    jobFiles={this.state.jobFiles}
+                    dailyPrestarts={this.state.dailyPrestarts}
+                    user={this.state.user}
+                  />
+                )}
+              />
+              <Route
+                path={routes.SITEPLANTREGISTER}
+                render={props => (
+                  <SitePlantRegister
+                    {...props}
+                    user={this.state.user}
+                    jobFiles={this.state.jobFiles}
+                    plantVerifications={this.state.plantVerifications}
+                  />
+                )}
+              />
+              <Route
+                path={routes.SQESTATS}
+                render={props => (
+                  <SQEStats
+                    {...props}
+                    user={this.state.user}
+                    dailyPrestarts={this.state.dailyPrestarts}
+                    jobFiles={this.state.jobFiles}
+                    dailyDiarys={this.state.dailyDiarys}
+                    siteInspections={this.state.siteInspections}
+                    toolboxMinutes={this.state.toolboxMinutes}
+                    hazards={this.state.hazards}
+                  />
+                )}
+              />
+              <Route
+                path={routes.HAZARDREGISTER}
+                render={props => (
+                  <HazardRegister
+                    {...props}
+                    user={this.state.user}
+                    jobFiles={this.state.jobFiles}
+                    hazards={this.state.hazards}
+                    toolboxMinutes={this.state.toolboxMinutes}
+                    siteInspections={this.state.siteInspections}
+                    dailyDiarys={this.state.dailyDiarys}
+                  />
+                )}
+              />
+              <Route
+                path={routes.INCIDENTREGISTER}
+                render={props => (
+                  <IncidentRegister
+                    {...props}
+                    user={this.state.user}
+                    jobFiles={this.state.jobFiles}
+                    incidentNonConf={this.state.incidentNonConf}
+                  />
+                )}
+              />
+              <Route
+                path={routes.NONCONFORMANCE}
+                render={props => (
+                  <NonConformanceRegister
+                    {...props}
+                    user={this.state.user}
+                    jobFiles={this.state.jobFiles}
+                    incidentNonConf={this.state.incidentNonConf}
+                  />
+                )}
+              />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
-              <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} devicesLastSynced={this.state.devicesLastSynced} />} />
+              <Route
+                path={routes.JOB}
+                render={props => (
+                  <Job {...props} user={this.state.user} devicesLastSynced={this.state.devicesLastSynced} />
+                )}
+              />
             </div>
-            <Button block onClick={this.PageNotes} style={{ maxWidth: 200, margin: '15px auto' }} className='printHide'>Page Notes</Button>
+            <Button block onClick={this.PageNotes} style={{ maxWidth: 200, margin: '15px auto' }} className="printHide">
+              Page Notes
+            </Button>
           </Content>
-          <Footer style={{ textAlign: "center", background: '#f3f3f3' }} className='printHide'>
+          <Footer style={{ textAlign: 'center', background: '#f3f3f3' }} className="printHide">
             Info Sync Solutions ©2018 Created by Jim Alexander
           </Footer>
         </Layout>
@@ -294,6 +374,6 @@ class ClientPortal extends Component {
     )
   }
 }
-const authCondition = (authUser) => !!authUser;
+const authCondition = authUser => !!authUser
 
-export default withAuthorization(authCondition)(ClientPortal);
+export default withAuthorization(authCondition)(ClientPortal)
