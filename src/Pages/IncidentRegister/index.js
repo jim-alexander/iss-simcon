@@ -11,7 +11,7 @@ export default class IncidentRegister extends Component {
     this.tableData()
   }
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.incidentNonConf !== this.props.incidentNonConf) {
+    if (prevProps.incidentNonConf !== this.props.incidentNonConf || prevState.selectedJob !== this.state.selectedJob) {
       this.tableData()
     }
   }
@@ -53,13 +53,26 @@ export default class IncidentRegister extends Component {
     this.props.incidentNonConf.forEach(record => {
       if (record.form_values['800c']) {
         if (record.form_values['800c'].choice_values[0] !== 'Quality Non-Conformance') {
-          data.push(record)
-          console.log(record)
+          const job = () => {
+            let index = this.props.jobFiles.findIndex(job => job.project_id === record.project_id)
+            let jobNumber = index > 0 ? this.props.jobFiles[index].form_values['5f36'] : 'none'
+            return jobNumber
+          }
+          record.job = job()
+          if (this.state.selectedJob.length <= 0) {
+            data.push(record)
+          } else {
+            if (this.state.selectedJob.indexOf(record.project_id) !== -1) {
+              data.push(record)
+            } 
+            return
+          }
         }
       }
     })
     this.setState({ data })
   }
+  action = (val) => console.log(val)
   render() {
     return (
       <div>
@@ -69,7 +82,7 @@ export default class IncidentRegister extends Component {
           pagination={false}
           id="boresTableOne"
           className="boreTables tableResizer"
-          columns={columns}
+          columns={columns(this.action)}
           dataSource={this.state.data}
           //   rowClassName={record => record.status}
           rowKey="id"

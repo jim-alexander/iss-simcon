@@ -77,7 +77,6 @@ export default class HazardRegister extends Component {
         let jobNumber = index > 0 ? this.props.jobFiles[index].form_values['5f36'] : 'none'
         return jobNumber
       }
-      job()
       let obj = {
         id: `${hazard.id}-${Math.random()}`,
         jobNumber: job(),
