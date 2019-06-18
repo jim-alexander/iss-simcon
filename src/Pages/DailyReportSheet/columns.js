@@ -195,45 +195,69 @@ export const hiredPlant = invoice => {
   ]
 }
 
-export const materialsReceived = [
-  {
-    title: 'Supplier',
-    dataIndex: 'supplier',
-    key: 'supplier'
-  },
-  {
-    title: 'Item',
-    dataIndex: 'item',
-    key: 'item'
-  },
-  {
-    title: 'Unit',
-    dataIndex: 'unit',
-    key: 'unit'
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    key: 'quantity'
-  },
-  // {
-  //     title: 'Docket No',
-  //     dataIndex: 'docket',
-  //     key: 'docket',
-  //     className: 'hideThis',
-  // },
-  {
-    title: 'Records',
-    dataIndex: 'photo',
-    key: 'photo',
-    className: 'hideThis'
-  },
-  {
-    title: 'Invoiced?',
-    dataIndex: 'invoiced',
-    key: 'invoiced'
-  }
-]
+export const materialsReceived = invoice => {
+  return [
+    {
+      title: 'Supplier',
+      dataIndex: 'supplier',
+      key: 'supplier'
+    },
+    {
+      title: 'Item',
+      dataIndex: 'item',
+      key: 'item'
+    },
+    {
+      title: 'Unit',
+      dataIndex: 'unit',
+      key: 'unit'
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity'
+    },
+    // {
+    //     title: 'Docket No',
+    //     dataIndex: 'docket',
+    //     key: 'docket',
+    //     className: 'hideThis',
+    // },
+    {
+      title: 'Records',
+      dataIndex: 'photo',
+      key: 'photo',
+      className: 'hideThis'
+    },
+    {
+      title: 'Invoiced?',
+      dataIndex: 'invoiced',
+      key: 'invoiced',
+      className: 'invoiced',
+      render: (text, record) => {
+        if (!record.invoiced) {
+          return (
+            <span
+              onClick={() => {
+                invoice(record, !record.invoiced, record.from)
+              }}>
+              Invoice
+            </span>
+          )
+        } else {
+          return (
+            <span
+              onClick={() => {
+                invoice(record, !record.invoiced, record.from)
+              }}>
+              ✔
+            </span>
+          )
+        }
+      }
+    }
+  ]
+}
 
 export const sqeStats = [
   {

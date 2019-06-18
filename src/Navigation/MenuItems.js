@@ -97,7 +97,7 @@ const NonConformanceRegister = role => {
       <Menu.Item key="/non-conformance-register/">
         <Link to={routes.NONCONFORMANCE}>
           <Icon type="pushpin" />
-          <span className="nav-text">Conformance</span>
+          <span className="nav-text">Non Conformance</span>
         </Link>
       </Menu.Item>
     )

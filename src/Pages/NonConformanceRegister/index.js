@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
-import { Select, Table } from 'antd'
+import { Select, Table, message } from 'antd'
 import { columns } from './columns'
+import { Client } from 'fulcrum-app'
 import './index.css'
+
+const client = new Client(process.env.REACT_APP_SECRET_KEY)
+
 export default class NonConformanceRegister extends Component {
   state = {
+    loading: false,
     selectedJob: [],
     data: []
   }
@@ -14,6 +19,32 @@ export default class NonConformanceRegister extends Component {
     if (prevProps.incidentNonConf !== this.props.incidentNonConf || prevState.selectedJob !== this.state.selectedJob) {
       this.tableData()
     }
+  }
+  action = (val, type) => {
+    this.setState({ loading: true })
+    let data = this.state.data
+    let index = data.findIndex(item => item.id === val.id)
+
+    if (type === 'PM') {
+      val['d234'] = 'yes'
+      val.status = 'SQE Action Required'
+    }
+    if (type === 'SQE') {
+      val['6e01'] = 'yes'
+      val.status = 'Closed Out'
+    }
+    data[index] = val
+    client.records
+      .update(val.id, val)
+      .then(resp => {
+        this.setState({ data, loading: false })
+        message.success('Action Submitted.')
+      })
+      .catch(err => {
+        console.log(err)
+        message.error('An error occured.')
+        this.setState({ loading: false })
+      })
   }
   selectJob() {
     let sorted = this.props.jobFiles.sort((a, b) => {
@@ -63,7 +94,7 @@ export default class NonConformanceRegister extends Component {
           } else {
             if (this.state.selectedJob.indexOf(record.project_id) !== -1) {
               data.push(record)
-            } 
+            }
             return
           }
         }
@@ -71,14 +102,39 @@ export default class NonConformanceRegister extends Component {
     })
     this.setState({ data })
   }
-  
-  action = (val) => console.log(val)
+  action = (val, type) => {
+    this.setState({ loading: true })
+    let data = this.state.data
+    let index = data.findIndex(item => item.id === val.id)
+
+    if (type === 'PM') {
+      val['d234'] = 'yes'
+      val.status = 'SQE Action Required'
+    }
+    if (type === 'SQE') {
+      val['6e01'] = 'yes'
+      val.status = 'Closed Out'
+    }
+    data[index] = val
+    client.records
+      .update(val.id, val)
+      .then(resp => {
+        this.setState({ data, loading: false })
+        message.success('Action Submitted.')
+      })
+      .catch(err => {
+        console.log(err)
+        message.error('An error occured. Please check your internet connection.')
+        this.setState({ loading: false })
+      })
+  }
   render() {
     return (
       <div>
         {this.selectJob()}
         <Table
           bordered
+          loading={this.state.loading}
           pagination={false}
           id="boresTableOne"
           className="boreTables tableResizer"
