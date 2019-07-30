@@ -1,48 +1,70 @@
 .subHeader div {
-    font-size: smaller;
-    text-align: center;
+  font-size: smaller;
+  text-align: center;
 }
 
 th.subHeader {
-    padding: 5px !important;
+  padding: 5px !important;
 }
 
 th.titleHeader {
-    padding: 5px !important;
+  padding: 5px !important;
 }
 #sqeStatsTotal th {
-    display: none
+  display: none;
 }
 #sqeStatsTotal tbody {
-    border-top: 1px solid #e0e0e0
-    /* border-top: 2px solid darkgrey; */
+  border-top: 1px solid #e0e0e0;
+  /* border-top: 2px solid darkgrey; */
 }
-.sqeTotal{
-    background-color: #fcfcfc;
-    font-weight: 500
-}   
+.sqeTotal {
+  background-color: #fcfcfc;
+  font-weight: 500;
+}
 
 th.manHours {
-    background-color: #f6ffed !important;
-    border-bottom: 2px solid #2ecc71 !important;
+  background-color: #f6ffed !important;
+  border-bottom: 2px solid #2ecc71 !important;
 }
 
 th.documentsCompleted {
-    background-color: #e6f7ff !important;
-    border-bottom: 2px solid #3498db !important;
+  background-color: #e6f7ff !important;
+  border-bottom: 2px solid #3498db !important;
 }
 
 th.materials {
-    background-color: #fffbe6 !important;
-    border-bottom: 2px solid #f1c40f !important;
+  background-color: #fffbe6 !important;
+  border-bottom: 2px solid #f1c40f !important;
 }
 
 /* TOTALS */
-td.employeesTotal{border-top: 2px solid #2ecc71 !important;}
-td.contractorsTotal{border-top: 2px solid #2ecc71 !important;}
-td.siteInspectionsTotal{border-top: 2px solid #3498db !important;}
-td.hazardsTotal{border-top: 2px solid #3498db !important;}
-td.toolboxsTotal{border-top: 2px solid #3498db !important;}
-td.dieselTotal{border-top: 2px solid #f1c40f !important;}
-td.unleadedTotal{border-top: 2px solid #f1c40f !important;}
-td.waterTotal{border-top: 2px solid #f1c40f !important;}
+td.employeesTotal {
+  border-top: 2px solid #2ecc71 !important;
+}
+td.contractorsTotal {
+  border-top: 2px solid #2ecc71 !important;
+}
+td.siteInspectionsTotal {
+  border-top: 2px solid #3498db !important;
+}
+td.hazardsTotal {
+  border-top: 2px solid #3498db !important;
+}
+td.toolboxsTotal {
+  border-top: 2px solid #3498db !important;
+}
+td.incidentsTotal {
+  border-top: 2px solid #3498db !important;
+}
+td.conformanceTotal {
+  border-top: 2px solid #3498db !important;
+}
+td.dieselTotal {
+  border-top: 2px solid #f1c40f !important;
+}
+td.unleadedTotal {
+  border-top: 2px solid #f1c40f !important;
+}
+td.waterTotal {
+  border-top: 2px solid #f1c40f !important;
+}

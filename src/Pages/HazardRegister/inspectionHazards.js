@@ -93,13 +93,6 @@ export const inspectionHazards = values => {
     },
     {
       values,
-      comments: values["a630"], //12.2
-      assignedTo: values["1c39"] ? values["1c39"].choice_values[0] : null,
-      closeOutDate: values["0edd"] ? values["0edd"] : null,
-      closeOutLocation: "0edd"
-    },
-    {
-      values,
       comments: values["1f36"], //12.3
       assignedTo: values["2d79"] ? values["2d79"].choice_values[0] : null,
       closeOutDate: values["c7c6"] ? values["c7c6"] : null,
