@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Select, Table, message } from "antd";
-import { columns } from "./columns";
-import { Client } from "fulcrum-app";
-import "./index.css";
+import React, { Component } from 'react';
+import { Select, Table, message } from 'antd';
+import { columns } from './columns';
+import { Client } from 'fulcrum-app';
+import './index.css';
 
 const client = new Client(process.env.REACT_APP_SECRET_KEY);
 
@@ -26,22 +26,22 @@ export default class IncidentRegister extends Component {
 
   selectJob() {
     let sorted = this.props.jobFiles.sort((a, b) => {
-      if (a.form_values["5f36"]) {
-        if (a.form_values["5f36"] < b.form_values["5f36"]) return 1;
-        if (a.form_values["5f36"] > b.form_values["5f36"]) return -1;
+      if (a.form_values['5f36']) {
+        if (a.form_values['5f36'] < b.form_values['5f36']) return 1;
+        if (a.form_values['5f36'] > b.form_values['5f36']) return -1;
         return 0;
       }
       return null;
     });
     return (
       <Select
-        mode="multiple"
-        placeholder="Select Job Number(s)"
-        style={{ width: "100%", paddingBottom: 10 }}
+        mode='multiple'
+        placeholder='Select Job Number(s)'
+        style={{ width: '100%', paddingBottom: 10 }}
         onChange={jobs => {
           this.setState({
             selectedJob: jobs.map(job =>
-              job.substring(0, job.indexOf("p.lSS#@"))
+              job.substring(0, job.indexOf('p.lSS#@'))
             )
           });
         }}>
@@ -49,8 +49,8 @@ export default class IncidentRegister extends Component {
           if (job.project_id) {
             return (
               <Select.Option
-                key={`${job.project_id}p.lSS#@${job.form_values["5b1c"]}`}>
-                {job.form_values["5b1c"]}
+                key={`${job.project_id}p.lSS#@${job.form_values['5b1c']}`}>
+                {job.form_values['5b1c']}
               </Select.Option>
             );
           }
@@ -62,10 +62,10 @@ export default class IncidentRegister extends Component {
   tableData() {
     let data = [];
     this.props.incidentNonConf.forEach(record => {
-      if (record.form_values["800c"]) {
+      if (record.form_values['800c']) {
         if (
-          record.form_values["800c"].choice_values[0] !==
-          "Quality Non-Conformance"
+          record.form_values['800c'].choice_values[0] !==
+          'Quality Non-Conformance'
         ) {
           const job = () => {
             let index = this.props.jobFiles.findIndex(
@@ -73,16 +73,16 @@ export default class IncidentRegister extends Component {
             );
             let jobNumber =
               index > 0
-                ? this.props.jobFiles[index].form_values["5f36"]
-                : "none";
+                ? this.props.jobFiles[index].form_values['5f36']
+                : 'none';
             return jobNumber;
           };
           const description = () => {
-            let myDescription = "";
-            if (record.form_values["3c19"]) {
-              myDescription = record.form_values["3c19"];
-            } else if (record.form_values["ebcb"]) {
-              myDescription = record.form_values["ebcb"];
+            let myDescription = '';
+            if (record.form_values['3c19']) {
+              myDescription = record.form_values['3c19'];
+            } else if (record.form_values['ebcb']) {
+              myDescription = record.form_values['ebcb'];
             }
             return myDescription;
           };
@@ -106,25 +106,25 @@ export default class IncidentRegister extends Component {
     let data = this.state.data;
     let index = data.findIndex(item => item.id === val.id);
 
-    if (type === "PM") {
-      val["d234"] = "yes";
-      val.status = "SQE Action Required";
+    if (type === 'PM') {
+      val['d234'] = 'yes';
+      val.status = 'SQE Action Required';
     }
-    if (type === "SQE") {
-      val["6e01"] = "yes";
-      val.status = "Closed Out";
+    if (type === 'SQE') {
+      val['6e01'] = 'yes';
+      val.status = 'Closed Out';
     }
     data[index] = val;
     client.records
       .update(val.id, val)
       .then(resp => {
         this.setState({ data, loading: false });
-        message.success("Action Submitted.");
+        message.success('Action Submitted.');
       })
       .catch(err => {
         console.log(err);
         message.error(
-          "An error occured. Please check your internet connection."
+          'An error occured. Please check your internet connection.'
         );
         this.setState({ loading: false });
       });
@@ -137,13 +137,13 @@ export default class IncidentRegister extends Component {
           bordered
           loading={this.state.loading}
           pagination={false}
-          id="boresTableOne"
-          className="boreTables tableResizer"
-          columns={columns(this.action)}
+          id='boresTableOne'
+          className='boreTables tableResizer'
+          columns={columns(this.action, this.state.data)}
           dataSource={this.state.data}
           //   rowClassName={record => record.status}
-          rowKey="id"
-          size="middle"
+          rowKey='id'
+          size='middle'
         />
       </div>
     );
