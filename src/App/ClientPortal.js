@@ -298,19 +298,12 @@ class ClientPortal extends Component {
               />
               <Route
                 path={routes.TIMESHEETS}
-                render={props => (
-                  <Timesheets {...props} jobFiles={this.state.jobFiles} dailyPrestarts={this.state.dailyPrestarts} user={this.state.user} />
-                )}
+                render={props => <Timesheets {...props} jobFiles={this.state.jobFiles} dailyPrestarts={this.state.dailyPrestarts} user={this.state.user} />}
               />
               <Route
                 path={routes.SITEPLANTREGISTER}
                 render={props => (
-                  <SitePlantRegister
-                    {...props}
-                    user={this.state.user}
-                    jobFiles={this.state.jobFiles}
-                    plantVerifications={this.state.plantVerifications}
-                  />
+                  <SitePlantRegister {...props} user={this.state.user} jobFiles={this.state.jobFiles} plantVerifications={this.state.plantVerifications} />
                 )}
               />
               <Route
@@ -326,6 +319,8 @@ class ClientPortal extends Component {
                     toolboxMinutes={this.state.toolboxMinutes}
                     hazards={this.state.hazards}
                     incidentNonConf={this.state.incidentNonConf}
+                    siteInspection={this.state.siteInspection}
+                    taskObservation={this.state.taskObservation}
                   />
                 )}
               />
@@ -348,30 +343,17 @@ class ClientPortal extends Component {
               <Route
                 path={routes.INCIDENTREGISTER}
                 render={props => (
-                  <IncidentRegister
-                    {...props}
-                    user={this.state.user}
-                    jobFiles={this.state.jobFiles}
-                    incidentNonConf={this.state.incidentNonConf}
-                  />
+                  <IncidentRegister {...props} user={this.state.user} jobFiles={this.state.jobFiles} incidentNonConf={this.state.incidentNonConf} />
                 )}
               />
               <Route
                 path={routes.NONCONFORMANCE}
                 render={props => (
-                  <NonConformanceRegister
-                    {...props}
-                    user={this.state.user}
-                    jobFiles={this.state.jobFiles}
-                    incidentNonConf={this.state.incidentNonConf}
-                  />
+                  <NonConformanceRegister {...props} user={this.state.user} jobFiles={this.state.jobFiles} incidentNonConf={this.state.incidentNonConf} />
                 )}
               />
               <Route path={routes.PROFILE} render={props => <Profile {...props} user={this.state.user} />} />
-              <Route
-                path={routes.JOB}
-                render={props => <Job {...props} user={this.state.user} devicesLastSynced={this.state.devicesLastSynced} />}
-              />
+              <Route path={routes.JOB} render={props => <Job {...props} user={this.state.user} devicesLastSynced={this.state.devicesLastSynced} />} />
             </div>
             <Button block onClick={this.PageNotes} style={{ maxWidth: 200, margin: '15px auto' }} className='printHide'>
               Page Notes
