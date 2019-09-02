@@ -4,6 +4,10 @@
     background: #fafafa;
 }
 
+.timesheetDayLink {
+    color: black !important
+}
+
 .timesheetTotals {
     background: #fafafa;
 }
@@ -11,12 +15,15 @@
 .date {
     background: #fafafa;
 }
+
 td.timesheetTotals.leftBorder {
     border-left: 2px solid #e0e0e0;
 }
+
 th.timesheetTotals.leftBorder {
     border-left: 2px solid #e0e0e0;
 }
+
 th.totals.leftBorder {
     border-left: 2px solid #e0e0e0;
 }
@@ -25,8 +32,9 @@ th.totals.leftBorder {
     text-align: center;
     padding: 2px !important;
 }
+
 #timesheet td {
-    padding: 5px!important;
+    padding: 5px !important;
 }
 
 td.dateSub.hideTheseCells {
@@ -69,6 +77,7 @@ th.totals {
     th.dateSub.hideTheseCells {
         font-size: 12px !important
     }
+
     th.timesheetTotals div {
         font-size: 12px !important
     }

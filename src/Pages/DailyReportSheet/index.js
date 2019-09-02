@@ -301,6 +301,11 @@ class DailyReportSheet extends React.Component {
                 } else {
                   addHours = 0;
                 }
+                var absent = log.form_values["c9b8"]
+                  ? log.form_values["c9b8"].choice_values[0] !== "No"
+                    ? log.form_values["c9b8"].choice_values[0]
+                    : null
+                  : null;
 
                 this.setState(prevState => ({
                   companyPersonnel: [
@@ -310,6 +315,7 @@ class DailyReportSheet extends React.Component {
                       name: compName,
                       start,
                       end,
+                      absent,
                       hours: diff,
                       lafha
                     }
@@ -348,9 +354,7 @@ class DailyReportSheet extends React.Component {
                       photos.push(
                         <div key={photo.photo_id}>
                           <a
-                            href={`https://web.fulcrumapp.com/api/v2/photos/${
-                              photo.photo_id
-                            }`}
+                            href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`}
                             target="_blank"
                             rel="noopener noreferrer">
                             Photo
@@ -466,9 +470,7 @@ class DailyReportSheet extends React.Component {
                   photos.push(
                     <div key={photo.photo_id}>
                       <a
-                        href={`https://web.fulcrumapp.com/api/v2/photos/${
-                          photo.photo_id
-                        }`}
+                        href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         Photo
@@ -503,9 +505,7 @@ class DailyReportSheet extends React.Component {
                   photos.push(
                     <div key={photo.photo_id}>
                       <a
-                        href={`https://web.fulcrumapp.com/api/v2/photos/${
-                          photo.photo_id
-                        }`}
+                        href={`https://web.fulcrumapp.com/api/v2/photos/${photo.photo_id}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         Photo

@@ -61,6 +61,12 @@ export const timesheet = [
     width: 100
   },
   {
+    title: "Absence",
+    dataIndex: "absent",
+    key: "absent",
+    width: 20
+  },
+  {
     title: "LAFHA",
     dataIndex: "lafha",
     key: "lafha",
