@@ -1,11 +1,15 @@
 .boreTables {
-  margin-bottom: 10px
+  margin-bottom: 10px;
 }
 
 .ant-table-footer {
   padding: 1px 15px;
   font-weight: 400;
   text-align: right;
+}
+.ant-layout.ant-layout-has-sider > .ant-layout,
+.ant-layout.ant-layout-has-sider > .ant-layout-content {
+  overflow: inherit !important;
 }
 
 .dailyReportTables .ant-table-title {
@@ -24,17 +28,17 @@
   text-align: center;
 }
 
-.dailyReportTables .ant-table tr>th {
+.dailyReportTables .ant-table tr > th {
   padding: 5px 5px !important;
 }
 
 .dailyReportTables th div {
-  font-size: 10px !important
+  font-size: 10px !important;
 }
 
 td.invoiced span {
   cursor: pointer;
-  color: #3498db
+  color: #3498db;
 }
 
 @media only screen and (min-width: 992px) {
@@ -43,13 +47,12 @@ td.invoiced span {
   }
 
   .dailyReportTables th div {
-    font-size: 13px !important
+    font-size: 13px !important;
   }
 
-  .dailyReportTables .ant-table tr>th {
+  .dailyReportTables .ant-table tr > th {
     padding: 5px 10px !important;
   }
-
 }
 
 #boresTableTwo .ant-table-title {
