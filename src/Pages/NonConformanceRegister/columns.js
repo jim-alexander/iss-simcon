@@ -83,47 +83,10 @@ export function columns(action) {
 
     {
       title: 'Status',
-      className: 'status',
-      children: [
-        {
-          title: 'PM Action',
-          dataIndex: 'status',
-          key: 'pm_action',
-          render: (text, record) => {
-            if (text === 'PM Action Required') {
-              return (
-                <span
-                  onClick={() => {
-                    action(record, 'PM')
-                  }}>
-                  Action
-                </span>
-              )
-            }
-          },
-          className: 'subHeader action',
-          width: 100
-        },
-        {
-          title: 'SQE Manager Action',
-          dataIndex: 'status',
-          key: 'sqe_action',
-          render: (text, record) => {
-            if (text === 'SQE Action Required') {
-              return (
-                <span
-                  onClick={() => {
-                    action(record, 'SQE')
-                  }}>
-                  Action
-                </span>
-              )
-            }
-          },
-          className: 'subHeader action',
-          width: 100
-        }
-      ]
+      // className: 'status',
+      width: 100,
+      key: 'status',
+      dataIndex: 'status'
     }
   ]
 }

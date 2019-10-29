@@ -1,18 +1,12 @@
-import moment from 'moment';
-import React from 'react';
+import moment from 'moment'
+import React from 'react'
 
 export function columns(action, data) {
   let type_filters =
     data &&
-    [
-      ...new Set(
-        data.map(
-          item =>
-            item.form_values['800c'] &&
-            item.form_values['800c'].choice_values[0]
-        )
-      )
-    ].filter(Boolean);
+    [...new Set(data.map(item => item.form_values['800c'] && item.form_values['800c'].choice_values[0]))].filter(
+      Boolean
+    )
 
   return [
     {
@@ -21,22 +15,22 @@ export function columns(action, data) {
       key: 'date',
       render: date => {
         if (date) {
-          return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY');
+          return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY')
         } else {
-          return null;
+          return null
         }
       },
       sorter: (a, b) => {
         if (a || b) {
-          let aDate = moment(a.date, 'YYYY-MM-DD');
-          let bDate = moment(b.date, 'YYYY-MM-DD');
+          let aDate = moment(a.date, 'YYYY-MM-DD')
+          let bDate = moment(b.date, 'YYYY-MM-DD')
           if (aDate.isBefore(bDate)) {
-            return 1;
+            return 1
           }
           if (aDate.isAfter(bDate)) {
-            return -1;
+            return -1
           }
-          return 0;
+          return 0
         }
       },
       defaultSortOrder: 'ascending',
@@ -66,10 +60,9 @@ export function columns(action, data) {
       filters:
         type_filters &&
         type_filters.map(item => {
-          return { text: item, value: item };
+          return { text: item, value: item }
         }),
-      onFilter: (value, record) =>
-        record.form_values['800c'].choice_values[0].indexOf(value) === 0
+      onFilter: (value, record) => record.form_values['800c'].choice_values[0].indexOf(value) === 0
     },
     {
       title: 'Worksafe Notified?',
@@ -125,59 +118,8 @@ export function columns(action, data) {
     },
     {
       title: 'Status',
-      className: 'status',
-      children: [
-        {
-          title: 'PM Action',
-          dataIndex: 'status',
-          key: 'pm_action',
-          render: (text, record) => {
-            if (
-              record.form_values['800c'].choice_values[0] ===
-              'Theft / Property Damage'
-            ) {
-              return;
-            }
-            if (text === 'PM Action Required') {
-              return (
-                <span
-                  onClick={() => {
-                    action(record, 'PM');
-                  }}>
-                  Action
-                </span>
-              );
-            }
-          },
-          className: 'subHeader action',
-          width: 100
-        },
-        {
-          title: 'SQE Manager Action',
-          dataIndex: 'status',
-          key: 'sqe_action',
-          render: (text, record) => {
-            if (
-              record.form_values['800c'].choice_values[0] ===
-              'Theft / Property Damage'
-            ) {
-              return;
-            }
-            if (text === 'SQE Action Required') {
-              return (
-                <span
-                  onClick={() => {
-                    action(record, 'SQE');
-                  }}>
-                  Action
-                </span>
-              );
-            }
-          },
-          className: 'subHeader action',
-          width: 100
-        }
-      ]
+      dataIndex: 'status',
+      width: 100
     }
-  ];
+  ]
 }
