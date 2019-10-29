@@ -403,6 +403,20 @@ class DailyReportSheet extends React.Component {
               }))
             })
           }
+          if (file.form_values['d291']) {
+            let items = file.form_values['d291'].split('\n')
+            items.forEach(item => {
+              this.setState(prevState => ({
+                companyPlant: [
+                  ...prevState.companyPlant,
+                  {
+                    id: item,
+                    item
+                  }
+                ]
+              }))
+            })
+          }
           if (file.form_values['0bd7']) {
             let comments = []
             let listComments = file.form_values['0bd7'].split('\n')
@@ -759,7 +773,7 @@ class DailyReportSheet extends React.Component {
               <Table
                 pagination={false}
                 locale={{ emptyText: 'No Data' }}
-                title={() => 'Company Plant'}
+                title={() => 'Company & Contractor Plant'}
                 bordered
                 id='boresTableFour'
                 className='boreTables tableResizer dailyReportTables'

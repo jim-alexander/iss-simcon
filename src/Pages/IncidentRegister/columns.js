@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React from 'react'
+// import React from 'react'
 
 export function columns(action, data) {
   let type_filters =
