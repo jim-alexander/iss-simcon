@@ -70,6 +70,7 @@ class DailyReportSheet extends React.Component {
           hiredPlant: [],
           materialsDelivered: [],
           SQEStats: [],
+          sitePhotos: [],
           loadingSubContractorsTable: false,
           loadingHiredPlantTable: false,
           loadingMaterialsTable: false
@@ -402,6 +403,19 @@ class DailyReportSheet extends React.Component {
                 ]
               }))
             })
+            if (file.form_values['2cf0'].other_values) {
+              file.form_values['2cf0'].other_values.forEach(item => {
+                this.setState(prevState => ({
+                  companyPlant: [
+                    ...prevState.companyPlant,
+                    {
+                      id: item,
+                      item
+                    }
+                  ]
+                }))
+              })
+            }
           }
           if (file.form_values['d291']) {
             let items = file.form_values['d291'].split('\n')
@@ -551,14 +565,18 @@ class DailyReportSheet extends React.Component {
               ]
             }))
           }
+          // PHOTOS
+          if (diary.form_values['93bf']) {
+            diary.form_values['93bf'].forEach(photo =>
+              this.setState(prevState => ({
+                sitePhotos: [...prevState.sitePhotos, { id: photo.photo_id, caption: photo.caption }]
+              }))
+            )
+          }
         }
       })
     }
-    if (this.state.selectedJob) {
-      this.setState({
-        jobInfo
-      })
-    }
+    this.state.selectedJob && this.setState({ jobInfo })
   }
   invoice(record, invoiced, type) {
     this.setState({
@@ -705,37 +723,6 @@ class DailyReportSheet extends React.Component {
             columns={[{ title: 'Comments', key: 'comments', dataIndex: 'comments' }]}
           />
         </div>
-        {/* <Row gutter={10}>
-          <Col xs={24} sm={24} md={24} lg={12} xl={12} style={{ marginBottom: 10 }}>
-          <Table
-            pagination={false}
-            locale={{ emptyText: 'No Data' }}
-            title={() => 'Company Personnel'}
-            footer={() => `Total Hours: ${this.state.compPersTotal.asHours()}`}
-            bordered
-            id='boresTableTwo'
-            className='boreTables tableResizer dailyReportTables'
-            columns={column.timesheet}
-            dataSource={this.state.companyPersonnel}
-            rowKey='id'
-            size="middle" />
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-          <Table
-            pagination={false}
-            locale={{ emptyText: 'No Data' }}
-            title={() => 'Sub Contractors'}
-            footer={() => `Total Hours: ${this.state.subContrTotal.asHours()}`}
-            bordered
-            id='boresTableThree'
-            className='boreTables tableResizer dailyReportTables'
-            columns={column.timesheetContractors(this.invoice)}
-            loading={this.state.loadingSubContractorsTable}
-            dataSource={this.state.subContractors}
-            rowKey='id'
-            size="middle" />
-          </Col>
-        </Row> */}
         <div className='boresPadding'>
           <Table
             pagination={false}
@@ -810,6 +797,21 @@ class DailyReportSheet extends React.Component {
             className='boreTables tableResizer dailyReportTables'
             columns={column.materialsReceived(this.invoice)}
             dataSource={this.state.materialsDelivered}
+            loading={this.state.loadingMaterialsTable}
+            rowKey='id'
+            size='middle'
+          />
+        </div>
+        <div className='boresPadding'>
+          <Table
+            pagination={false}
+            locale={{ emptyText: 'No Data' }}
+            title={() => 'Site Photos'}
+            bordered
+            id='boresTableEight'
+            className='boreTables tableResizer dailyReportTables'
+            columns={column.sitePhotos}
+            dataSource={this.state.sitePhotos}
             loading={this.state.loadingMaterialsTable}
             rowKey='id'
             size='middle'
