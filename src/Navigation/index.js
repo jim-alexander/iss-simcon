@@ -23,10 +23,10 @@ const navMenu = user => {
         style={{ borderTop: '#b3b3b333 solid 1px' }}>
         {item.DailyReport(user.role)}
         {item.Timesheets(user)}
-        {item.Calendar(user.role)}
+        {/* {item.Calendar(user.role)} */}
         {item.Registers(user.role)}
         {item.SQEStats(user.role)}
-        {item.SafetyKPI(user.role)}
+        {/* {item.SafetyKPI(user.role)} */}
         {item.Fulcrum(user.role)}
         {item.Role(user.role)}
         {item.Username(user.username)}

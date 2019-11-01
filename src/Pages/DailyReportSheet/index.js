@@ -711,7 +711,6 @@ class DailyReportSheet extends React.Component {
             size='middle'
           />
         </div>
-
         <div className='boresPadding'>
           <Table
             size='small'
